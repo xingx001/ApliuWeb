@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 using System.Web;
 using ThoughtWorks.QRCode.Codec;
 
-namespace ApliuWeb
+namespace ApliuTools
 {
     public class QRCode
     {

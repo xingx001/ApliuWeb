@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApliuTools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -24,11 +25,11 @@ namespace ApliuWeb
                 FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                 RouteConfig.RegisterRoutes(RouteTable.Routes);
                 BundleConfig.RegisterBundles(BundleTable.Bundles);
-                Logger.WriteLog("主程序启动完成");
+                Logger.WriteLogWeb("主程序启动完成");
             }
             catch (Exception ex)
             {
-                Logger.WriteLog("主程序启动失败，详情：" + ex.Message);
+                Logger.WriteLogWeb("主程序启动失败，详情：" + ex.Message);
             }
         }
     }

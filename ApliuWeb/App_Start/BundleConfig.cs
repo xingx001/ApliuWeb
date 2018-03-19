@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using ApliuTools;
+using System.Web;
 using System.Web.Optimization;
 
 namespace ApliuWeb
@@ -40,11 +41,11 @@ namespace ApliuWeb
                             "~/Content/themes/base/jquery.ui.datepicker.css",
                             "~/Content/themes/base/jquery.ui.progressbar.css",
                             "~/Content/themes/base/jquery.ui.theme.css"));
-                Logger.WriteLog("加载默认js、css完成");
+                Logger.WriteLogWeb("加载默认js、css完成");
             }
             catch (System.Exception ex)
             {
-                Logger.WriteLog("加载默认js、css失败，详情：" + ex.Message);
+                Logger.WriteLogWeb("加载默认js、css失败，详情：" + ex.Message);
             }
         }
     }
