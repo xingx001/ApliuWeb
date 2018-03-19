@@ -1,0 +1,26 @@
+﻿body{
+	width:100%;
+	background-image:url(../images/bgimggree.jpg);
+	background-repeat: no-repeat;
+    background-size:100% auto;
+	overflow-y:hidden;
+	overflow-x:hidden;
+}
+#mainselect img
+{
+	border-radius: 10px; width:55%; height:auto;-webkit-box-shadow: 0px 0px 10px #666; -moz-box-shadow: 0px 0px 10px #666; box-shadow: 0px 0px 10px #666;
+}
+
+#mainselect img:hover
+{
+	-webkit-box-shadow:0px 0px 10px red;
+    -moz-box-shadow:0px 0px 10px red;
+    box-shadow:0px 0px 10px red;/*水平偏移0, 垂直偏移0，模糊0(纯色), 扩展大小30像素*/
+}
+
+#mainselect img:active
+{
+	-webkit-box-shadow:0px 0px 10px #0000FF;
+    -moz-box-shadow:0px 0px 10px #0000FF;
+    box-shadow:0px 0px 10px #0000FF;/*水平偏移0, 垂直偏移0，模糊0(纯色), 扩展大小30像素*/
+}
