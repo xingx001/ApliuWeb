@@ -8,31 +8,31 @@ using System.Web.Http;
 
 namespace ApliuWeb.Controllers
 {
-    public class ApliuToolApiController : ApiController
+    public class ToolApiController : ApiController
     {
-        // GET api/apliutool
+        // GET api/tool
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/apliutool/5
+        // GET api/tool/5
         public HttpResponseMessage GetQRCode(string id)
         {
             return QRCode.CreateCodeSimple(id);
         }
 
-        // POST api/apliutool
+        // POST api/tool
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/apliutool/5
+        // PUT api/tool/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/apliutool/5
+        // DELETE api/tool/5
         public void Delete(int id)
         {
         }

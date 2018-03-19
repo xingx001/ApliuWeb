@@ -5,13 +5,13 @@
 <script>
     var createqrcode = function () {
         var content = document.getElementById("coontent").value;
-        var srcapi = "/api/apliutoolapi/GetQRCode?id=" + content + "&random" + Math.random();
+        var srcapi = "/api/toolapi/GetQRCode?id=" + content + "&random" + Math.random();
         $("#qrcodeimg").attr("src", srcapi);
     }
 </script>
 <div style="text-align: center;">
     <h2>自主生成二维码</h2>
-    <div style="margin-top: 30px;">接口Get Api：www.apliu.xyz/api/apliutoolapi/content，其中content是需要生成二维码的内容</div>
+    <div style="margin-top: 30px;">接口Get Api：www.apliu.xyz/api/toolapi/content，其中content是需要生成二维码的内容</div>
     <div style="margin-top: 30px;">
         <input id="coontent" />
         <button onclick="createqrcode()">生成二维码</button>

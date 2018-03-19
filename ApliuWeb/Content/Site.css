@@ -22,14 +22,14 @@ a {
     text-decoration: underline;
 }
 
-    a:link, a:visited,
+    /*a:link, a:visited,
     a:active, a:hover {
         color: #333;
-    }
+    }*/
 
-    a:hover {
+    /*a:hover {
         background-color: #c7d1d6;
-    }
+    }*/
 
 header, footer, hgroup,
 nav, section {

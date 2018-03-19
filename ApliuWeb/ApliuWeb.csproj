@@ -122,8 +122,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\ApliuToolApiController.cs" />
-    <Compile Include="Controllers\ApliuToolController.cs" />
+    <Compile Include="Controllers\ToolApiController.cs" />
+    <Compile Include="Controllers\ToolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -493,7 +493,6 @@
     <Content Include="Game\Poker\Prototype.js" />
     <Content Include="Game\Poker\ResourceData.js" />
     <Content Include="Global.asax" />
-    <Content Include="index.html" />
     <Content Include="Log\ReadMe.txt" />
     <Content Include="OldWeb\bgmusic\adgy.ogg" />
     <Content Include="OldWeb\cloudmain\php\allmessage.php" />
@@ -923,7 +922,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\TestIndex.cshtml" />
     <Content Include="Views\Home\TestView.cshtml" />
-    <Content Include="Views\ApliuTool\QRCode.cshtml" />
+    <Content Include="Views\Tool\QRCode.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

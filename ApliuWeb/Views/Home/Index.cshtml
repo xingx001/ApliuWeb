@@ -18,6 +18,24 @@
     <link rel="stylesheet" href="../../Earliest/css/app.css?v=20150605">
 </head>
 <body>
+    <script type="text/javascript">
+        var proxyAssets = "/h5touchassets";
+        var index_url = "";
+    </script>
+
+    <script type="text/javascript">
+        var appUrlConfig = [{
+            "download_img_url": "http:\/\/\/upload_img\/00528\/111111\/H5-0714.jpg",
+            "android_url": "http:\/\/\/",
+            "iphone_url": "http:\/\/\/cn\/app\/id445573854?mt=8",
+            "app_url": ":\/\/"
+        }, {
+            "download_img_url": "http:\/\/\/upload_img\/00528\/987\/and-0902.png",
+            "android_url": "http:\/\/\/block_mobileClient_download.htm?channel=30153",
+            "iphone_url": "http:\/\/\/us\/app\/id488202082",
+            "app_url": "ddreader:\/\/"
+        }]
+    </script>
 
     <header id="search" dd_name="首页搜索区">
         <div class="dd-logo">
@@ -77,14 +95,14 @@
                 <img class="" src="../../Earliest/images/wodedangdang-h5.png"><span>个人信息</span></a></li>
             <li><a href="javascript:void(0);" dd_name="好书榜">
                 <img class="" src="../../Earliest/images/haoshubang.png"><span>热榜</span></a></li>
-            <li><a href="ApliuTool/QRCode" dd_name="童书榜">
+            <li><a href="Tool/QRCode" dd_name="童书榜">
                 <img class="" src="../../Earliest/images/tognshubang-0604.png"><span>二维码</span></a></li>
             <li><a href="javascript:void(0);" dd_name="9块9">
                 <img class="" src="../../Earliest/images/9.9.png"><span>旧版</span></a></li>
             <li><a href="OldWeb/maincopy.html" dd_name="电子书">
                 <img class="" src="../../Earliest/images/dianzihsu.png"><span>更多</span></a></li>
         </ul>
-        <section class="seckilling" dd_name="首页秒杀区">
+        <section class="seckilling" dd_name="首页秒杀区" style="display: none;">
             <div class="seckilling-box">
                 <div class="seckilling-title">
                     <span class="seckilling-name">秒购</span>
@@ -263,7 +281,7 @@
 
         <section class="floor" dd_name="">
             <h2>
-                <a class="title">最新商品</a>
+                <a class="title">最新内容</a>
                 <a href="javascript:void(0);" class="more" dd_name="更多">更多</a>
             </h2>
             <dl>
@@ -280,7 +298,6 @@
         </section>
 
     </section>
-
 
     <div class="fixed_box" style="-webkit-transform-origin: 0px 0px; opacity: 1; -webkit-transform: scale(1, 1); display: none;">
         <a href="javascript:scrollTo(0,0)" class="btn_back" id="backtop">

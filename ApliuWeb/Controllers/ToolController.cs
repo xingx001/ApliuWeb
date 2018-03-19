@@ -6,10 +6,10 @@ using System.Web.Mvc;
 
 namespace ApliuWeb.Controllers
 {
-    public class ApliuToolController : Controller
+    public class ToolController : Controller
     {
         //
-        // GET: /ApliuTool/
+        // GET: /Tool/
 
         public ActionResult QRCode()
         {
@@ -17,7 +17,7 @@ namespace ApliuWeb.Controllers
         }
 
         //
-        // GET: /ApliuTool/Details/5
+        // GET: /Tool/Details/5
 
         public ActionResult Details(int id)
         {
@@ -25,7 +25,7 @@ namespace ApliuWeb.Controllers
         }
 
         //
-        // GET: /ApliuTool/Create
+        // GET: /Tool/Create
 
         public ActionResult Create()
         {
@@ -33,7 +33,7 @@ namespace ApliuWeb.Controllers
         }
 
         //
-        // POST: /ApliuTool/Create
+        // POST: /Tool/Create
 
         [HttpPost]
         public ActionResult Create(FormCollection collection)
@@ -51,7 +51,7 @@ namespace ApliuWeb.Controllers
         }
 
         //
-        // GET: /ApliuTool/Edit/5
+        // GET: /Tool/Edit/5
 
         public ActionResult Edit(int id)
         {
@@ -59,7 +59,7 @@ namespace ApliuWeb.Controllers
         }
 
         //
-        // POST: /ApliuTool/Edit/5
+        // POST: /Tool/Edit/5
 
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
@@ -77,7 +77,7 @@ namespace ApliuWeb.Controllers
         }
 
         //
-        // GET: /ApliuTool/Delete/5
+        // GET: /Tool/Delete/5
 
         public ActionResult Delete(int id)
         {
@@ -85,7 +85,7 @@ namespace ApliuWeb.Controllers
         }
 
         //
-        // POST: /ApliuTool/Delete/5
+        // POST: /Tool/Delete/5
 
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
