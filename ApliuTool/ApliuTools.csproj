@@ -7,8 +7,8 @@
     <ProjectGuid>{181462D8-64B9-4899-A011-D2504A74D46B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ApliuTool</RootNamespace>
-    <AssemblyName>ApliuTool</AssemblyName>
+    <RootNamespace>ApliuTools</RootNamespace>
+    <AssemblyName>ApliuTools</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
@@ -45,8 +46,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="ThoughtWorks.QRCode">
-      <HintPath>..\ApliuWeb\bin\ThoughtWorks.QRCode.dll</HintPath>
+    <Reference Include="ThoughtWorks.QRCode, Version=1.0.2774.19990, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\ThoughtWorks.QRCode.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +62,9 @@
     <Compile Include="SecurityHelper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SMSMessage.cs" />
+    <Compile Include="TestClass.cs" />
+    <Compile Include="TimeHelper.cs" />
     <Compile Include="WebServiceHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,15 @@
 ﻿@{
     ViewBag.Title = "TestView";
-} 
-<h2>TestView</h2> 
+
+}
+@using ApliuTools;
+<h2>TestView</h2>
+<div>
+    @{
+    string  No1=   SecurityHelper.SHA256Encrypt("Apliu",System.Text.Encoding.UTF8);
+
+    string No2 = TestClass.sha256("Apliu");
+    }
+    @No1;<br />
+    @No2;
+</div>
