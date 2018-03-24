@@ -15,7 +15,7 @@ using System.Xml.Serialization;
 using System.Reflection;
 using System;
 
-namespace ApliuTools
+namespace ApliuTools.Web
 {
     public class WebServiceHelper
     {

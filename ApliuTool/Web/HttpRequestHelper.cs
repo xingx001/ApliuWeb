@@ -6,9 +6,9 @@ using System.Net;
 using System.Text;
 using System.Web;
 
-namespace ApliuTools
+namespace ApliuTools.Web
 {
-    public class HttpRequest
+    public class HttpRequestHelper
     {
         public static string HttpGet(string getUrl)
         {

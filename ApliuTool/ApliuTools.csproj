@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -52,7 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HttpRequest.cs" />
+    <Compile Include="DataConvert.cs" />
     <Compile Include="Logger.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -65,7 +66,19 @@
     <Compile Include="SMSMessage.cs" />
     <Compile Include="TestClass.cs" />
     <Compile Include="TimeHelper.cs" />
-    <Compile Include="WebServiceHelper.cs" />
+    <Compile Include="Web\HttpContextRequest.cs" />
+    <Compile Include="Web\HttpRequestHelper.cs" />
+    <Compile Include="Web\HYRequest.cs" />
+    <Compile Include="Web\ServerInfo.cs" />
+    <Compile Include="Web\Thumbnail.cs" />
+    <Compile Include="Web\UrlRewriter.cs" />
+    <Compile Include="Web\WebServiceHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ApliuDatabase\ApliuDatabase.csproj">
+      <Project>{8d217dc0-99fd-46fb-8ea8-6fbc2dd63e3a}</Project>
+      <Name>ApliuDatabase</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

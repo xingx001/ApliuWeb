@@ -1,26 +1,67 @@
-﻿using System;
+﻿using ApliuDatabase;
+using ApliuTools.Web;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ApliuTools
 {
-    class SMSMessage
+    public interface SMSMessage
     {
+        bool SendSMS(string Mobile, string SMSContent, out string SendMsg, params string[] Args);
     }
 
-    public class TencentSMS
+    public class TencentSMS : SMSMessage
     {
+        /// <summary>
+        /// 腾讯云 发送短信
+        /// </summary>
+        /// <param name="Mobile"></param>
+        /// <param name="SMSContent"></param>
+        /// <param name="Args">SMSAppId,SMSAppKey</param>
+        /// <returns></returns>
+        public bool SendSMS(string Mobile, string SMSContent, out string SendMsg, params string[] Args)
+        {
+            if (Args.Length != 2)
+            {
+                SendMsg = "Apliu：腾讯云短信，参数有误";
+                return false;
+            }
+            return SendSMS(Mobile, SMSContent, out SendMsg, Args[0], Args[1]);
+        }
+
+        /// <summary>
+        /// 腾讯云 发送短信
+        /// </summary>
+        /// <param name="Mobile"></param>
+        /// <param name="SMSContent"></param>
+        /// <param name="SMSAppId">短信应用API ID</param>
+        /// <param name="SMSAppKey">API ID秘钥</param>
+        /// <returns></returns>
+        public static bool SendSMS(string Mobile, string SMSContent, string SendMsg, string SMSAppId, string SMSAppKey)
+        {
+            string Rand = new Random().Next(int.MaxValue).ToString().PadLeft(10, '0');
+            string sendjson = GetSendJson(Mobile, SMSContent, SMSAppKey, Rand);
+            string sendurl = string.Format(SendUrl, SMSAppId, Rand);
+            string response = HttpRequestHelper.HttpGet(sendurl);
+            bool result = AnalysisResponse(response, out SendMsg);
+            string insertlog = string.Format(sqlInsertAll, Guid.NewGuid(), Mobile, SMSContent, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "Apliu", "验证码", result, SendMsg);
+            DatabaseHelper.PostData(insertlog);
+            return result;
+        }
+
         /// <summary>
         /// 短信接口发送地址
         /// </summary>
-        private readonly string SendUrl = "https://yun.tim.qq.com/v5/tlssmssvr/sendsms?sdkappid={0}&random={1}";
+        private readonly static string SendUrl = "https://yun.tim.qq.com/v5/tlssmssvr/sendsms?sdkappid={0}&random={1}";
         /// <summary>
         /// 请求Json格式
         /// </summary>
-        private readonly string RequestJson = @"{
+        private readonly static string RequestJson = @"{
                     ""ext"": ""{0}"",
                     ""extend"": ""{1}"",
                     ""msg"": ""{2}"",
@@ -32,16 +73,11 @@ namespace ApliuTools
                     ""time"": {6},
                     ""type"": {7}
                 }";
-        /// <summary>
-        /// 返回Json格式
-        /// </summary>
-        private readonly string ResponseJson = @"{
-                    ""result"": 0,
-                    ""errmsg"": ""OK"",
-                    ""ext"": """",
-                    ""fee"": 1,
-                    ""sid"": ""xxxxxxx""
-                }";
+        private static string sqlInsertAll = @"insert into ApSMSHistory(SMSID,MobileNumber,SMSContent,SendTime,CreateUser,SMSType,Project,SendResult,SendMsg) 
+                        values('{0}','{1}','{2}','{3}','{4}','{5}','ApliuWeb','{6}','{7}');";
+        private static string sqlInsertHis = @"insert into ApSMSHistory(SMSID,MobileNumber,SMSContent,SendTime,CreateUser,SMSType,Project) 
+                        values('{0}','{1}','{2}','{3}','{4}','{5}','ApliuWeb');";
+        private static string sqlUpdateHis = @"update ApSMSHistory set SendResult='{0}',SendMsg='{1}' where SMSID='{2}'";
 
         /// <summary>
         /// 获取发送短信的Json
@@ -55,10 +91,10 @@ namespace ApliuTools
         /// <param name="type">短信类型，Enum{0: 普通短信, 1: 营销短信}（注意：要按需填值，不然会影响到业务的正常使用）</param>
         ///<param name="random">随机数 10位，与发送URL的random一致</param>
         /// <returns></returns>
-        private string GetSendJson(string ext, string extend, string msg, string mobile, string nationcode, long time, string type, string random)
+        private static string GetSendJson(string ext, string extend, string msg, string mobile, string nationcode, long time, string SMSAppKey, string type, string random)
         {
             //"sig" 字段根据公式 sha256（appkey=$appkey&random=$random&time=$time&mobile=$mobile）生成
-            string sig = string.Format(@"appkey={0}&random={1}&time={2}&mobile={3}", ConfigurationManager.AppSettings["SMSAppKey"], random, time, mobile);
+            string sig = string.Format(@"appkey={0}&random={1}&time={2}&mobile={3}", SMSAppKey, random, time, mobile);
             sig = SecurityHelper.SHA256Encrypt(sig, Encoding.UTF8);
             string json = string.Format(RequestJson, ext, extend, msg, sig, mobile, nationcode, time, type);
             return json;
@@ -71,120 +107,51 @@ namespace ApliuTools
         /// <param name="Message">短信内容</param>
         /// <param name="random">随机数 10位，与发送URL的random一致</param>
         /// <returns></returns>
-        private string GetSendJson(string Mobile, string Message, string Random)
+        private static string GetSendJson(string Mobile, string Message, string SMSAppKey, string Random)
         {
-            string json = GetSendJson("", "", Message, Mobile, "86", TimeHelper.getCurrentUnixTime(), "0", Random);
+            string json = GetSendJson("", "", Message, Mobile, "86", TimeHelper.getCurrentUnixTime(), SMSAppKey, "0", Random);
             return json;
         }
 
-    }
-    /*
-    public class SmsSingleSender : SmsBase
-    {
-        private string url = "https://yun.tim.qq.com/v5/tlssmssvr/sendsms";
-
-        public SmsSingleSender(int appid, string appkey)
-            : base(appid, appkey, new DefaultHTTPClient())
-        { }
-
-        public SmsSingleSender(int appid, string appkey, IHTTPClient httpclient)
-            : base(appid, appkey, httpclient)
-        { }
-
         /// <summary>
-        /// Send single SMS message.
+        /// 解析返回Json报文
         /// </summary>
-        /// <param name="type">SMS message type, Enum{0: normal SMS, 1: marketing SMS}</param>
-        /// <param name="nationCode">nation dialing code, e.g. China is 86, USA is 1</param>
-        /// <param name="phoneNumber">phone number</param>
-        /// <param name="msg">SMS message content< /param>
-        /// <param name="extend">extend field, default is empty string</param>
-        /// <param name="ext">ext field, content will be returned by server as it is</param>
-        /// <returns>SmsSingleSenderResult</returns>
-        public SmsSingleSenderResult send(int type, string nationCode, string phoneNumber,
-            string msg, string extend, string ext)
+        /// <param name="json"></param>
+        /// <param name="errorMsg"></param>
+        /// <returns></returns>
+        private static bool AnalysisResponse(string json, out string errorMsg)
         {
-            long random = SmsSenderUtil.getRandom();
-            long now = SmsSenderUtil.getCurrentTime();
-            JSONObjectBuilder body = new JSONObjectBuilder()
-                .Put("tel", (new JSONObjectBuilder()).Put("nationcode", nationCode).Put("mobile", phoneNumber).Build())
-                .Put("type", type)
-                .Put("msg", msg)
-                .Put("sig", SmsSenderUtil.calculateSignature(this.appkey, random, now, phoneNumber))
-                .Put("time", now)
-                .Put("extend", !String.IsNullOrEmpty(extend) ? extend : "")
-                .Put("ext", !String.IsNullOrEmpty(ext) ? ext : "");
+            /*@"{
+                    ""result"": 0,
+                    ""errmsg"": ""OK"",
+                    ""ext"": """",
+                    ""fee"": 1,
+                    ""sid"": ""xxxxxxx""
+                }";*/
+            if (string.IsNullOrEmpty(json))
+            {
+                errorMsg = "Apliu：解析Json不能为空";
+                return false;
+            }
 
-            HTTPRequest req = new HTTPRequest(HTTPMethod.POST, this.url)
-                .addHeader("Conetent-Type", "application/json")
-                .addQueryParameter("sdkappid", this.appid)
-                .addQueryParameter("random", random)
-                .setConnectionTimeout(60 * 1000)
-                .setRequestTimeout(60 * 1000)
-                .setBody(body.Build().ToString());
-
-            // May throw HttpRequestException
-            HTTPResponse res = httpclient.fetch(req);
-
-            // May throw HTTPException
-            handleError(res);
-
-            SmsSingleSenderResult result = new SmsSingleSenderResult();
-            // May throw JSONException
-            result.parseFromHTTPResponse(res);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Send single SMS message with template paramters.
-        /// </summary>
-        /// <param name="nationCode">nation dialing code, e.g. China is 86, USA is 1</param>
-        /// <param name="phoneNumber">phone number</param>
-        /// <param name="templateId">template id</param>
-        /// <param name="parameters">template parameters</param>
-        /// <param name="sign">Sms user sign</param>
-        /// <param name="extend">extend field, default is empty string</param>
-        /// <param name="ext">ext field, content will be returned by server as it is</param>
-        /// <returns>SmsSingleSenderResult</returns>
-        public SmsSingleSenderResult sendWithParam(string nationCode, string phoneNumber, int templateId,
-            string[] parameters, string sign, string extend, string ext)
-        {
-
-            long random = SmsSenderUtil.getRandom();
-            long now = SmsSenderUtil.getCurrentTime();
-
-            JSONObjectBuilder body = new JSONObjectBuilder()
-                .Put("tel", (new JSONObjectBuilder()).Put("nationcode", nationCode).Put("mobile", phoneNumber).Build())
-                .Put("sig", SmsSenderUtil.calculateSignature(appkey, random, now, phoneNumber))
-                .Put("tpl_id", templateId)
-                .PutArray("params", parameters)
-                .Put("sign", !String.IsNullOrEmpty(sign) ? sign : "")
-                .Put("time", now)
-                .Put("extend", !String.IsNullOrEmpty(extend) ? extend : "")
-                .Put("ext", !String.IsNullOrEmpty(ext) ? ext : "");
-
-            HTTPRequest req = new HTTPRequest(HTTPMethod.POST, this.url)
-                .addHeader("Conetent-Type", "application/json")
-                .addQueryParameter("sdkappid", this.appid)
-                .addQueryParameter("random", random)
-                .setConnectionTimeout(60 * 1000)
-                .setRequestTimeout(60 * 1000)
-                .setBody(body.Build().ToString());
-
-            // May throw HttpRequestException
-            HTTPResponse res = httpclient.fetch(req);
-
-            // May throw HTTPException
-            handleError(res);
-
-            SmsSingleSenderResult result = new SmsSingleSenderResult();
-            // May throw JSONException
-            result.parseFromHTTPResponse(res);
+            bool result = false;
+            try
+            {
+                JObject jobj = JsonConvert.DeserializeObject(json) as JObject;
+                if (jobj != null)
+                {
+                    result = jobj["result"].ToString() == "0";
+                    errorMsg = jobj["errmsg"].ToString();
+                }
+                else errorMsg = "Apliu：返回报文Json解析失败，Json：" + json;
+            }
+            catch (Exception ex)
+            {
+                errorMsg = ex.Message;
+            }
 
             return result;
         }
     }
-     * */
 }
 

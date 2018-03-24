@@ -145,7 +145,7 @@ and (-webkit-min-device-pixel-ratio : 2)
 .floor h2{position:relative;overflow:hidden;border-bottom:1px solid #eee;}
 .floor h2 a{display:block;height:1.7rem;line-height:1.7rem;}
 .floor h2 .title{color:#4a525d;font-size:.75rem;text-indent:.25rem;}
-.floor h2 .more{position:absolute;right:0;top:0;width:2.25rem;font-size:.6rem;color:#fe435d;background:url(../images/more-arrow.png) 1.4rem center no-repeat;background-size:.6rem;}
+.floor h2 .more{position:absolute;right:0;top:0;width:2.25rem;font-size:.6rem;color:#fe435d;background-size:.6rem;}
 .floor dl{overflow:hidden;}
 .floor dl dt,.floor dl dd{float:left;display:block;width:50%;-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden;}
 .floor dl dd{border-left:1px solid #eee;border-bottom:1px solid #eee;}

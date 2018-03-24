@@ -25,6 +25,14 @@ namespace ApliuWeb
                 FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                 RouteConfig.RegisterRoutes(RouteTable.Routes);
                 BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+                SiteConfig.LoadConfig();
+
+                DataAccess.Instance.Ceshi();
+                //SMSMessage sms = new TencentSMS();
+                //string msg;
+                //bool result = sms.SendSMS("18779182730", "验证码：100000，有效期1分钟", out msg, SiteConfig.GetConfigNodeValue("SMSAppId"), SiteConfig.GetConfigNodeValue("SMSAppKey"));
+
                 Logger.WriteLogWeb("主程序启动完成");
             }
             catch (Exception ex)

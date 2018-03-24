@@ -122,10 +122,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Config\SiteConfig.cs" />
     <Compile Include="Controllers\ToolApiController.cs" />
     <Compile Include="Controllers\ToolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Function\DataAccess.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -493,6 +495,8 @@
     <Content Include="Game\Poker\Prototype.js" />
     <Content Include="Game\Poker\ResourceData.js" />
     <Content Include="Global.asax" />
+    <Content Include="Images\tips.png" />
+    <Content Include="JsScript\apliualert.js" />
     <Content Include="Log\ReadMe.txt" />
     <Content Include="OldWeb\bgmusic\adgy.ogg" />
     <Content Include="OldWeb\cloudmain\php\allmessage.php" />
@@ -505,7 +509,6 @@
     <Content Include="OldWeb\cloudmain\php\moniliuyan.php" />
     <Content Include="OldWeb\cloudmain\php\zan.php" />
     <Content Include="OldWeb\cloudmain\qwer.mht" />
-    <Content Include="OldWeb\Flappy2048\image\Thumbs.db" />
     <Content Include="OldWeb\Flappy2048\php\inputgame.php" />
     <Content Include="OldWeb\game2048\php\inputgame.php" />
     <Content Include="OldWeb\login\php\boollogin.php" />
@@ -525,6 +528,9 @@
     <Content Include="OldWeb\自定义网页相关\layer\iconfont\iconfont.ttf" />
     <Content Include="OldWeb\自定义网页相关\layer\iconfont\iconfont.woff" />
     <Content Include="OldWeb\自定义网页相关\qwer.mht" />
+    <Content Include="Config\BaseConfig.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\ApliuWeb.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Images\apliulogo.png" />
@@ -926,7 +932,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Function\" />
     <Folder Include="Models\" />
     <Folder Include="OldWeb\lovetime\cert\" />
   </ItemGroup>
@@ -934,10 +939,17 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ApliuDatabase\ApliuDatabase.csproj">
+      <Project>{8d217dc0-99fd-46fb-8ea8-6fbc2dd63e3a}</Project>
+      <Name>ApliuDatabase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ApliuTool\ApliuTools.csproj">
       <Project>{181462d8-64b9-4899-a011-d2504a74d46b}</Project>
       <Name>ApliuTools</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

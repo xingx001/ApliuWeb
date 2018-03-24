@@ -19,6 +19,7 @@ namespace ApliuTools
         /// <returns></returns>
         public static HttpResponseMessage CreateCodeSimple(string content)
         {
+            if (string.IsNullOrEmpty(content)) return null;
             QRCodeEncoder qrCodeEncoder = new QRCodeEncoder();
             //设置二维码编码格式  
             qrCodeEncoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;

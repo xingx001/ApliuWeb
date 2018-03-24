@@ -1,10 +1,13 @@
 ﻿@{
     ViewBag.Title = "QRCode";
 }
-
 <script>
     var createqrcode = function () {
         var content = document.getElementById("coontent").value;
+        if (content == null || content == "") {
+            apliualert("请输入需要生成二维码的内容");
+            return;
+        }
         var srcapi = "/api/toolapi/GetQRCode?id=" + content + "&random" + Math.random();
         $("#qrcodeimg").attr("src", srcapi);
     }
