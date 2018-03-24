@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Web;
 
@@ -49,7 +50,7 @@ namespace ApliuTools
             {
                 sthread.Wait();
 
-                using (StreamWriter sw = new StreamWriter(filename, true))
+                using (StreamWriter sw = new StreamWriter(filename, true, Encoding.UTF8))
                 {
                     sw.WriteLine(DateTime.Now.ToString() + " : " + Msg);
                     sw.Flush();
