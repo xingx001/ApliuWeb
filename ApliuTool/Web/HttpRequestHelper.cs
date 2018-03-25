@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Web;
 
@@ -71,6 +72,18 @@ namespace ApliuTools.Web
             }
 
             return result;
+        }
+
+        public static HttpResponseMessage encapResult(string s)
+        {
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(
+                    s,
+                    Encoding.UTF8,
+                    "text/html"
+                )
+            };
         }
     }
 }

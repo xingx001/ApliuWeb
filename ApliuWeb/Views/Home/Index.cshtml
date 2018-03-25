@@ -8,14 +8,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="application-name" content="">
-    <title>首页</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="">
     <meta name="version" content="ddtouch">
     <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
-    <link rel="stylesheet" href="../../Earliest/css/common.css">
-    <link rel="stylesheet" href="../../Earliest/css/app.css?v=20150605">
+    <link rel="stylesheet" href="/Earliest/css/common.css">
+    <link rel="stylesheet" href="/Earliest/css/app.css">
 </head>
 <body>
     <script type="text/javascript">
@@ -39,20 +38,20 @@
 
     <header id="search" dd_name="首页搜索区">
         <div class="dd-logo">
-            <a href="javascript:void(0);" style="background-size: 2rem 2rem;" dd_name="logo跳转"></a>
+            <a href="/" style="background-size: 2rem 2rem;" dd_name="logo跳转"></a>
         </div>
         <div class="search_box">
             <div class="search">
-                <form id="index_search_form" method="get" action="" target="_parent" onsubmit="return submit_search();">
+                <form id="index_search_form" method="get" action="/Shared/Error" target="_parent" onsubmit="return submit_search();">
                     <div class="text_box">
                         <input id="keyword" name="keyword" type="text" placeholder="请输入搜索内容" class="keyword text" onkeydown="this.style.color=&#39;#404040&#39;" autocomplete="off">
                     </div>
                     <input type="submit" value="" class="submit" dd_name="搜索">
-                    <input type="hidden" value="d256b1d537fe186e53c0444399341c24" name="sid">
+                    <input type="hidden" value="index_search_form_submit" name="sid">
                 </form>
             </div>
         </div>
-        <div class="header-category"><a href="javascript:void(0);" dd_name="跳转分类"><em>更多</em></a></div>
+        <div class="header-category"><a href="/Earliest/ListNavi/index.html" dd_name="跳转分类"><em>更多</em></a></div>
         <div class="search_list"></div>
     </header>
     <section id="wrapper">
@@ -91,10 +90,10 @@
                 <img class="" src="../../Earliest/images/fenlei.png"><span>斗地主</span></a></li>
             <li><a href="javascript:void(0);" dd_name="立减5元">
                 <img class="" src="../../Earliest/images/xiazai-0605.png"><span>下载</span></a></li>
-            <li><a href="javascript:void(0);" dd_name="">
-                <img class="" src="../../Earliest/images/wodedangdang-h5.png"><span>个人信息</span></a></li>
-            <li><a href="javascript:void(0);" dd_name="好书榜">
-                <img class="" src="../../Earliest/images/haoshubang.png"><span>热榜</span></a></li>
+            <li><a href="/Earliest/PersCenter/index.html" dd_name="">
+                <img class="" src="../../Earliest/images/wodedangdang-h5.png"><span>个人中心</span></a></li>
+            <li><a href="/Tool/SqlServer" dd_name="好书榜">
+                <img class="" src="../../Earliest/images/haoshubang.png"><span>数据库</span></a></li>
             <li><a href="Tool/QRCode" dd_name="童书榜">
                 <img class="" src="../../Earliest/images/tognshubang-0604.png"><span>二维码</span></a></li>
             <li><a href="javascript:void(0);" dd_name="9块9">
@@ -323,19 +322,13 @@
             <p>Copyright Apliu 2018 www.apliu.xyz</p>
         </section>
     </footer>
-    <script src="../../Earliest/js/zepto.min.js"></script>
-    <script src="../../Earliest/js/underscore.min.js"></script>
-    <script src="../../Earliest/js/iscroll5.min.js"></script>
-    <script src="../../Earliest/js/fastclick.min.js"></script>
-    <script src="../../Earliest/js/mod_countdown.min.js"></script>
-    <script src="../../Earliest/js/mod_suggest.min.js"></script>
-    <script src="../../Earliest/js/mdd_index.min.js"></script>
-    <script src="../../Earliest/js/js_tracker.js"></script>
-
-
+    <script src="/Earliest/js/zepto.min.js"></script>
+    <script src="/Earliest/js/underscore.min.js"></script>
+    <script src="/Earliest/js/iscroll5.min.js"></script>
+    <script src="/Earliest/js/fastclick.min.js"></script>
+    <script src="/Earliest/js/mod_countdown.min.js"></script>
+    <script src="/Earliest/js/mod_suggest.min.js"></script>
+    <script src="/Earliest/js/mdd_index.min.js"></script>
+    <script src="/Earliest/js/js_tracker.js"></script>
 </body>
-<style type="text/css" id="17050682000">
-
-</style>
 </html>
-<!--LHC-2015-10-09-->

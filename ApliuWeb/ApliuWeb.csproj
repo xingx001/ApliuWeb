@@ -25,7 +25,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Bin\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -40,6 +40,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -61,9 +65,6 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
@@ -123,6 +124,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Config\SiteConfig.cs" />
+    <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\ToolApiController.cs" />
     <Compile Include="Controllers\ToolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -188,6 +190,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="CssStyle\CommonStyle.css" />
     <Content Include="Earliest\css\app.css" />
     <Content Include="Earliest\css\common.css" />
     <Content Include="Earliest\images\108-700-270.jpg" />
@@ -240,7 +243,6 @@
     <Content Include="Earliest\images\ww_h5_9.30.jpg" />
     <Content Include="Earliest\images\xiazai-0605.png" />
     <Content Include="Earliest\images\YD108H5.jpg.jpg" />
-    <Content Include="Earliest\index.html" />
     <Content Include="Earliest\js\fastclick.min.js" />
     <Content Include="Earliest\js\iscroll5.min.js" />
     <Content Include="Earliest\js\js_tracker.js" />
@@ -249,61 +251,60 @@
     <Content Include="Earliest\js\mod_suggest.min.js" />
     <Content Include="Earliest\js\underscore.min.js" />
     <Content Include="Earliest\js\zepto.min.js" />
-    <Content Include="Earliest\个人中心\css\base2013.css" />
-    <Content Include="Earliest\个人中心\css\guessing.css" />
-    <Content Include="Earliest\个人中心\css\header%281%29.css" />
-    <Content Include="Earliest\个人中心\css\header.css" />
-    <Content Include="Earliest\个人中心\css\list.css" />
-    <Content Include="Earliest\个人中心\css\myhome1.01.css" />
-    <Content Include="Earliest\个人中心\images\547bc6b5Ncc52a3b8.png" />
-    <Content Include="Earliest\个人中心\images\547bc6dbN3dabf32a.png" />
-    <Content Include="Earliest\个人中心\images\547bc6eaN6c97383c.png" />
-    <Content Include="Earliest\个人中心\images\547bc70aNf7e3462a.png" />
-    <Content Include="Earliest\个人中心\images\547bc727Nde7da59c.png" />
-    <Content Include="Earliest\个人中心\images\547bc742N95a14876.png" />
-    <Content Include="Earliest\个人中心\images\547bc75fNc5c6209c.png" />
-    <Content Include="Earliest\个人中心\images\547bc772Nbdf299f1.png" />
-    <Content Include="Earliest\个人中心\images\55546b06Nbd7a17eb.png" />
-    <Content Include="Earliest\个人中心\images\defaul.png" />
-    <Content Include="Earliest\个人中心\images\headbg.png" />
-    <Content Include="Earliest\个人中心\images\jd-sprites_v=12.png" />
-    <Content Include="Earliest\个人中心\index.html" />
-    <Content Include="Earliest\个人中心\js\downloadAppPlugIn.js" />
-    <Content Include="Earliest\个人中心\js\jdslider.src.js" />
-    <Content Include="Earliest\个人中心\js\jquery-1.6.2.min.js" />
-    <Content Include="Earliest\个人中心\js\m_common.js" />
-    <Content Include="Earliest\个人中心\js\news1.0.js" />
-    <Content Include="Earliest\个人中心\js\ojbUrl.js" />
-    <Content Include="Earliest\个人中心\js\pingJS.1.0.js" />
-    <Content Include="Earliest\个人中心\js\spin.min.js" />
-    <Content Include="Earliest\产品分类\css\2013\category\all_html5.css" />
-    <Content Include="Earliest\产品分类\css\base2013.css" />
-    <Content Include="Earliest\产品分类\images\touch2013\bg_line.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\bg_line2.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\bg_line3.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\b_icon.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon-huodong.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon2b.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon2b_2.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon_clock.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon_detail.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon_dp.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon_dp2.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon_heart.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon_order.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon_slid.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon_star.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\icon_star2.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\no_100_100.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\no_140_140.png" />
-    <Content Include="Earliest\产品分类\images\touch2013\no_308_108.png" />
-    <Content Include="Earliest\产品分类\js\html5\cart.js" />
-    <Content Include="Earliest\产品分类\js\html5\common.js" />
-    <Content Include="Earliest\产品分类\js\html5\spin.min.js" />
-    <Content Include="Earliest\产品分类\js\jquery-1.6.2.min.js" />
-    <Content Include="Earliest\产品分类\js\zepto.min.js" />
-    <Content Include="Earliest\产品分类\产品分类页\index.html" />
+    <Content Include="Earliest\ListNavi\index.html" />
+    <Content Include="Earliest\PersCenter\css\base2013.css" />
+    <Content Include="Earliest\PersCenter\css\guessing.css" />
+    <Content Include="Earliest\PersCenter\css\header.css" />
+    <Content Include="Earliest\PersCenter\css\list.css" />
+    <Content Include="Earliest\PersCenter\css\myhome.css" />
+    <Content Include="Earliest\PersCenter\images\547bc6b5Ncc52a3b8.png" />
+    <Content Include="Earliest\PersCenter\images\547bc6dbN3dabf32a.png" />
+    <Content Include="Earliest\PersCenter\images\547bc6eaN6c97383c.png" />
+    <Content Include="Earliest\PersCenter\images\547bc70aNf7e3462a.png" />
+    <Content Include="Earliest\PersCenter\images\547bc727Nde7da59c.png" />
+    <Content Include="Earliest\PersCenter\images\547bc742N95a14876.png" />
+    <Content Include="Earliest\PersCenter\images\547bc75fNc5c6209c.png" />
+    <Content Include="Earliest\PersCenter\images\547bc772Nbdf299f1.png" />
+    <Content Include="Earliest\PersCenter\images\55546b06Nbd7a17eb.png" />
+    <Content Include="Earliest\PersCenter\images\defaul.png" />
+    <Content Include="Earliest\PersCenter\images\headbg.png" />
+    <Content Include="Earliest\PersCenter\images\jd-sprites_v=12.png" />
+    <Content Include="Earliest\PersCenter\index.html" />
+    <Content Include="Earliest\PersCenter\js\downloadAppPlugIn.js" />
+    <Content Include="Earliest\PersCenter\js\jdslider.src.js" />
+    <Content Include="Earliest\PersCenter\js\jquery-1.6.2.min.js" />
+    <Content Include="Earliest\PersCenter\js\m_common.js" />
+    <Content Include="Earliest\PersCenter\js\news1.0.js" />
+    <Content Include="Earliest\PersCenter\js\ojbUrl.js" />
+    <Content Include="Earliest\PersCenter\js\pingJS.1.0.js" />
+    <Content Include="Earliest\PersCenter\js\spin.min.js" />
+    <Content Include="Earliest\ListNavi\css\2013\category\all_html5.css" />
+    <Content Include="Earliest\ListNavi\css\base2013.css" />
+    <Content Include="Earliest\ListNavi\images\touch2013\bg_line.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\bg_line2.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\bg_line3.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\b_icon.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon-huodong.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon2b.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon2b_2.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon_clock.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon_detail.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon_dp.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon_dp2.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon_heart.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon_order.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon_slid.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon_star.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\icon_star2.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\no_100_100.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\no_140_140.png" />
+    <Content Include="Earliest\ListNavi\images\touch2013\no_308_108.png" />
+    <Content Include="Earliest\ListNavi\js\html5\cart.js" />
+    <Content Include="Earliest\ListNavi\js\html5\common.js" />
+    <Content Include="Earliest\ListNavi\js\html5\spin.min.js" />
+    <Content Include="Earliest\ListNavi\js\jquery-1.6.2.min.js" />
+    <Content Include="Earliest\ListNavi\js\zepto.min.js" />
     <Content Include="Earliest\产品列表\css\app.css" />
     <Content Include="Earliest\产品列表\images\1012542452-1_h_1.jpg" />
     <Content Include="Earliest\产品列表\images\1059780222-1_h.jpg" />
@@ -497,6 +498,7 @@
     <Content Include="Global.asax" />
     <Content Include="Images\tips.png" />
     <Content Include="JsScript\apliualert.js" />
+    <Content Include="JsScript\CommonJs.js" />
     <Content Include="Log\ReadMe.txt" />
     <Content Include="OldWeb\bgmusic\adgy.ogg" />
     <Content Include="OldWeb\cloudmain\php\allmessage.php" />
@@ -929,6 +931,7 @@
     <Content Include="Views\Home\TestIndex.cshtml" />
     <Content Include="Views\Home\TestView.cshtml" />
     <Content Include="Views\Tool\QRCode.cshtml" />
+    <Content Include="Views\Tool\SqlServer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -81,7 +81,7 @@ namespace ApliuWeb
         /// <param name="Sql"></param>
         /// <param name="Args"></param>
         /// <returns></returns>
-        public static DataSet GetData(string Sql, params SqlParameter[] Args)
+        public DataSet GetData(string Sql, params SqlParameter[] Args)
         {
             DataSet dsData = null;
             try
@@ -101,7 +101,7 @@ namespace ApliuWeb
         /// <param name="Sql"></param>
         /// <param name="Args"></param>
         /// <returns></returns>
-        public static bool PostData(string Sql, params SqlParameter[] Args)
+        public bool PostData(string Sql, params SqlParameter[] Args)
         {
             bool result = false;
             try
@@ -110,6 +110,26 @@ namespace ApliuWeb
                 {
                     result = true;
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLogWeb("数据库更新失败，Sql：" + Sql + "，详情：" + ex.Message);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Post 返回受影响数据条数
+        /// </summary>
+        /// <param name="Sql"></param>
+        /// <param name="Args"></param>
+        /// <returns></returns>
+        public int PostDataInt(string Sql, params SqlParameter[] Args)
+        {
+            int result = -1;
+            try
+            {
+                result = DatabaseHelper.PostData(Sql, Args);
             }
             catch (Exception ex)
             {

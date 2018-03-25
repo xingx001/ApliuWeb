@@ -103,6 +103,7 @@ namespace ApliuDatabase
                 case DatabaseTypeEnum.SqlServer:
                     using (SqlConnection cn = new SqlConnection(connectionString))
                     {
+                        dsData = new DataSet();
                         cn.Open();
                         SqlCommand cmd = new SqlCommand();
                         PrepareCommand(cmd, cn, (SqlTransaction)null, commandType, commandText, commandParameters as SqlParameter[]);
@@ -115,6 +116,7 @@ namespace ApliuDatabase
                 case DatabaseTypeEnum.MySql:
                     using (MySqlConnection cn = new MySqlConnection(connectionString))
                     {
+                        dsData = new DataSet();
                         cn.Open();
                         MySqlCommand cmd = new MySqlCommand();
                         PrepareCommand(cmd, cn, (MySqlTransaction)null, commandType, commandText, commandParameters as MySqlParameter[]);

@@ -540,5 +540,48 @@ namespace ApliuTools
         }
         #endregion
 
+        #region 网页请求加解密算法
+        /// <summary>
+        /// URL解密
+        /// </summary>
+        /// <param name="Content"></param>
+        /// <param name="Encoding"></param>
+        /// <returns></returns>
+        public static string UrlDecode(string Content, Encoding encoding)
+        {
+            return HttpUtility.UrlDecode(Content, encoding);
+        }
+
+        /// <summary>
+        /// URL 加密
+        /// </summary>
+        /// <param name="Content"></param>
+        /// <param name="Encoding"></param>
+        /// <returns></returns>
+        public static string UrlEncode(string Content, Encoding encoding)
+        {
+            return HttpUtility.UrlEncode(Content, encoding);
+        }
+
+        /// <summary>
+        /// HTML 解密
+        /// </summary>
+        /// <param name="Content"></param>
+        /// <returns></returns>
+        public static string HtmlDecode(string Content)
+        {
+            return HttpUtility.HtmlDecode(Content);
+        }
+
+        /// <summary>
+        /// HTML 加密
+        /// </summary>
+        /// <param name="Content"></param>
+        /// <returns></returns>
+        public static string HtmlEncode(string Content)
+        {
+            return HttpUtility.HtmlEncode(Content);
+        }
+        #endregion
     }
 }

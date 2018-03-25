@@ -24,13 +24,11 @@ ul,li {
     width:100%;
 }
 .jd-header, .jd-header a {
-    font-family: "PingHei","Lucida Grande", "Lucida Sans Unicode", "STHeiti", "Helvetica","Arial","Verdana","sans-serif";
     color:#252525;
     text-decoration: none;
     font-size:16px;
 }
 .jd-footer, .jd-footer a {
-    font-family: "PingHei","Lucida Grande", "Lucida Sans Unicode", "STHeiti", "Helvetica","Arial","Verdana","sans-serif";
 }
 .jd-footer-links a {
     display:inline-block;
@@ -42,7 +40,7 @@ ul,li {
 }
 .jd-header-bar {
     position:relative;
-    background:#efefef url(../images/2015/header-bg.png?v=2) repeat-x 0 0;
+    background:#efefef url(../images/header-bg.png) repeat-x 0 0;
     background-size: 100% 44px;
     min-height:44px;
     border-bottom:1px solid #bfbfbf;
