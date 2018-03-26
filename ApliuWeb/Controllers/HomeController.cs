@@ -17,10 +17,5 @@ namespace ApliuWeb.Controllers
         {
             return View();
         }
-
-        public ActionResult TestIndex()
-        {
-            return View();
-        }
     }
 }

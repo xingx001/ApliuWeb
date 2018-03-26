@@ -1,229 +1,196 @@
-﻿<!DOCTYPE html>
-<html class="mdd-index" style="font-size: 40px;">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>首页</title>
-    <meta name="charset" content="utf-8">
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="application-name" content="">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <meta name="version" content="ddtouch">
-    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
-    <link rel="stylesheet" href="/Earliest/css/common.css">
-    <link rel="stylesheet" href="/Earliest/css/app.css">
-</head>
-<body>
-    <script type="text/javascript">
-        var proxyAssets = "/h5touchassets";
-        var index_url = "";
-    </script>
+﻿@{
+    ViewBag.Title = "Apliu 主页";
+    Layout = "~/Views/Shared/Templet.cshtml";
+}
 
-    <script type="text/javascript">
-        var appUrlConfig = [{
-            "download_img_url": "http:\/\/\/upload_img\/00528\/111111\/H5-0714.jpg",
-            "android_url": "http:\/\/\/",
-            "iphone_url": "http:\/\/\/cn\/app\/id445573854?mt=8",
-            "app_url": ":\/\/"
-        }, {
-            "download_img_url": "http:\/\/\/upload_img\/00528\/987\/and-0902.png",
-            "android_url": "http:\/\/\/block_mobileClient_download.htm?channel=30153",
-            "iphone_url": "http:\/\/\/us\/app\/id488202082",
-            "app_url": "ddreader:\/\/"
-        }]
-    </script>
+<script type="text/javascript">
+    var proxyAssets = "/h5touchassets";
+</script>
 
-    <header id="search" dd_name="首页搜索区">
-        <div class="dd-logo">
-            <a href="/" style="background-size: 2rem 2rem;" dd_name="logo跳转"></a>
-        </div>
-        <div class="search_box">
-            <div class="search">
-                <form id="index_search_form" method="get" action="/Shared/Error" target="_parent" onsubmit="return submit_search();">
-                    <div class="text_box">
-                        <input id="keyword" name="keyword" type="text" placeholder="请输入搜索内容" class="keyword text" onkeydown="this.style.color=&#39;#404040&#39;" autocomplete="off">
-                    </div>
-                    <input type="submit" value="" class="submit" dd_name="搜索">
-                    <input type="hidden" value="index_search_form_submit" name="sid">
-                </form>
-            </div>
-        </div>
-        <div class="header-category"><a href="/Earliest/ListNavi/index.html" dd_name="跳转分类"><em>更多</em></a></div>
-        <div class="search_list"></div>
-    </header>
-    <section id="wrapper">
-        <section class="top-slider-wrapper" dd_name="首页焦点轮播区">
-            <section data-widget="topSlider" class="J_top_slider index-slider">
-                <ul class="top-slider" style="width: 500%; -webkit-transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transform: translate(-2588px, 0px) translateZ(0px);">
-                    <li style="width: 20%">
-                        <a href="javascript:void(0);" dd_name="焦点轮播图1">
-                            <img src="../../images/other/zhanshi1.jpg" alt="预留">
-                        </a>
-                    </li>
-                    <li style="width: 20%">
-                        <a href="javascript:void(0);" dd_name="焦点轮播图2">
-                            <img class="" alt="预留" src="../../images/other/zhanshi1.jpg">
-                        </a>
-                    </li>
-                    <li style="width: 20%">
-                        <a href="javascript:void(0);" dd_name="焦点轮播图3">
-                            <img class="" alt="预留" src="../../images/other/zhanshi1.jpg">
-                        </a>
-                    </li>
-                </ul>
-                <div class="top-slider-indicator">
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <!--                    <span class="dot"></span>
+<script type="text/javascript">
+    var appUrlConfig = [{
+        "download_img_url": "http:\/\/\/upload_img\/00528\/111111\/H5-0714.jpg",
+        "android_url": "http:\/\/\/",
+        "iphone_url": "http:\/\/\/cn\/app\/id445573854?mt=8",
+        "app_url": ":\/\/"
+    }, {
+        "download_img_url": "http:\/\/\/upload_img\/00528\/987\/and-0902.png",
+        "android_url": "http:\/\/\/block_mobileClient_download.htm?channel=30153",
+        "iphone_url": "http:\/\/\/us\/app\/id488202082",
+        "app_url": "ddreader:\/\/"
+    }]
+</script>
+
+<section id="wrapper">
+    <section class="top-slider-wrapper" dd_name="首页焦点轮播区">
+        <section data-widget="topSlider" class="J_top_slider index-slider">
+            <ul class="top-slider" style="width: 500%; -webkit-transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transform: translate(-2588px, 0px) translateZ(0px);">
+                <li style="width: 20%">
+                    <a href="javascript:void(0);" dd_name="焦点轮播图1">
+                        <img src="../../images/other/zhanshi1.jpg" alt="预留">
+                    </a>
+                </li>
+                <li style="width: 20%">
+                    <a href="javascript:void(0);" dd_name="焦点轮播图2">
+                        <img class="" alt="预留" src="../../images/other/zhanshi1.jpg">
+                    </a>
+                </li>
+                <li style="width: 20%">
+                    <a href="javascript:void(0);" dd_name="焦点轮播图3">
+                        <img class="" alt="预留" src="../../images/other/zhanshi1.jpg">
+                    </a>
+                </li>
+            </ul>
+            <div class="top-slider-indicator">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <!--                    <span class="dot"></span>
                     <span class="dot"></span>-->
-                    <span class="dot on"></span>
-                </div>
-            </section>
-        </section>
-        <ul class="index-nav" dd_name="首页功能区">
-            <li><a href="../../OldWeb/lovetime/wxindex.html" dd_name="爱的故事">
-                <img class="" src="../../Earliest/images/gouwuche.png"><span>爱的故事</span></a></li>
-            <li><a href="../../Game/Poker/Poker.html" dd_name="分类">
-                <img class="" src="../../Earliest/images/fenlei.png"><span>斗地主</span></a></li>
-            <li><a href="javascript:void(0);" dd_name="立减5元">
-                <img class="" src="../../Earliest/images/xiazai-0605.png"><span>下载</span></a></li>
-            <li><a href="/Earliest/PersCenter/index.html" dd_name="">
-                <img class="" src="../../Earliest/images/wodedangdang-h5.png"><span>个人中心</span></a></li>
-            <li><a href="/Tool/SqlServer" dd_name="好书榜">
-                <img class="" src="../../Earliest/images/haoshubang.png"><span>数据库</span></a></li>
-            <li><a href="Tool/QRCode" dd_name="童书榜">
-                <img class="" src="../../Earliest/images/tognshubang-0604.png"><span>二维码</span></a></li>
-            <li><a href="javascript:void(0);" dd_name="9块9">
-                <img class="" src="../../Earliest/images/9.9.png"><span>旧版</span></a></li>
-            <li><a href="OldWeb/maincopy.html" dd_name="电子书">
-                <img class="" src="../../Earliest/images/dianzihsu.png"><span>更多</span></a></li>
-        </ul>
-        <section class="seckilling" dd_name="首页秒杀区" style="display: none;">
-            <div class="seckilling-box">
-                <div class="seckilling-title">
-                    <span class="seckilling-name">秒购</span>
-                    <span class="seckilling-icon"></span>
-                    <div class="seckilling-content" data-widget="countdown" data-end-time="1444381201" data-left-time="12191" data-is-begin="0">
-                    </div>
-                </div>
-                <div class="seckilling-con" id="seckill_index">
-                    <ul class="clearfix">
-                        <li>
-                            <a href="javascript:void(0);" dd_name="秒杀品1">
-                                <p class="pic">
-                                    <img class="" src="../../images/apliulogo.png">
-                                </p>
-                                <p class="price">
-                                    <span class="rob">
-                                        <span class="sign">¥</span>
-                                        <span class="num">1.00</span>
-                                        <span class="tail"></span>
-                                    </span>
-                                    <span class="discount">3折</span>
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" dd_name="秒杀品2">
-                                <p class="pic">
-                                    <img class="" src="../../images/apliulogo.png">
-                                </p>
-                                <p class="price">
-                                    <span class="rob">
-                                        <span class="sign">¥</span>
-                                        <span class="num">2.00</span>
-                                        <span class="tail"></span>
-                                    </span>
-                                    <!--<span class="discount">折</span>-->
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" dd_name="秒杀品3">
-                                <p class="pic">
-                                    <img class="" src="../../images/apliulogo.png">
-                                </p>
-                                <p class="price">
-                                    <span class="rob">
-                                        <span class="sign">¥</span>
-                                        <span class="num">3.00</span>
-                                        <span class="tail"></span>
-                                    </span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" dd_name="秒杀品3">
-                                <p class="pic">
-                                    <img class="" src="../../images/apliulogo.png">
-                                </p>
-                                <p class="price">
-                                    <span class="rob">
-                                        <span class="sign">¥</span>
-                                        <span class="num">4.00</span>
-                                        <span class="tail"></span>
-                                    </span>
-                                    <!--<span class="discount">折</span>-->
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" dd_name="秒杀品3">
-                                <p class="pic">
-                                    <img class="" src="../../images/apliulogo.png">
-                                </p>
-                                <p class="price">
-                                    <span class="rob">
-                                        <span class="sign">¥</span>
-                                        <span class="num">5.00</span>
-                                        <span class="tail"></span>
-                                    </span>
-                                    <!--<span class="discount">折</span>-->
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" dd_name="秒杀品3">
-                                <p class="pic">
-                                    <img class="" src="../../images/apliulogo.png">
-                                </p>
-                                <p class="price">
-                                    <span class="rob">
-                                        <span class="sign">¥</span>
-                                        <span class="num">6.00</span>
-                                        <span class="tail"></span>
-                                    </span>
-                                    <span class="discount">3折</span>
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <span class="dot on"></span>
             </div>
         </section>
-        <section class="banner" dd_name="轮播推荐区">
-            <section data-widget="bannerSlider" class="J_banner_slider banner-slider" id="bannerSlider_99659" dd_name="轮播推荐区99659">
-                <ul class="banner-slider" style="width: 200%; -webkit-transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transform: translate(-647px, 0px) translateZ(0px);">
-                    <li style="width: 50%">
-                        <a href="javascript:void(0);" dd_name="轮播推荐1">
-                            <img class="" src="../../images/other/hxzst.jpg"></a>
+    </section>
+    <ul class="index-nav" dd_name="首页功能区">
+        <li><a href="../../OldWeb/lovetime/wxindex.html" dd_name="爱的故事">
+            <img class="" src="../../Earliest/images/gouwuche.png"><span>爱的故事</span></a></li>
+        <li><a href="../../Game/Poker/Poker.html" dd_name="分类">
+            <img class="" src="../../Earliest/images/fenlei.png"><span>斗地主</span></a></li>
+        <li><a href="javascript:void(0);" dd_name="立减5元">
+            <img class="" src="../../Earliest/images/xiazai-0605.png"><span>下载</span></a></li>
+        <li><a href="/Earliest/PersCenter/index.html" dd_name="">
+            <img class="" src="../../Earliest/images/wodedangdang-h5.png"><span>个人中心</span></a></li>
+        <li><a href="/Tool/SqlServer" dd_name="好书榜">
+            <img class="" src="../../Earliest/images/haoshubang.png"><span>数据库</span></a></li>
+        <li><a href="Tool/QRCode" dd_name="童书榜">
+            <img class="" src="../../Earliest/images/tognshubang-0604.png"><span>二维码</span></a></li>
+        <li><a href="javascript:void(0);" dd_name="9块9">
+            <img class="" src="../../Earliest/images/9.9.png"><span>旧版</span></a></li>
+        <li><a href="OldWeb/maincopy.html" dd_name="电子书">
+            <img class="" src="../../Earliest/images/dianzihsu.png"><span>更多</span></a></li>
+    </ul>
+    <section class="seckilling" dd_name="首页秒杀区" style="display: none;">
+        <div class="seckilling-box">
+            <div class="seckilling-title">
+                <span class="seckilling-name">秒购</span>
+                <span class="seckilling-icon"></span>
+                <div class="seckilling-content" data-widget="countdown" data-end-time="1444381201" data-left-time="12191" data-is-begin="0">
+                </div>
+            </div>
+            <div class="seckilling-con" id="seckill_index">
+                <ul class="clearfix">
+                    <li>
+                        <a href="javascript:void(0);" dd_name="秒杀品1">
+                            <p class="pic">
+                                <img class="" src="../../images/apliulogo.png">
+                            </p>
+                            <p class="price">
+                                <span class="rob">
+                                    <span class="sign">¥</span>
+                                    <span class="num">1.00</span>
+                                    <span class="tail"></span>
+                                </span>
+                                <span class="discount">3折</span>
+                            </p>
+                        </a>
                     </li>
-                    <li style="width: 50%">
-                        <a href="javascript:void(0);" dd_name="轮播推荐2">
-                            <img class="" src="../../images/other/weburl.png"></a>
+                    <li>
+                        <a href="javascript:void(0);" dd_name="秒杀品2">
+                            <p class="pic">
+                                <img class="" src="../../images/apliulogo.png">
+                            </p>
+                            <p class="price">
+                                <span class="rob">
+                                    <span class="sign">¥</span>
+                                    <span class="num">2.00</span>
+                                    <span class="tail"></span>
+                                </span>
+                                <!--<span class="discount">折</span>-->
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" dd_name="秒杀品3">
+                            <p class="pic">
+                                <img class="" src="../../images/apliulogo.png">
+                            </p>
+                            <p class="price">
+                                <span class="rob">
+                                    <span class="sign">¥</span>
+                                    <span class="num">3.00</span>
+                                    <span class="tail"></span>
+                                </span>
+                                <span class="discount">5折</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" dd_name="秒杀品3">
+                            <p class="pic">
+                                <img class="" src="../../images/apliulogo.png">
+                            </p>
+                            <p class="price">
+                                <span class="rob">
+                                    <span class="sign">¥</span>
+                                    <span class="num">4.00</span>
+                                    <span class="tail"></span>
+                                </span>
+                                <!--<span class="discount">折</span>-->
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" dd_name="秒杀品3">
+                            <p class="pic">
+                                <img class="" src="../../images/apliulogo.png">
+                            </p>
+                            <p class="price">
+                                <span class="rob">
+                                    <span class="sign">¥</span>
+                                    <span class="num">5.00</span>
+                                    <span class="tail"></span>
+                                </span>
+                                <!--<span class="discount">折</span>-->
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" dd_name="秒杀品3">
+                            <p class="pic">
+                                <img class="" src="../../images/apliulogo.png">
+                            </p>
+                            <p class="price">
+                                <span class="rob">
+                                    <span class="sign">¥</span>
+                                    <span class="num">6.00</span>
+                                    <span class="tail"></span>
+                                </span>
+                                <span class="discount">3折</span>
+                            </p>
+                        </a>
                     </li>
                 </ul>
-                <div class="banner-slider-indicator">
-                    <span class="dot"></span>
-                    <span class="dot on"></span>
-                </div>
-            </section>
+            </div>
+        </div>
+    </section>
+    <section class="banner" dd_name="轮播推荐区">
+        <section data-widget="bannerSlider" class="J_banner_slider banner-slider" id="bannerSlider_99659" dd_name="轮播推荐区99659">
+            <ul class="banner-slider" style="width: 200%; -webkit-transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transform: translate(-647px, 0px) translateZ(0px);">
+                <li style="width: 50%">
+                    <a href="javascript:void(0);" dd_name="轮播推荐1">
+                        <img class="" src="../../images/other/hxzst.jpg"></a>
+                </li>
+                <li style="width: 50%">
+                    <a href="javascript:void(0);" dd_name="轮播推荐2">
+                        <img class="" src="../../images/other/weburl.png"></a>
+                </li>
+            </ul>
+            <div class="banner-slider-indicator">
+                <span class="dot"></span>
+                <span class="dot on"></span>
+            </div>
         </section>
-        <!--        <section class="floor" dd_name="">
+    </section>
+    <!--        <section class="floor" dd_name="">
             <h2>
                 <a class="title">推荐商品</a>
                 <a href="javascript:void(0);" class="more" dd_name="更多">更多</a>
@@ -278,57 +245,22 @@
 
 
 
-        <section class="floor" dd_name="">
-            <h2>
-                <a class="title">最新内容</a>
-                <a href="javascript:void(0);" class="more" dd_name="更多">更多</a>
-            </h2>
-            <dl>
-                <dt><a href="javascript:void(0);" dd_name="">
-                    <img class="" src="../../images/other/sxzst.jpg"></a></dt>
+    <section class="floor" dd_name="">
+        <h2>
+            <a class="title">最新内容</a>
+            <a href="javascript:void(0);" class="more" dd_name="更多">更多</a>
+        </h2>
+        <dl>
+            <dt><a href="javascript:void(0);" dd_name="">
+                <img class="" src="../../images/other/sxzst.jpg"></a></dt>
 
-                <dd><a href="javascript:void(0);">
-                    <img class="" src="../../images/apliulogo.png"></a></dd>
+            <dd><a href="javascript:void(0);">
+                <img class="" src="../../images/apliulogo.png"></a></dd>
 
-                <dd><a href="javascript:void(0);">
-                    <img class="" src="../../images/apliulogo.png"></a></dd>
+            <dd><a href="javascript:void(0);">
+                <img class="" src="../../images/apliulogo.png"></a></dd>
 
-            </dl>
-        </section>
-
+        </dl>
     </section>
 
-    <div class="fixed_box" style="-webkit-transform-origin: 0px 0px; opacity: 1; -webkit-transform: scale(1, 1); display: none;">
-        <a href="javascript:scrollTo(0,0)" class="btn_back" id="backtop">
-            <img style="width: 2rem" src="../../Earliest/images/go-top.png"></a>
-    </div>
-    <footer class="footer new">
-        <section class="status-bar">
-            <div style="text-align: center;">
-                <a href="javascript:void(0);" style="float: none; width: 30%; margin-left: auto;">登录</a>
-                <a href="javascript:void(0);" style="float: none; width: 30%; margin-left: auto;">注册</a>
-                <a style="float: right; margin-left: auto; padding: 0 15px 0 0;" href="javascript:scrollTo(0,0);">TOP</a>
-            </div>
-        </section>
-        <nav class="b-nav">
-            <p>
-                <a href="javascript:void(0);" ontouchstart="">提建议</a>
-                <a class="red" href="javascript:void(0);" ontouchstart="">触屏版</a>
-                <a href="javascript:void(0);" ontouchstart="">电脑版</a>
-                <a href="javascript:void(0);" ontouchstart="">帮&nbsp;&nbsp;助</a>
-            </p>
-        </nav>
-        <section class="copyright">
-            <p>Copyright Apliu 2018 www.apliu.xyz</p>
-        </section>
-    </footer>
-    <script src="/Earliest/js/zepto.min.js"></script>
-    <script src="/Earliest/js/underscore.min.js"></script>
-    <script src="/Earliest/js/iscroll5.min.js"></script>
-    <script src="/Earliest/js/fastclick.min.js"></script>
-    <script src="/Earliest/js/mod_countdown.min.js"></script>
-    <script src="/Earliest/js/mod_suggest.min.js"></script>
-    <script src="/Earliest/js/mdd_index.min.js"></script>
-    <script src="/Earliest/js/js_tracker.js"></script>
-</body>
-</html>
+</section>

@@ -16,6 +16,11 @@ namespace ApliuWeb.Controllers
             return View();
         }
 
+        public ActionResult Templet()
+        {
+            return View();
+        }
+
         //
         // GET: /Shared/Details/5
 

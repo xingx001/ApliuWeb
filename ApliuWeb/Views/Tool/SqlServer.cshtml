@@ -1,113 +1,46 @@
 ﻿@{
     ViewBag.Title = "SqlServer 数据库";
+    Layout = "~/Views/Shared/Templet.cshtml";
 }
-<!DOCTYPE html>
-<html class="mdd-index" style="font-size: 40px;">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="charset" content="utf-8">
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="application-name" content="">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <meta name="version" content="ddtouch">
-    <meta http-equiv="Cache-Control" content="must-revalidate,no-cache">
-    <link rel="stylesheet" href="/Earliest/css/common.css">
-    <link rel="stylesheet" href="/Earliest/css/app.css">
-</head>
-<body>
-    <script>
-        var index_url = "";
-        var executesql = function (type) {
-            var content = document.getElementById("coontent").value;
-            if (content == null || content == "") {
-                apliualert("请输入需要执行的Sql");
-                return;
-            }
-            $(".qrcodebutton").attr("background", "#b8b8b8");
-            var apiurl = "/api/toolapi/ExecuteSql?Sql=" + content + "&Type=" + type;
-            $.when(ApliuCommon.HttpSend(apiurl)).then(function (data) {
-                $("#executesqlresult").val(data);
-                $(".qrcodebutton").attr("background", "#ff463c");
-            }, function (error) {
-                $("#executesqlresult").val(error);
-                $(".qrcodebutton").attr("background", "#ff463c");
-            });
+
+<script>
+    var executesql = function (type) {
+        var content = document.getElementById("coontent").value;
+        if (content == null || content == "") {
+            apliualert("请输入需要执行的Sql");
+            return;
         }
-    </script>
-    <header id="search" dd_name="首页搜索区">
-        <div class="dd-logo">
-            <a href="/" style="background-size: 2rem 2rem;" dd_name="logo跳转"></a>
-        </div>
-        <div class="search_box">
-            <div class="search">
-                <form id="index_search_form" method="get" action="/Shared/Error" target="_parent" onsubmit="return submit_search();">
-                    <div class="text_box">
-                        <input id="keyword" name="keyword" type="text" placeholder="请输入搜索内容" class="keyword text" onkeydown="this.style.color=&#39;#404040&#39;" autocomplete="off">
-                    </div>
-                    <input type="submit" value="" class="submit" dd_name="搜索">
-                    <input type="hidden" value="index_search_form_submit" name="sid">
-                </form>
-            </div>
-        </div>
-        <div class="header-category"><a href="/Earliest/ListNavi/index.html" dd_name="跳转分类"><em>更多</em></a></div>
-        <div class="search_list"></div>
-    </header>
-    <div style="padding: 10px; background-color: white;">
-        <div style="margin-top: 30px;">
-            <span class="Biaoqian">功能介绍</span><br />
-            <div style="padding-left: 1rem;font-size:0.7rem;">
-                a. Sql 语句<br />
-                b. 更新则返回是否成功以及更新条数<br />
-                c. 查询则返回查询结果<br />
-                d. 一次仅返回一个DataTable<br />
-            </div>
-        </div>
-        <div style="margin-top: 30px;">
-            <span class="Biaoqian">演示Demo</span><br />
-            <div style="margin-top: 10px; text-align: center;">
-                <textarea id="coontent" class="qrcodecontentinput" placeholder="请输入Sql 语句"></textarea>
-                <input onclick="executesql('Get')" class="qrcodebutton" type="button" value="执行Sql-Get" />
-                <input onclick="executesql('Post')" class="qrcodebutton" type="button" value="执行Sql-Post" />
-            </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <textarea id="executesqlresult" class="qrcodecontentinput" style="font-size:0.5rem;height:8rem;" placeholder="执行结果"></textarea>
-            </div>
+        $(".qrcodebutton").attr("background", "#b8b8b8");
+        var apiurl = "/api/toolapi/ExecuteSql?Sql=" + content + "&Type=" + type;
+        $.when(ApliuCommon.HttpSend(apiurl)).then(function (data) {
+            $("#executesqlresult").val(data);
+            $(".qrcodebutton").attr("background", "#ff463c");
+        }, function (error) {
+            $("#executesqlresult").val(error);
+            $(".qrcodebutton").attr("background", "#ff463c");
+        });
+    }
+</script>
+
+<div style="padding: 10px; background-color: white;">
+    <div style="margin-top: 30px;">
+        <span class="Biaoqian">功能介绍</span><br />
+        <div style="padding-left: 1rem; font-size: 0.7rem;">
+            a. Sql 语句<br />
+            b. 更新则返回是否成功以及更新条数<br />
+            c. 查询则返回查询结果<br />
+            d. 一次仅返回一个DataTable<br />
         </div>
     </div>
-    <div class="fixed_box" style="-webkit-transform-origin: 0px 0px; opacity: 1; -webkit-transform: scale(1, 1); display: none;">
-        <a href="javascript:scrollTo(0,0)" class="btn_back" id="backtop">
-            <img style="width: 2rem" src="../../Earliest/images/go-top.png"></a>
+    <div style="margin-top: 30px;">
+        <span class="Biaoqian">演示Demo</span><br />
+        <div style="margin-top: 10px; text-align: center;">
+            <textarea id="coontent" class="qrcodecontentinput" placeholder="请输入Sql 语句"></textarea>
+            <input onclick="executesql('Get')" class="qrcodebutton" type="button" value="执行Sql-Get" />
+            <input onclick="executesql('Post')" class="qrcodebutton" type="button" value="执行Sql-Post" />
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <textarea id="executesqlresult" class="qrcodecontentinput" style="font-size: 0.5rem; height: 8rem;" placeholder="执行结果"></textarea>
+        </div>
     </div>
-    <footer class="footer new">
-        <section class="status-bar">
-            <div style="text-align: center;">
-                <a href="javascript:void(0);" style="float: none; width: 30%; margin-left: auto;">登录</a>
-                <a href="javascript:void(0);" style="float: none; width: 30%; margin-left: auto;">注册</a>
-                <a style="float: right; margin-left: auto; padding: 0 15px 0 0;" href="javascript:scrollTo(0,0);">TOP</a>
-            </div>
-        </section>
-        <nav class="b-nav">
-            <p>
-                <a href="javascript:void(0);" ontouchstart="">提建议</a>
-                <a class="red" href="javascript:void(0);" ontouchstart="">触屏版</a>
-                <a href="javascript:void(0);" ontouchstart="">电脑版</a>
-                <a href="javascript:void(0);" ontouchstart="">帮&nbsp;&nbsp;助</a>
-            </p>
-        </nav>
-        <section class="copyright">
-            <p>Copyright Apliu 2018 www.apliu.xyz</p>
-        </section>
-    </footer>
-    <script src="/Earliest/js/zepto.min.js"></script>
-    <script src="/Earliest/js/underscore.min.js"></script>
-    <script src="/Earliest/js/iscroll5.min.js"></script>
-    <script src="/Earliest/js/fastclick.min.js"></script>
-    <script src="/Earliest/js/mod_countdown.min.js"></script>
-    <script src="/Earliest/js/mod_suggest.min.js"></script>
-    <script src="/Earliest/js/mdd_index.min.js"></script>
-</body>
-</html>
+</div>

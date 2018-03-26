@@ -26,9 +26,9 @@ namespace ApliuWeb.Controllers
             return QRCode.CreateCodeSimple(Content);
         }
 
-        // GET api/toolapi/SearchTools?Keyword=content
+        // GET api/toolapi/SearchTool?Keyword=content
         [HttpGet]
-        public HttpResponseMessage SearchTools(string Keyword)
+        public HttpResponseMessage SearchTool(string Keyword)
         {
             return HttpRequestHelper.encapResult(Keyword);
         }

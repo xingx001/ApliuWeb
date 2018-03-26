@@ -9,28 +9,45 @@
     color: #656a73;
     background: #e4e4e6;
     display: block;
-    resize:none;
-    height:6rem;
-    border-radius:5px;
-    padding:10px;
-    margin:0 auto;
+    resize: none;
+    height: 6rem;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0 auto;
 }
 
 .qrcodebutton {
     margin: 0 auto;
-    margin-top:10px;
-    height:1.2rem;
-    width:5rem;
+    margin-top: 10px;
+    height: 1.2rem;
+    width: 5rem;
     background: #ff463c;
     border: none;
     border-radius: .3rem;
-    color:white;
+    color: white;
 }
 
-.Biaoqian{
-    color:#ff463c;
+.Biaoqian {
+    color: #ff463c;
 }
 
-body{
+body {
     font-family: 'microsoft yahei','华文细黑',Verdana,Arial,Helvetica,sans-serif;
+}
+
+.loginwelcome {
+    height: 1.5rem;
+    padding: 0 1.5rem;
+    line-height: 1.5rem;
+    border: solid 1px #FFF;
+    border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    margin-top: 3rem;
+    text-align: center;
+    background-color: #fb4e3a;
+    color: white;
+    font-size: 0.7rem;
 }
