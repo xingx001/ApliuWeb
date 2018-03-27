@@ -145,6 +145,36 @@ namespace ApliuWeb
         }
 
         /// <summary>
+        /// 获取指定链接库配置
+        /// </summary>
+        /// <param name="DatabaseTypeSelect"></param>
+        public static void GetDatabaseConfig(string DatabaseTypeSelect, out string databaseType, out string databaseConnection)
+        {
+            databaseType = string.Empty;
+            databaseConnection = string.Empty;
+            XmlDocument doc = new XmlDocument();
+            doc.Load(configFilePath);
+
+            XmlNode node = null;
+            string[] dbtype = new string[] { };
+            node = doc.SelectSingleNode("//configuration/" + DatabaseTypeSelect);
+            if (node != null)
+            {
+                dbtype = node.InnerText.Trim().Split('-');
+                if (dbtype.Length == 2) databaseType = dbtype[0];
+            }
+
+            if (dbtype.Length == 2)
+            {
+                node = doc.SelectSingleNode("//configuration/" + dbtype[1]);
+                if (node != null)
+                {
+                    databaseConnection = node.InnerText.Trim();
+                }
+            }
+        }
+
+        /// <summary>
         /// 获取base.config文件appSettings中指定节点的值
         /// </summary>
         /// <param name="NodeName"></param>

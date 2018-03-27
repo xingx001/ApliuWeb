@@ -2,6 +2,7 @@
 using ApliuTools;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -11,26 +12,51 @@ namespace ApliuWeb
 {
     public class DataAccess
     {
-        private static DataAccess _Instance = null;
+        private static Dictionary<string, DataAccess> _Instance = new Dictionary<string, DataAccess>() { };
+
+        /// <summary>
+        /// 获取默认的数据库链接对象 key=Default 从配置文件中读取
+        /// </summary>
         public static DataAccess Instance
         {
             get
             {
-                if (_Instance == null) LoadDataAccess();
-                return _Instance;
+                if (_Instance.ContainsKey("Default")) return _Instance["Default"];
+                else
+                {
+                    LoadDataAccess("Default", SiteConfig.Instance.DatabaseType, SiteConfig.Instance.DatabaseConnection);
+                    return _Instance["Default"];
+                }
             }
         }
 
         /// <summary>
+        /// 获取指定Key的数据库链接对象，再使用前需要进行Load，如果找不到则返回Null
+        /// </summary>
+        public static ReadOnlyDictionary<string, DataAccess> InstanceKey
+        {
+            get
+            {
+                return new ReadOnlyDictionary<string, DataAccess>(_Instance);
+            }
+        }
+
+        private DatabaseHelper dbHelper = new DatabaseHelper();
+
+        /// <summary>
         /// 初始化数据库连接通道
         /// </summary>
-        private static void LoadDataAccess()
+        public static void LoadDataAccess(string instanceKey, string databaseType, string databaseConnection)
         {
             try
             {
-                DatabaseType.dbType = (DatabaseTypeEnum)Enum.Parse(typeof(DatabaseTypeEnum), SiteConfig.Instance.DatabaseType);
-                DatabaseHelper.DatabaseConnection = SiteConfig.Instance.DatabaseConnection;
-                _Instance = new DataAccess();
+                if (!_Instance.ContainsKey(instanceKey))
+                {
+                    DataAccess dataAccess = new DataAccess();
+                    dataAccess.dbHelper.databaseType = (DatabaseTypeEnum)Enum.Parse(typeof(DatabaseTypeEnum), databaseType);
+                    dataAccess.dbHelper.databaseConnection = databaseConnection;
+                    _Instance.Add(instanceKey, dataAccess);
+                }
             }
             catch (Exception)
             {
@@ -86,7 +112,7 @@ namespace ApliuWeb
             DataSet dsData = null;
             try
             {
-                dsData = DatabaseHelper.GetData(Sql, Args);
+                dsData = dbHelper.GetData(Sql, Args);
             }
             catch (Exception ex)
             {
@@ -106,7 +132,7 @@ namespace ApliuWeb
             bool result = false;
             try
             {
-                if (DatabaseHelper.PostData(Sql, Args) >= 0)
+                if (dbHelper.PostData(Sql, Args) >= 0)
                 {
                     result = true;
                 }
@@ -129,7 +155,7 @@ namespace ApliuWeb
             int result = -1;
             try
             {
-                result = DatabaseHelper.PostData(Sql, Args);
+                result = dbHelper.PostData(Sql, Args);
             }
             catch (Exception ex)
             {
@@ -148,7 +174,7 @@ namespace ApliuWeb
         /// <returns></returns>
         public SqlParameter MakeInParam(string ParamName, SqlDbType DbType, int Size, object Value)
         {
-            System.Data.SqlClient.SqlParameter sqlParams = DatabaseHelper.MakeParamSqlServer(ParamName, DbType, Size, ParameterDirection.Input, Value);
+            System.Data.SqlClient.SqlParameter sqlParams = dbHelper.MakeParamSqlServer(ParamName, DbType, Size, ParameterDirection.Input, Value);
             return sqlParams;
         }
     }

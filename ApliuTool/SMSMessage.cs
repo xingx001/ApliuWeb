@@ -50,7 +50,7 @@ namespace ApliuTools
             string response = HttpRequestHelper.HttpGet(sendurl);
             bool result = AnalysisResponse(response, out SendMsg);
             string insertlog = string.Format(sqlInsertAll, Guid.NewGuid(), Mobile, SMSContent, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "Apliu", "验证码", result, SendMsg);
-            DatabaseHelper.PostData(insertlog);
+            //DatabaseHelper.PostData(insertlog);
             return result;
         }
 

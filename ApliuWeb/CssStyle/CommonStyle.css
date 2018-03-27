@@ -51,3 +51,82 @@ body {
     color: white;
     font-size: 0.7rem;
 }
+
+
+
+#css3tableflexible :after, #css3tableflexible thead:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+
+#css3tableflexible {
+    /*width: 100%;*/
+    font-size: 0.5em; /*12*/
+    line-height: 1em; /*15*/
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+    #css3tableflexible th,
+    #css3tableflexible td {
+        margin: 0;
+        padding: 0.2em; /*10*/
+        vertical-align: top;
+        border: 1px solid #babcbf;
+        background: #fff;
+    }
+
+    #css3tableflexible th {
+        text-align: left;
+        background: #fff2b2;
+    }
+
+
+@media only screen and (max-width: 30em) { /*640*/
+
+    #css3tableflexible {
+        /*display: block;*/
+        position: relative;
+        /*width: 100%;*/
+    }
+
+        #css3tableflexible thead {
+            display: block;
+            float: left;
+        }
+
+        #css3tableflexible tbody {
+            display: -webkit-box;
+            overflow-x: auto;
+        }
+
+        #css3tableflexible th,
+        #css3tableflexible tr,
+        #css3tableflexible td {
+            display: block;
+        }
+
+        #css3tableflexible th {
+            border-bottom: 0;
+        }
+
+        #css3tableflexible td {
+            border-left: 0;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        #css3tableflexible tbody tr {
+            border-right: 1px solid #babcbf;
+        }
+
+        #css3tableflexible th:last-child,
+        #css3tableflexible td:last-child {
+            border-bottom: 1px solid #babcbf;
+        }
+}

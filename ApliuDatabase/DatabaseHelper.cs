@@ -11,17 +11,17 @@ namespace ApliuDatabase
 {
     public class DatabaseHelper
     {
-        public static string DatabaseConnection = string.Empty;
-        private static Hashtable parmCache = Hashtable.Synchronized(new Hashtable());
+        public string databaseConnection = string.Empty;
+        public DatabaseTypeEnum databaseType = DatabaseTypeEnum.SqlServer;
 
         /// <summary>
         /// 查询数据库
         /// </summary>
         /// <param name="Sql"></param>
         /// <returns></returns>
-        public static DataSet GetData(string Sql)
+        public DataSet GetData(string Sql)
         {
-            return ExecuteGet(DatabaseConnection, CommandType.Text, Sql, new object[0]);
+            return ExecuteGet(databaseConnection, CommandType.Text, Sql, new object[0]);
         }
 
         /// <summary>
@@ -29,9 +29,9 @@ namespace ApliuDatabase
         /// </summary>
         /// <param name="Sql"></param>
         /// <returns></returns>
-        public static int PostData(string Sql)
+        public int PostData(string Sql)
         {
-            return ExecutePost(DatabaseConnection, CommandType.Text, Sql, new object[0]);
+            return ExecutePost(databaseConnection, CommandType.Text, Sql, new object[0]);
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace ApliuDatabase
         /// </summary>
         /// <param name="Sql"></param>
         /// <returns></returns>
-        public static DataSet GetData(string Sql, params object[] Args)
+        public DataSet GetData(string Sql, params object[] Args)
         {
-            return ExecuteGet(DatabaseConnection, CommandType.Text, Sql, Args);
+            return ExecuteGet(databaseConnection, CommandType.Text, Sql, Args);
         }
 
         /// <summary>
@@ -49,19 +49,19 @@ namespace ApliuDatabase
         /// </summary>
         /// <param name="Sql"></param>
         /// <returns></returns>
-        public static int PostData(string Sql, params object[] Args)
+        public int PostData(string Sql, params object[] Args)
         {
-            return ExecutePost(DatabaseConnection, CommandType.Text, Sql, Args);
+            return ExecutePost(databaseConnection, CommandType.Text, Sql, Args);
         }
 
         /// <summary>
         /// PostData
         /// </summary>
         /// <returns>返回受影响的行数</returns>
-        public static int ExecutePost(string connectionString, CommandType cmdType, string cmdText, params object[] commandParameters)
+        public int ExecutePost(string connectionString, CommandType cmdType, string cmdText, params object[] commandParameters)
         {
             int val = -1;
-            switch (DatabaseType.dbType)
+            switch (databaseType)
             {
                 case DatabaseTypeEnum.SqlServer:
                     SqlCommand cmdsqlmain = new SqlCommand();
@@ -95,10 +95,10 @@ namespace ApliuDatabase
         /// GetData
         /// </summary>
         /// <returns>返回查询结果</returns>
-        public static DataSet ExecuteGet(string connectionString, CommandType commandType, string commandText, params object[] commandParameters)
+        public DataSet ExecuteGet(string connectionString, CommandType commandType, string commandText, params object[] commandParameters)
         {
             DataSet dsData = null;
-            switch (DatabaseType.dbType)
+            switch (databaseType)
             {
                 case DatabaseTypeEnum.SqlServer:
                     using (SqlConnection cn = new SqlConnection(connectionString))
@@ -135,7 +135,7 @@ namespace ApliuDatabase
         /// <summary>
         /// SqlServer 设置SqlCommand
         /// </summary>
-        private static void PrepareCommand(SqlCommand cmd, SqlConnection conn, SqlTransaction trans, CommandType cmdType, string cmdText, SqlParameter[] commandParameters)
+        private void PrepareCommand(SqlCommand cmd, SqlConnection conn, SqlTransaction trans, CommandType cmdType, string cmdText, SqlParameter[] commandParameters)
         {
             if (conn.State != ConnectionState.Open)
                 conn.Open();
@@ -157,7 +157,7 @@ namespace ApliuDatabase
         /// <summary>
         /// MySql 设置MySqlCommand
         /// </summary>
-        private static void PrepareCommand(MySqlCommand cmd, MySqlConnection conn, MySqlTransaction trans, CommandType cmdType, string cmdText, MySqlParameter[] commandParameters)
+        private void PrepareCommand(MySqlCommand cmd, MySqlConnection conn, MySqlTransaction trans, CommandType cmdType, string cmdText, MySqlParameter[] commandParameters)
         {
             if (conn.State != ConnectionState.Open)
                 conn.Open();
@@ -185,7 +185,7 @@ namespace ApliuDatabase
         /// <param name="Direction">默认 ParameterDirection.Input</param>
         /// <param name="Value"></param>
         /// <returns></returns>
-        public static SqlParameter MakeParamSqlServer(string ParamName, SqlDbType DbType, Int32 Size, ParameterDirection Direction, object Value)
+        public SqlParameter MakeParamSqlServer(string ParamName, SqlDbType DbType, Int32 Size, ParameterDirection Direction, object Value)
         {
             SqlParameter param;
 
@@ -210,7 +210,7 @@ namespace ApliuDatabase
         /// <param name="Direction">默认 ParameterDirection.Input</param>
         /// <param name="Value"></param>
         /// <returns></returns>
-        public static MySqlParameter MakeParamMySql(string ParamName, MySqlDbType DbType, Int32 Size, ParameterDirection Direction, object Value)
+        public MySqlParameter MakeParamMySql(string ParamName, MySqlDbType DbType, Int32 Size, ParameterDirection Direction, object Value)
         {
             MySqlParameter param;
 

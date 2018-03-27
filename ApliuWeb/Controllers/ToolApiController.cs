@@ -49,10 +49,15 @@ namespace ApliuWeb.Controllers
 
             Sql = Sql.Trim();
             if (string.IsNullOrEmpty(Sql)) return result.ToString();
-            switch (Type)
+
+            string databaseType = string.Empty;
+            string databaseConnection = string.Empty;
+            SiteConfig.GetDatabaseConfig("DatabaseTest", out databaseType, out databaseConnection);
+            DataAccess.LoadDataAccess("DatabaseTest", databaseType, databaseConnection);
+            switch (Type.ToUpper())
             {
-                case "Get":
-                    DataSet sqlds = DataAccess.Instance.GetData(Sql);
+                case "GET":
+                    DataSet sqlds = DataAccess.InstanceKey["DatabaseTest"].GetData(Sql);
                     if (sqlds != null && sqlds.Tables.Count > 0)
                     {
                         result.code = "0";
@@ -60,8 +65,49 @@ namespace ApliuWeb.Controllers
                         result.result = "执行成功";
                     }
                     break;
-                case "Post":
-                    int rank = DataAccess.Instance.PostDataInt(Sql, null);
+                case "POST":
+                    int rank = DataAccess.InstanceKey["DatabaseTest"].PostDataInt(Sql, null);
+                    if (rank >= 0)
+                    {
+                        result.code = "0";
+                        result.msg = "受影响的数据条数：" + rank;
+                        result.result = "执行成功";
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return result.ToString();
+        }
+
+        [HttpGet]
+        public string ExecuteDatabseSql(string conn, string type, string sql)
+        {
+            ResponseMessage result = new ResponseMessage();
+            result.code = "-1";
+            result.msg = "发生异常";
+            result.result = "执行失败";
+
+            sql = sql.Trim();
+            if (string.IsNullOrEmpty(sql)) return result.ToString();
+
+            string databaseType = "0";
+            string databaseConnection = conn;
+            string key = Guid.NewGuid().ToString();
+            DataAccess.LoadDataAccess(key, databaseType, databaseConnection);
+            switch (type.ToUpper())
+            {
+                case "GET":
+                    DataSet sqlds = DataAccess.InstanceKey[key].GetData(sql);
+                    if (sqlds != null && sqlds.Tables.Count > 0)
+                    {
+                        result.code = "0";
+                        result.msg = JsonConvert.SerializeObject(sqlds.Tables[0]);
+                        result.result = "执行成功";
+                    }
+                    break;
+                case "POST":
+                    int rank = DataAccess.InstanceKey[key].PostDataInt(sql, null);
                     if (rank >= 0)
                     {
                         result.code = "0";

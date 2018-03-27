@@ -8,8 +8,8 @@ namespace ApliuDatabase
 {
     public class DatabaseType
     {
-        private static DatabaseTypeEnum _dbType = DatabaseTypeEnum.SqlServer;
-        public static DatabaseTypeEnum dbType
+        private DatabaseTypeEnum _dbType = DatabaseTypeEnum.SqlServer;
+        public DatabaseTypeEnum dbType
         {
             get
             {
