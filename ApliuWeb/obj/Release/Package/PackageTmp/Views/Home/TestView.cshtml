@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "~/Views/Shared/Templet.cshtml";
+    ViewBag.Title = "TestView";
+}
+@using ApliuTools;
+<h2>TestView</h2>
+<div>
+    @{
+        string No1 = SecurityHelper.SHA256Encrypt("Apliu", System.Text.Encoding.UTF8);
+
+        string No2 = TestClass.sha256("Apliu");
+    }
+    <span style="width:30px;">@No1;</span><br />
+    <span>@No2;</span>
+</div>

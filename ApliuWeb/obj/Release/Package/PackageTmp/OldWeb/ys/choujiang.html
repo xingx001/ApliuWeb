@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>抽奖</title>
+
+<style type="text/css">
+#lottery{width:574px;height:584px;margin:20px auto 0;background:url(images/bg.jpg) no-repeat;padding:50px 55px;}
+#lottery table td{width:142px;height:142px;text-align:center;vertical-align:middle;font-size:24px;color:#333;font-index:-999}
+#lottery table td a{width:284px;height:284px;line-height:150px;display:block;text-decoration:none;}
+#lottery table td.active{background-color:#ea0000;}
+#zhezhaoceng {
+	position: fixed;
+	top: 0px;
+	visibility: collapse;
+	background-color: rgba(5, 5, 5, 0.5);
+	width: 100%;
+	height: 1000px;
+	z-index: 100;
+	_position: absolute;
+}
+#tanchuangceng {
+	border-radius: 10px;
+	position: fixed;
+	z-index: 101;
+	visibility: collapse;
+	_position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -168.5px 0 0 -250px;
+	width: 500px;
+	height: 337px;
+	overflow: hidden;
+	-webkit-box-shadow: 0px 0px 15px #666;
+	-moz-box-shadow: 0px 0px 15px #666;
+	box-shadow: 0px 0px 15px #666;
+	background-color: #FACA00;
+}
+.lucky-btn {
+	font: 14px/24px arial, "\5b8b\4f53", sans-serif, "Microsoft YaHei", tahoma;
+	width: 136px;
+	height: 49px;
+	display: -moz-inline-box;
+	-moz-box-orient: vertical;
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 20px;
+	line-height: 49px;
+	color: #fff;
+	margin: 0 10px;
+	text-align: center;
+	text-decoration: none;
+}
+.lucky-btn-more {
+	background-image: url(images/baiduanniu.png);
+	background-position: -845px -676px;
+	background-repeat: no-repeat;
+}
+.lucky-btn-ok {
+	background-image: url(images/baiduanniu.png);
+	background-position: -845px -622px;
+	background-repeat: no-repeat;
+}
+.titlebar-close {
+	width: 21px;
+	height: 21px;
+	float: right;
+	cursor: pointer;
+	background-image: url(images/baiduanniu.png);
+	background-position: -960px -596px;
+	background-color: transparent;
+	background-repeat: no-repeat;
+}
+</style>
+
+</head>
+<body>
+
+<div id="lottery">
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td class="lottery-unit lottery-unit-0"><img src="images/1.png"></td>
+			<td class="lottery-unit lottery-unit-1"><img src="images/2.png"></td>
+			<td class="lottery-unit lottery-unit-2"><img src="images/4.png"></td>
+            <td class="lottery-unit lottery-unit-3"><img src="images/3.png"></td>
+		</tr>
+		<tr>
+			<td class="lottery-unit lottery-unit-11"><img src="images/7.png"></td>
+			<td colspan="2" rowspan="2"><a href="javascript:void(0);"></a></td>
+			<td class="lottery-unit lottery-unit-4"><img src="images/5.png"></td>
+		</tr>
+		<tr>
+			<td class="lottery-unit lottery-unit-10"><img src="images/1.png"></td>
+			<td class="lottery-unit lottery-unit-5"><img src="images/6.png"></td>
+		</tr>
+        <tr>
+			<td class="lottery-unit lottery-unit-9"><img src="images/3.png"></td>
+			<td class="lottery-unit lottery-unit-8"><img src="images/6.png"></td>
+			<td class="lottery-unit lottery-unit-7"><img src="images/8.png"></td>
+            <td class="lottery-unit lottery-unit-6"><img src="images/7.png"></td>
+		</tr>
+	</table>
+</div>
+<div id="zhezhaoceng"><!--遮罩层--></div>
+<div id="tanchuangceng"><!--弹窗层-->
+  <div style="">
+    <div style="float: left;color:#5E2F15; height:26px;font-size: 22px;width: 90%; font-weight:900;line-height: 24px;padding:10px 0px 10px 2%">恭喜您获得以下奖品</div>
+    <div class="titlebar-close" style="margin-right:10px; margin-top:10px;"></div>
+  </div>
+  <div style=" height:202px; margin-top:66px;">
+    <div id="jiangpinxianshi" style="border-radius: 50%;border: 3px solid #D4AB00; background-color:#FFF; height:162px; width:162px; margin:0 auto; text-align:center;"></div>
+  	<div style="color:#5E2F15;font-size: 22px;font-weight:900; width:500px;text-align:center;">阳少赶紧发货！！！</div>
+  </div>
+  <div style="background-color:#FDEA99; width:100%; height:69px; text-align:center; padding-top:10px;"> <a href="javascript:void(0);" class="lucky-btn lucky-btn-ok">确定</a> <a href="javascript:void(0);" class="lucky-btn lucky-btn-more">再来一次</a> </div>
+</div>
+<script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+<script type="text/javascript">
+var lottery={
+	index:-1,	//当前转动到哪个位置，起点位置
+	count:0,	//总共有多少个位置
+	timer:0,	//setTimeout的ID，用clearTimeout清除
+	speed:20,	//初始转动速度
+	times:0,	//转动次数
+	cycle:50,	//转动基本次数：即至少需要转动多少次再进入抽奖环节
+	prize:-1,	//中奖位置
+	init:function(id){
+		if ($("#"+id).find(".lottery-unit").length>0) {
+			$lottery = $("#"+id);
+			$units = $lottery.find(".lottery-unit");
+			this.obj = $lottery;
+			this.count = $units.length;
+			$lottery.find(".lottery-unit-"+this.index).addClass("active");
+		};
+	},
+	roll:function(){
+		var index = this.index;
+		var count = this.count;
+		var lottery = this.obj;
+		$(lottery).find(".lottery-unit-"+index).removeClass("active");
+		index += 1;
+		if (index>count-1) {
+			index = 0;
+		};
+		$(lottery).find(".lottery-unit-"+index).addClass("active");
+		this.index=index;
+		return false;
+	},
+	stop:function(index){
+		this.prize=index;
+		return false;
+	}
+};
+
+function roll(){
+	lottery.times += 1;
+	lottery.roll();
+	if (lottery.times > lottery.cycle+10 && lottery.prize==lottery.index) {
+		clearTimeout(lottery.timer);
+		var _prize=lottery.prize;
+		window.setTimeout(function(){ToMe(_prize);},500);
+		lottery.prize=-1;
+		lottery.times=0;
+		click=false;
+	}else{
+		if (lottery.times<lottery.cycle) {
+			lottery.speed -= 10;
+		}else if(lottery.times==lottery.cycle) {
+			var index = Math.random()*(lottery.count)|0;
+			lottery.prize = index;		
+		}else{
+			if (lottery.times > lottery.cycle+10 && ((lottery.prize==0 && lottery.index==7) || lottery.prize==lottery.index+1)) {
+				lottery.speed += 110;
+			}else{
+				lottery.speed += 20;
+			}
+		}
+		if (lottery.speed<40) {
+			lottery.speed=40;
+		};
+		//console.log(lottery.times+'^^^^^^'+lottery.speed+'^^^^^^^'+lottery.prize);
+		lottery.timer = setTimeout(roll,lottery.speed);
+	}
+	return false;
+}
+
+var click=false;
+
+window.onload=function(){
+	lottery.init('lottery');
+	$("#lottery a").click(function(){
+		if (click) {
+			return false;
+		}else{
+			lottery.speed=100;
+			roll();
+			click=true;
+			return false;
+		}
+	});
+	$(".lucky-btn-ok").click(function(){
+		closeTC();
+	});
+	$(".lucky-btn-more").click(function(){
+		closeTC();
+		lottery.speed=100;
+		roll();
+		click=true;
+		return false;
+	});
+	$(".titlebar-close").click(function(){
+		closeTC();
+	});
+};
+
+function ToMe(_prize)
+{
+	document.getElementById("zhezhaoceng").style.visibility="visible";
+	document.getElementById("tanchuangceng").style.visibility="visible";
+	var jiangpin=document.getElementById("jiangpinxianshi");
+	jiangpin.innerHTML="<img src='images/"+(_prize%8+1)+".png'>";
+}
+
+function closeTC()
+{
+	document.getElementById("zhezhaoceng").style.visibility="collapse";
+	document.getElementById("tanchuangceng").style.visibility="collapse";
+}
+</script>
+</body>
+</html>

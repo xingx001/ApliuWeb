@@ -1,0 +1,5 @@
+D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuDatabase\bin\Release\ApliuDatabase.dll
+D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuDatabase\bin\Release\ApliuDatabase.pdb
+D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuDatabase\bin\Release\MySql.Data.dll
+D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuDatabase\obj\Release\ApliuDatabase.dll
+D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuDatabase\obj\Release\ApliuDatabase.pdb
