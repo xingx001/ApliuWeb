@@ -18,6 +18,7 @@ namespace ApliuTools
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
+        [Obsolete]
         public static string EncryptContent(Object Content)
         {
             string Value = Content.ToString();
@@ -46,6 +47,7 @@ namespace ApliuTools
         /// </summary>
         /// <param name="Content"></param>
         /// <returns></returns>
+        [Obsolete]
         public static string DecryptConten(Object Content)
         {
             string Value = Content.ToString();

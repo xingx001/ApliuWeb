@@ -81,7 +81,7 @@ namespace ApliuWeb.Controllers
         }
 
         [HttpGet]
-        public string ExecuteDatabseSql(string conn, string type, string sql)
+        public string ExecuteDatabseSql(string source, string userid, string password, string database, string sql)
         {
             ResponseMessage result = new ResponseMessage();
             result.code = "-1";
@@ -91,32 +91,33 @@ namespace ApliuWeb.Controllers
             sql = sql.Trim();
             if (string.IsNullOrEmpty(sql)) return result.ToString();
 
+            string conn = string.Format(@"Data Source={0};Initial Catalog={1};Integrated Security=False;User ID={2};Password={3};Connect Timeout=15;Encrypt=False;TrustServerCertificate=False", source, database, userid, password);
+
             string databaseType = "0";
             string databaseConnection = conn;
-            string key = Guid.NewGuid().ToString();
+            string ip = HYRequest.GetIP();//以客户端IP作为Key，避免重复加载数据库链接对象
+            string key = SecurityHelper.MD5Encrypt(ip, System.Text.Encoding.UTF8);
+            if (string.IsNullOrEmpty(ip)) key = Guid.NewGuid().ToString().Replace("-","");
             DataAccess.LoadDataAccess(key, databaseType, databaseConnection);
-            switch (type.ToUpper())
+            if (sql.ToUpper().Contains("UPDATE") || sql.ToUpper().Contains("DELETE") || sql.ToUpper().Contains("INSERT"))
             {
-                case "GET":
-                    DataSet sqlds = DataAccess.InstanceKey[key].GetData(sql);
-                    if (sqlds != null && sqlds.Tables.Count > 0)
-                    {
-                        result.code = "0";
-                        result.msg = JsonConvert.SerializeObject(sqlds.Tables[0]);
-                        result.result = "执行成功";
-                    }
-                    break;
-                case "POST":
-                    int rank = DataAccess.InstanceKey[key].PostDataInt(sql, null);
-                    if (rank >= 0)
-                    {
-                        result.code = "0";
-                        result.msg = "受影响的数据条数：" + rank;
-                        result.result = "执行成功";
-                    }
-                    break;
-                default:
-                    break;
+                int rank = DataAccess.InstanceKey[key].PostDataInt(sql, null);
+                if (rank >= 0)
+                {
+                    result.code = "0";
+                    result.msg = "受影响的数据条数：" + rank;
+                    result.result = "执行成功";
+                }
+            }
+            else
+            {
+                DataSet sqlds = DataAccess.InstanceKey[key].GetData(sql);
+                if (sqlds != null && sqlds.Tables.Count > 0)
+                {
+                    result.code = "0";
+                    result.msg = JsonConvert.SerializeObject(sqlds.Tables[0]);
+                    result.result = "执行成功";
+                }
             }
             return result.ToString();
         }

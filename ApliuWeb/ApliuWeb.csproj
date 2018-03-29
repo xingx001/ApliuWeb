@@ -124,10 +124,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Config\SiteConfig.cs" />
+    <Compile Include="Controllers\ClansController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\ToolApiController.cs" />
     <Compile Include="Controllers\ToolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Function\DataAccess.cs" />
     <Compile Include="Global.asax.cs">
@@ -496,7 +498,9 @@
     <Content Include="Game\Poker\Prototype.js" />
     <Content Include="Game\Poker\ResourceData.js" />
     <Content Include="Global.asax" />
-    <Content Include="Images\tips.png" />
+    <Content Include="Images\Logo\logorect.png" />
+    <Content Include="Images\Logo\logosqu.png" />
+    <Content Include="Images\Icon\tips.png" />
     <Content Include="JsScript\apliualert.js" />
     <Content Include="JsScript\CommonJs.js" />
     <Content Include="Log\ReadMe.txt" />
@@ -535,7 +539,6 @@
     </Content>
     <None Include="Properties\PublishProfiles\ApliuWeb.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
-    <Content Include="Images\apliulogo.png" />
     <Content Include="Images\other\hxzst.jpg" />
     <Content Include="Images\other\sxzst.jpg" />
     <Content Include="Images\other\weburl.png" />
@@ -914,6 +917,24 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="User\css\common.css" />
+    <Content Include="User\css\login.css" />
+    <Content Include="User\css\register.css" />
+    <Content Include="User\images\bj.png" />
+    <Content Include="User\images\icon_list.png" />
+    <Content Include="User\images\logo.png" />
+    <Content Include="User\images\open.jpg" />
+    <Content Include="User\images\qq.png" />
+    <Content Include="User\images\show.png" />
+    <Content Include="User\images\wb.png" />
+    <Content Include="User\images\wx.png" />
+    <Content Include="User\images\zc-1.jpg" />
+    <Content Include="User\images\zc-2.jpg" />
+    <Content Include="User\images\zc-3.jpg" />
+    <Content Include="User\index.html" />
+    <Content Include="User\login.html" />
+    <Content Include="User\newPassword.html" />
+    <Content Include="User\register.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -932,6 +953,8 @@
     <Content Include="Views\Tool\QRCode.cshtml" />
     <Content Include="Views\Tool\SqlServer.cshtml" />
     <Content Include="Views\Shared\Templet.cshtml" />
+    <Content Include="Views\Clans\Nb102zz.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
