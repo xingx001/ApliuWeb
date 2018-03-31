@@ -15,7 +15,7 @@
       <publishTime>03/29/2018 19:23:44</publishTime>
     </File>
     <File Include="bin/ApliuWeb.dll">
-      <publishTime>03/29/2018 19:23:45</publishTime>
+      <publishTime>03/31/2018 17:25:48</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -108,7 +108,7 @@
       <publishTime>03/24/2018 18:05:31</publishTime>
     </File>
     <File Include="Config/BaseConfig.config">
-      <publishTime>03/29/2018 18:42:19</publishTime>
+      <publishTime>03/31/2018 15:28:08</publishTime>
     </File>
     <File Include="Content/Site.css">
       <publishTime>03/24/2018 19:26:19</publishTime>
@@ -276,7 +276,19 @@
       <publishTime>03/20/2018 12:12:33</publishTime>
     </File>
     <File Include="CssStyle/CommonStyle.css">
-      <publishTime>03/27/2018 16:37:15</publishTime>
+      <publishTime>03/31/2018 16:47:14</publishTime>
+    </File>
+    <File Include="CssStyle/jquery-weui.min.css">
+      <publishTime>03/31/2018 10:24:32</publishTime>
+    </File>
+    <File Include="CssStyle/User/login.css">
+      <publishTime>03/31/2018 16:44:54</publishTime>
+    </File>
+    <File Include="CssStyle/weui.min.css">
+      <publishTime>03/31/2018 10:24:30</publishTime>
+    </File>
+    <File Include="CssStyle/ydui.css">
+      <publishTime>03/31/2018 12:15:09</publishTime>
     </File>
     <File Include="Earliest/css/app.css">
       <publishTime>03/29/2018 13:42:46</publishTime>
@@ -1364,8 +1376,29 @@
     <File Include="Images/apliulogo.png">
       <publishTime>03/20/2018 12:12:34</publishTime>
     </File>
+    <File Include="Images/Background/login.jpg">
+      <publishTime>03/31/2018 10:46:11</publishTime>
+    </File>
+    <File Include="Images/Icon/qq.png">
+      <publishTime>03/31/2018 10:45:39</publishTime>
+    </File>
     <File Include="Images/Icon/tips.png">
       <publishTime>02/28/2018 14:37:03</publishTime>
+    </File>
+    <File Include="Images/Icon/wb.png">
+      <publishTime>03/31/2018 10:45:39</publishTime>
+    </File>
+    <File Include="Images/Icon/wx.png">
+      <publishTime>03/31/2018 10:45:39</publishTime>
+    </File>
+    <File Include="Images/Icon/zc-1.jpg">
+      <publishTime>03/31/2018 10:45:39</publishTime>
+    </File>
+    <File Include="Images/Icon/zc-2.jpg">
+      <publishTime>03/31/2018 10:45:39</publishTime>
+    </File>
+    <File Include="Images/Icon/zc-3.jpg">
+      <publishTime>03/31/2018 10:45:39</publishTime>
     </File>
     <File Include="Images/Logo/logorect.png">
       <publishTime>03/29/2018 13:33:53</publishTime>
@@ -1398,7 +1431,16 @@
       <publishTime>03/29/2018 13:40:34</publishTime>
     </File>
     <File Include="JsScript/CommonJs.js">
-      <publishTime>03/27/2018 15:32:19</publishTime>
+      <publishTime>03/31/2018 17:16:39</publishTime>
+    </File>
+    <File Include="JsScript/jquery-weui.min.js">
+      <publishTime>03/31/2018 10:22:13</publishTime>
+    </File>
+    <File Include="JsScript/User/login.js">
+      <publishTime>03/31/2018 16:01:04</publishTime>
+    </File>
+    <File Include="JsScript/ydui.js">
+      <publishTime>03/31/2018 12:47:37</publishTime>
     </File>
     <File Include="Log/ReadMe.txt">
       <publishTime>03/20/2018 12:28:33</publishTime>
@@ -2388,7 +2430,7 @@
       <publishTime>03/20/2018 12:12:35</publishTime>
     </File>
     <File Include="OldWeb/pins/js/game.js">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>03/31/2018 17:19:16</publishTime>
     </File>
     <File Include="OldWeb/pins/js/jquery-1.8.3.min.js">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -2612,6 +2654,12 @@
     <File Include="Scripts/_references.js">
       <publishTime>03/20/2018 12:12:35</publishTime>
     </File>
+    <File Include="Test/cube.html">
+      <publishTime>03/30/2018 12:21:00</publishTime>
+    </File>
+    <File Include="Test/dialog.html">
+      <publishTime>03/31/2018 10:55:17</publishTime>
+    </File>
     <File Include="User/css/common.css">
       <publishTime>11/17/2016 16:18:23</publishTime>
     </File>
@@ -2669,8 +2717,11 @@
     <File Include="Views/Clans/Nb102zz.cshtml">
       <publishTime>03/29/2018 10:15:38</publishTime>
     </File>
+    <File Include="Views/Game/Pins.cshtml">
+      <publishTime>03/31/2018 16:55:37</publishTime>
+    </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>03/29/2018 13:46:08</publishTime>
+      <publishTime>03/31/2018 16:41:03</publishTime>
     </File>
     <File Include="Views/Home/TestIndex.cshtml">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -2682,10 +2733,10 @@
       <publishTime>03/27/2018 15:59:59</publishTime>
     </File>
     <File Include="Views/Shared/Templet.cshtml">
-      <publishTime>03/29/2018 12:57:33</publishTime>
+      <publishTime>03/31/2018 16:01:29</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>03/29/2018 09:57:05</publishTime>
+      <publishTime>03/31/2018 16:46:08</publishTime>
     </File>
     <File Include="Views/Tool/QRCode.cshtml">
       <publishTime>03/29/2018 13:42:40</publishTime>
@@ -2694,7 +2745,13 @@
       <publishTime>03/29/2018 18:23:29</publishTime>
     </File>
     <File Include="Views/User/Login.cshtml">
-      <publishTime>03/29/2018 13:59:36</publishTime>
+      <publishTime>03/31/2018 15:59:15</publishTime>
+    </File>
+    <File Include="Views/User/Password.cshtml">
+      <publishTime>03/31/2018 12:43:06</publishTime>
+    </File>
+    <File Include="Views/User/Register.cshtml">
+      <publishTime>03/31/2018 15:16:20</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>03/25/2018 15:05:09</publishTime>
@@ -2703,7 +2760,7 @@
       <publishTime>03/26/2018 13:55:03</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>03/29/2018 19:23:48</publishTime>
+      <publishTime>03/31/2018 17:25:51</publishTime>
     </File>
   </ItemGroup>
 </Project>
