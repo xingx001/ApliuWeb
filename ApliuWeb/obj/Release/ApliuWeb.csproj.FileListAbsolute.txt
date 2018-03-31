@@ -22,7 +22,6 @@ D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuWeb\bin\ThoughtWorks.QRCode.dll
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuWeb\bin\ApliuDatabase.pdb
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuWeb\bin\ApliuTools.pdb
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuWeb\bin\EntityFramework.xml
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuWeb\bin\Newtonsoft.Json.xml
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuWeb\bin\System.Net.Http.Formatting.xml
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuWeb\bin\System.Web.Helpers.xml
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuWeb\bin\System.Web.Http.xml

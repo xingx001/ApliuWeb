@@ -1,0 +1,13 @@
+2018/3/30 10:27:44 : 加载默认js、css完成
+2018/3/30 10:27:58 : 数据库更新失败，Sql：insert into Test values(@name1,@name2,@name3);，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/3/30 10:27:58 : 数据库更新失败，Sql：update Test set Msg='Ceshi' where ID='18874dc5-dafe-4ab5-b308-1c76688b2130';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/3/30 10:27:58 : 主程序启动完成201893241942
+2018/3/30 11:37:44 : 加载默认js、css完成
+2018/3/30 11:37:59 : 数据库更新失败，Sql：insert into Test values(@name1,@name2,@name3);，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/3/30 11:37:59 : 数据库更新失败，Sql：update Test set Msg='Ceshi' where ID='809652c1-a10b-4101-a340-20a458301d11';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/3/30 11:37:59 : 主程序启动完成201893241942
+2018/3/30 11:40:03 : 加载默认js、css完成
+2018/3/30 11:40:17 : 加载默认js、css完成
+2018/3/30 11:40:32 : 数据库更新失败，Sql：insert into Test values(@name1,@name2,@name3);，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/3/30 11:40:32 : 数据库更新失败，Sql：update Test set Msg='Ceshi' where ID='f8833e4f-44b6-4ad3-a8bb-64e8eb933e81';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/3/30 11:40:32 : 主程序启动完成201893241942
