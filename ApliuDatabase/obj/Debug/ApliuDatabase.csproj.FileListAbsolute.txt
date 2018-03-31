@@ -1,4 +1,3 @@
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuDatabase\obj\Debug\ApliuDatabase.csprojResolveAssemblyReference.cache
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuDatabase\obj\Debug\ApliuDatabase.dll
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuDatabase\obj\Debug\ApliuDatabase.pdb
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuDatabase\bin\ApliuDatabase.dll

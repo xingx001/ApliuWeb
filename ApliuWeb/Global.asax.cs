@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.SessionState;
 
 namespace ApliuWeb
 {
@@ -25,10 +26,10 @@ namespace ApliuWeb
                 FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                 RouteConfig.RegisterRoutes(RouteTable.Routes);
                 BundleConfig.RegisterBundles(BundleTable.Bundles);
-
+                
                 SiteConfig.LoadConfig();
 
-                DataAccess.Instance.Ceshi();
+                //DataAccess.Instance.Ceshi();
                 //SMSMessage sms = new TencentSMS();
                 //string msg;
                 //bool result = sms.SendSMS("18779182730", "验证码：100000，有效期1分钟", out msg, SiteConfig.GetConfigNodeValue("SMSAppId"), SiteConfig.GetConfigNodeValue("SMSAppKey"));
@@ -39,6 +40,11 @@ namespace ApliuWeb
             {
                 Logger.WriteLogWeb("主程序启动失败，详情：" + ex.Message);
             }
+        }
+
+        protected void Application_PostAuthorizeRequest()
+        {
+            HttpContext.Current.SetSessionStateBehavior(SessionStateBehavior.Required);
         }
     }
 }

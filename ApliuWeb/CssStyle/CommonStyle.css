@@ -130,3 +130,18 @@ body {
             border-bottom: 1px solid #babcbf;
         }
 }
+
+.regTop {
+    width: 100%;
+    padding: 0.5rem 0 0.5rem 0;
+    background: #ffffff;
+    text-align: center;
+    position: relative;
+}
+
+.back {
+    position: absolute;
+    left: 0.3rem;
+    color: #4d525d;
+    text-decoration: none;
+}

@@ -8,12 +8,21 @@ ApliuCommon.HttpSend = function (apiurl, options) {
     var v;
     if (options) {
         if (options.params) {
-            apiurl += $.param(options.params);
+            try {
+                if (typeof JSON.parse(options.params) == "object") {
+                    apiurl += $.param(options.params);
+                } else {
+                    apiurl += "?" + options.params;
+                }
+            } catch (e) {
+                apiurl += "?" + options.params;
+            }
+
         }
-        if (options.method && options.method == "GET") {
+        if (options.method && options.method.toUpperCase() == "GET") {
             v = $.get(apiurl);
         }
-        else if (options.method && options.method == "POST") {
+        else if (options.method && options.method.toUpperCase() == "POST") {
             v = $.post(apiurl, options.params);
         }
         else {
@@ -69,8 +78,46 @@ String.prototype.format = function () {
     return resultStr;
 };
 
-//var options = {
-//    "method": "GET",
-//    "params": {},
-//    "usetoken": true
-//}
+ApliuCommon.isPoneAvailable = function (str) {
+    var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+    if (!myreg.test(str)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+ApliuCommon.getoptions = function (method, params, usertoken) {
+    var options = {
+        "method": method.toString().toUpperCase(),
+        "params": params,
+        "usertoken": usertoken
+    }
+    return options;
+}
+
+$(document).ready(function () {
+    var data = { method: "Get" };
+    $.when(ApliuCommon.HttpSend("/api/common/user", data)).then(function (rst) {
+        if (rst.code == "0") {
+            $("#userlogin").text(rst.msg);
+            $("#userlogin").attr("href", "javascript:void(0);");
+
+            $("#userregister").text("退出");
+            $("#userregister").attr("href", "javascript:logout();");
+        }
+    })
+})
+
+var logout = function () {
+    $.confirm("您确定要退出吗?", "确定退出?", function () {
+        var data = { method: "Post" };
+        $.when(ApliuCommon.HttpSend("/api/common/logout", data)).then(function (rst) {
+            if (rst.code == "0") {
+                window.location.href = "/Home/Index";
+            } else {
+                $.alert("退出失败，原因：" + rst.msg);
+            }
+        }, function (rst) { $.alert("退出失败，原因：" + rst.msg); });
+    });
+}
