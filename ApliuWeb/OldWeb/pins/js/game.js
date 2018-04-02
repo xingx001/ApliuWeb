@@ -2,12 +2,12 @@
 var time = -1;
 var guan = 1;
 var t;
+
 // 计时
 function showtime() {
     time++;
     t = setTimeout("showtime()", 1000);
 }
-showtime();
 
 function MC(t) {
     if (!(this instanceof MC)) return new MC(t);
@@ -42,6 +42,7 @@ function MC(t) {
 function gohw() {
 
 }
+
 var gameinit = function () {
     document.getElementById("gohw"),
     function (t, e, n) {
@@ -170,8 +171,12 @@ var gameinit = function () {
             }
         }(), l()
     }(window, document, Math);
+
+    showtime();
 }
+
 gameinit();
+
 var loginalert = 0;
 function gameover(level) {
     clearTimeout(t);
@@ -232,7 +237,11 @@ function gameover(level) {
 function startGame() {
     $("#gameover").hide();
     showtime();
-    gamestart();
+    var canvas = document.createElement("canvas");
+    canvas.height = "550rem";
+    canvas.style.marginTop = "-4rem";
+    canvas.id = "stage";
+    $("#gamemain").html('<canvas id="stage" height="550rem" style="margin-top: -4rem;"></canvas>');
     gameinit();
     //document.location.href = document.location.href;
 }

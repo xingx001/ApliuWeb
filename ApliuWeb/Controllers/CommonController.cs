@@ -91,15 +91,15 @@ namespace ApliuWeb.Controllers
                 return result.ToString();
             }
 
-            if (!UserInfo.LoginCheck(username, password))
-            {
-                result.msg = "用户名或密码错误";
-            }
-            else
+            if (UserInfo.LoginCheck(username, password))
             {
                 UserInfo.SetUserInfo(username, username, username, "", "");
                 result.code = "0";
                 result.msg = "登录成功";
+            }
+            else
+            {
+                result.msg = "用户名或密码错误";
             }
 
             return result.ToString();

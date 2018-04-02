@@ -53,7 +53,7 @@ namespace ApliuWeb
         {
             string regs = string.Format(@"select 1 from ApUserInfo where UserId='{0}' and Password='{1}';", UserId, SecurityHelper.MD5Encrypt(Password, Encoding.UTF8));
             DataSet ds = DataAccess.Instance.GetData(regs);
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count == 0)
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count == 1)
             {
                 return true;
             }
