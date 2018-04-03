@@ -16,19 +16,36 @@ namespace TestApp
         {
             InitializeComponent();
         }
+        private readonly static string RequestJson = @"{
+                    ""ext"": ""{0}"",
+                    ""extend"": ""{1}"",
+                    ""msg"": ""{2}"",
+                    ""sig"": ""{3}"",
+                    ""tel"": {
+                        ""mobile"": ""{4}"",
+                        ""nationcode"": ""{5}""
+                    },
+                    ""time"": {6},
+                    ""type"": {7}
+                }";
 
+        private readonly static string a1 = @"{{
+                    ""ext"": ""{0}"",
+                    ""extend"": ""{1}"",
+                    ""msg"": ""{2}"",
+                    ""sig"": ""{3}"",
+                    ""tel"": {{
+                        ""mobile"": ""{4}"",
+                        ""nationcode"": ""{5}""
+                    }},
+                    ""time"": {6},
+                    ""type"": {7}
+                }}";
         private void button1_Click(object sender, EventArgs e)
         {
+            string json = string.Format(RequestJson, "1", "2", "3", "4", "5", "6", "7", "8");
 
-            //ClassA.pub.Add("fff", new ClassA("fff"));
-            //MessageBox.Show(ClassA.pub["fff"].value);
-
-            //ClassA.pub["a"] = new ClassA("ddd");
-            //MessageBox.Show(ClassA.pub["a"].value);
-            MessageBox.Show(ClassA.pub["a"].value);
-            ClassA.set();
-            MessageBox.Show(ClassA.pub["b"].value);
-
+            MessageBox.Show(json);
         }
     }
 }

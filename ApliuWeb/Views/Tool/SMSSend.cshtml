@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "~/Views/Shared/Templet.cshtml";
+    ViewBag.Title = "短信";
+}
+
+<script>
+    var sendsms = function (type) {
+        var content = document.getElementById("content").value;
+        if (content == null || content == "") {
+            apliualert($("#content").attr('placeholder'));
+            return;
+        }
+        $(".qrcodebutton").attr("background", "#b8b8b8");
+        var apiurl = "/api/toolapi/sendsms?Mobile=" + "18779182730" + "&SMSContent=" + "您正在使用短信服务，短信验证码是145234，2分钟之内有效，如非本人操作，请忽略本短信。"
+            + "&SMSAppId=" + "" + "&SMSAppKey=" + "";
+        $.when(ApliuCommon.HttpSend(apiurl, ApliuCommon.getoptions("Post", "", ""))).then(function (rst) {
+            var data;
+            if (type == "Post") {
+                data = "执行结果：" + rst.result + "\r\n返回码：" + rst.code + "\r\n返回信息：" + rst.msg;
+            } else if (type == "Get") {
+                data = "执行结果：" + rst.result + "\r\n返回码：" + rst.code;
+            }
+            $("#executesqlresult").val(data);
+            $(".qrcodebutton").attr("background", "#ff463c");
+        }, function (rst) {
+            var error = "执行结果：" + rst.result + "\r\n返回码：" + rst.code + "\r\n返回信息：" + rst.msg;
+            $("#executesqlresult").val(error);
+            $(".qrcodebutton").attr("background", "#ff463c");
+        });
+    }
+</script>
+
+<div style="padding: 10px; background-color: white;">
+    <div style="margin-top: 30px;">
+        <span class="Biaoqian">Api介绍</span><br />
+        <div style="padding-left: 1rem; font-size: 0.7rem;">
+            1.接口地址：<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://www.apliu.xyz/api/toolapi/sendsms?mobile=18711111111&smscontent=短信内容&smsappid=腾讯云短信应用ID&smsappkey=腾讯云短信应用秘钥
+            2.接口参数：<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            3.接口说明：<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Post
+        </div>
+    </div>
+    <div style="margin-top: 30px;">
+        <span class="Biaoqian">演示Demo</span><br />
+        <div style="margin-top: 10px; text-align: center;">
+            <textarea id="content" class="qrcodecontentinput" placeholder="请输入短信内容"></textarea>
+            <input onclick="sendsms()" class="qrcodebutton" type="button" value="发送短信" />
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <textarea id="executesqlresult" class="qrcodecontentinput" style="font-size: 0.5rem; height: 6rem;" placeholder="发送结果"></textarea>
+        </div>
+    </div>
+</div>

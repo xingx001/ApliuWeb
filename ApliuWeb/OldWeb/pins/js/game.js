@@ -44,6 +44,8 @@ function gohw() {
 }
 
 var gameinit = function () {
+    time = -1;
+    guan = 1;
     document.getElementById("gohw"),
     function (t, e, n) {
         function i(t) {
@@ -171,7 +173,6 @@ var gameinit = function () {
             }
         }(), l()
     }(window, document, Math);
-
     showtime();
 }
 

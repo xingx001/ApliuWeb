@@ -19,7 +19,11 @@ namespace ApliuWeb.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/toolapi/GetQRCode?Content=content
+        /// <summary>
+        /// GET api/toolapi/GetQRCode?Content=content
+        /// </summary>
+        /// <param name="Content"></param>
+        /// <returns></returns>
         [HttpGet]
         public HttpResponseMessage GetQRCode(string Content)
         {
@@ -39,6 +43,12 @@ namespace ApliuWeb.Controllers
             return HttpRequestHelper.encapResult(sid + keyword);
         }
 
+        /// <summary>
+        /// 链接服务器的测试数据库
+        /// </summary>
+        /// <param name="Sql"></param>
+        /// <param name="Type"></param>
+        /// <returns></returns>
         [HttpGet]
         public string ExecuteSql(string Sql, string Type)
         {
@@ -80,6 +90,15 @@ namespace ApliuWeb.Controllers
             return result.ToString();
         }
 
+        /// <summary>
+        /// 链接指定数据库进行操作
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="userid"></param>
+        /// <param name="password"></param>
+        /// <param name="database"></param>
+        /// <param name="sql"></param>
+        /// <returns></returns>
         [HttpGet]
         public string ExecuteDatabseSql(string source, string userid, string password, string database, string sql)
         {
@@ -97,7 +116,7 @@ namespace ApliuWeb.Controllers
             string databaseConnection = conn;
             string ip = HYRequest.GetIP();//以客户端IP作为Key，避免重复加载数据库链接对象
             string key = SecurityHelper.MD5Encrypt(ip, System.Text.Encoding.UTF8);
-            if (string.IsNullOrEmpty(ip)) key = Guid.NewGuid().ToString().Replace("-","");
+            if (string.IsNullOrEmpty(ip)) key = Guid.NewGuid().ToString().Replace("-", "");
             DataAccess.LoadDataAccess(key, databaseType, databaseConnection);
             if (sql.ToUpper().Contains("UPDATE") || sql.ToUpper().Contains("DELETE") || sql.ToUpper().Contains("INSERT"))
             {
@@ -119,6 +138,21 @@ namespace ApliuWeb.Controllers
                     result.result = "执行成功";
                 }
             }
+            return result.ToString();
+        }
+
+        [HttpPost]
+        public string SendSMS(string Mobile, string SMSContent, string SMSAppId, string SMSAppKey)
+        {
+            ResponseMessage result = new ResponseMessage();
+            result.code = "-1";
+            result.msg = "发生异常";
+            result.result = "执行失败";
+
+            string SendMsg = "发生异常";
+            SMSMessage sms = new TencentSMS();
+            sms.SendSMS(Mobile, SMSContent, out SendMsg, SMSAppId, SMSAppKey);
+            result.msg = SendMsg;
             return result.ToString();
         }
 

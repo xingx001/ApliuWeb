@@ -21,6 +21,11 @@ namespace ApliuWeb.Controllers
             return View();
         }
 
+        public ActionResult SMSSend()
+        {
+            return View();
+        }
+
         //
         // GET: /Tool/Details/5
 

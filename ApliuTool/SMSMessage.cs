@@ -31,7 +31,7 @@ namespace ApliuTools
                 SendMsg = "Apliu：腾讯云短信，参数有误";
                 return false;
             }
-            return SendSMS(Mobile, SMSContent, out SendMsg, Args[0], Args[1]);
+            return SendSMSParams(Mobile, SMSContent, out SendMsg, Args[0], Args[1]);
         }
 
         /// <summary>
@@ -42,12 +42,12 @@ namespace ApliuTools
         /// <param name="SMSAppId">短信应用API ID</param>
         /// <param name="SMSAppKey">API ID秘钥</param>
         /// <returns></returns>
-        public static bool SendSMS(string Mobile, string SMSContent, string SendMsg, string SMSAppId, string SMSAppKey)
+        public static bool SendSMSParams(string Mobile, string SMSContent,out string SendMsg, string SMSAppId, string SMSAppKey)
         {
             string Rand = new Random().Next(int.MaxValue).ToString().PadLeft(10, '0');
             string sendjson = GetSendJson(Mobile, SMSContent, SMSAppKey, Rand);
             string sendurl = string.Format(SendUrl, SMSAppId, Rand);
-            string response = HttpRequestHelper.HttpGet(sendurl);
+            string response = HttpRequestHelper.HttpPost(sendurl, sendjson);
             bool result = AnalysisResponse(response, out SendMsg);
             string insertlog = string.Format(sqlInsertAll, Guid.NewGuid(), Mobile, SMSContent, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "Apliu", "验证码", result, SendMsg);
             //DatabaseHelper.PostData(insertlog);
@@ -61,18 +61,18 @@ namespace ApliuTools
         /// <summary>
         /// 请求Json格式
         /// </summary>
-        private readonly static string RequestJson = @"{
+        private readonly static string RequestJson = @"{{
                     ""ext"": ""{0}"",
                     ""extend"": ""{1}"",
                     ""msg"": ""{2}"",
                     ""sig"": ""{3}"",
-                    ""tel"": {
+                    ""tel"": {{
                         ""mobile"": ""{4}"",
                         ""nationcode"": ""{5}""
-                    },
+                    }},
                     ""time"": {6},
                     ""type"": {7}
-                }";
+                }}";
         private static string sqlInsertAll = @"insert into ApSMSHistory(SMSID,MobileNumber,SMSContent,SendTime,CreateUser,SMSType,Project,SendResult,SendMsg) 
                         values('{0}','{1}','{2}','{3}','{4}','{5}','ApliuWeb','{6}','{7}');";
         private static string sqlInsertHis = @"insert into ApSMSHistory(SMSID,MobileNumber,SMSContent,SendTime,CreateUser,SMSType,Project) 

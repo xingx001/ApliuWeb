@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataConvert.cs" />
+    <Compile Include="JsonHelper.cs" />
     <Compile Include="Logger.cs">
       <SubType>Code</SubType>
     </Compile>
