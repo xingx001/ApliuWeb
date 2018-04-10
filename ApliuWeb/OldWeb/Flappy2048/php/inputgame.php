@@ -12,18 +12,18 @@ $cur_username=$_COOKIE['cur_username'];
 $savegame="2";
 if($cur_username!=null||$cur_username!="")
 {
-	$con = mysql_connect($connectphp,$dbuserphp,$dbpasswordphp);
+	$con = mysqli_connect($connectphp,$dbuserphp,$dbpasswordphp);
 	if (!$con)
 	{
 	  //die('Could not connect: ' . mysql_error());
 	  //header("Location:../message.html?liuyan=false");
 	}
 	
-	mysql_select_db($dbnamephp, $con);
+	mysqli_select_db( $con,$dbnamephp);
 	//INSERT INTO Gamedata (username,game,score,max,usetime,data) VALUES('".$cur_username."','".$game."','".$score."','".$max."','".$time."','".$date."')
 	$sql="INSERT INTO Gamedata (username,game,score,max,usetime,data) VALUES('".$cur_username."','".$game."','".$score."','".$max."','".$time."','".$date."')";
-	mysql_query("set names 'utf8'");//写库
-	if (!mysql_query($sql,$con))
+	mysqli_query($con,"set names 'utf8'");//写库
+	if (!mysqli_query($con,$sql))
 	{
 	  //header("Location:../message.html?liuyan=false");
 	}
@@ -31,7 +31,7 @@ if($cur_username!=null||$cur_username!="")
 		$savegame="0";
 		//header("Location:../message.html");
 	}
-	mysql_close($con);
+	mysqli_close($con);
 }else $savegame="1";
 echo $savegame;
 ?>

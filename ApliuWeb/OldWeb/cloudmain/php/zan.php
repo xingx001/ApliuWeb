@@ -5,23 +5,23 @@ include '../../mysql/config.php';
 $id=$_GET['id'];
 $issuccess="1";
 $sql="";
-$con = mysql_connect($connectphp,$dbuserphp,$dbpasswordphp);
+$con = mysqli_connect($connectphp,$dbuserphp,$dbpasswordphp);
 if (!$con)
 {
   //die('Could not connect: ' . mysql_error());
   //header("Location:../message.html?liuyan=false");
 }
 
-mysql_select_db($dbnamephp, $con);
+mysqli_select_db($con,$dbnamephp);
 //INSERT INTO Message (username,message,likenum,floor,date) VALUES('".$cur_username."','".$message."','1','00001','".$date."')
 $sql="UPDATE Message set likenum=likenum+1 where id='". $id ."'";
 
-if (mysql_query($sql,$con))
+if (mysqli_query($con,$sql))
 {
   $issuccess=0;
 }
 echo $issuccess;
-mysql_close($con)
+mysqli_close($con)
 ?>
 </body>
 </html>

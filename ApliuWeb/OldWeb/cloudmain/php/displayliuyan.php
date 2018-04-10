@@ -2,15 +2,15 @@
 <body>
 <?php
 include '../../mysql/config.php';
-$con = mysql_connect($connectphp,$dbuserphp,$dbpasswordphp);
+$con = mysqli_connect($connectphp,$dbuserphp,$dbpasswordphp);
 if (!$con)
   {
   //die('Could not connect: ' . mysql_error());
   }
 
-mysql_select_db($dbnamephp, $con);
+mysqli_select_db($con,$dbnamephp);
 
-$result = mysql_query("select Message.*,UserInfo.type,UserInfo.status from Message left join UserInfo on Message.username=UserInfo.username order by Message.date");
+$result = mysqli_query($con,"select Message.*,UserInfo.type,UserInfo.status from Message left join UserInfo on Message.username=UserInfo.username order by Message.date");
 
 $tableone='<div class="job_right"><table border="1" height="150px" width="100%" rules="cols" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0"><tr><td align="center" rowspan="2" width="100px">';
 $tabletwo='</td><td align="left">';
@@ -20,7 +20,7 @@ $tablefour='</td></tr></table></div>';
 $tablebody="";
 $array = array();
 $datestr="";
-while($row = mysql_fetch_array($result))
+while($row = mysqli_fetch_array($result))
 {
 	if($row['type']=="admin")//加红色
 	{
@@ -47,7 +47,7 @@ else echo $k.'=>'.$val.''; */
 echo $tablebody;
 #echo urlencode(json_encode($array));
 #echo $datestr;
-mysql_close($con);
+mysqli_close($con);
 ?>
 </body>
 </html>

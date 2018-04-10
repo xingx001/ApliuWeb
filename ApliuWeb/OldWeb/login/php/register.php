@@ -5,18 +5,18 @@ include '../../mysql/config.php';
 $username=$_POST['username'];
 $password=$_POST['password'];
 $id=$_GET['id'];
-$con = mysql_connect($connectphp,$dbuserphp,$dbpasswordphp);
+$con = mysqli_connect($connectphp,$dbuserphp,$dbpasswordphp);
 if (!$con)
 {
   //die('Could not connect: ' . mysql_error());
   header("Location:../register.html?register=false");
 }
 
-mysql_select_db($dbnamephp, $con);
+mysqli_select_db($con,$dbnamephp);
 
 $sql="INSERT INTO UserInfo (username, password, type,status) VALUES('".$username."','".$password."','Normal','1')";
-mysql_query("set names 'utf8'");//写库
-if (!mysql_query($sql,$con))
+mysqli_query($con,"set names 'utf8'");//写库
+if (!mysqli_query($con,$sql))
 {
   header("Location:../register.html?register=false");
 }
@@ -24,7 +24,7 @@ else{
 	header("Location:../login.html?register=true&id=" . $id);
 }
 
-mysql_close($con)
+mysqli_close($con)
 ?>
 </body>
 </html>

@@ -11,22 +11,22 @@ $cur_username=$_COOKIE['cur_username'];
 $issuccess="1";
 if($cur_username!=""||$cur_username!=null)
 {
-	$con = mysql_connect($connectphp,$dbuserphp,$dbpasswordphp);
+	$con = mysqli_connect($connectphp,$dbuserphp,$dbpasswordphp);
 	if (!$con)
 	{
 	  //die('Could not connect: ' . mysql_error());
 	  //header("Location:../message.html?liuyan=false");
 	}
 	
-	mysql_select_db($dbnamephp, $con);
+	mysqli_select_db($con,$dbnamephp);
 	//INSERT INTO Floor (messageid,name,huifu,date) VALUES('".$cur_username."','".$message."','1','00001','".$date."')
 	$sql="INSERT INTO Floor (messageid,name,huifu,date) VALUES('".$id."','".$cur_username."','".$text."','".$date."')";
-	mysql_query("set names 'utf8'");//写库
-	if (mysql_query($sql,$con))
+	mysqli_query($con,"set names 'utf8'");//写库
+	if (mysqli_query($con,$sql))
 	{
 	  $issuccess=0;
 	}
-	mysql_close($con);
+	mysqli_close($con);
 }else $issuccess="2";
 echo $issuccess;
 ?>
