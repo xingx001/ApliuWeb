@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 
 namespace ApliuWeb.Controllers
@@ -160,6 +161,53 @@ namespace ApliuWeb.Controllers
         public string ApliuAjax(object value)
         {
             return "{\"errorCode\":\"-1\",\"errorMsg\":\"默认方法\"}";
+        }
+
+        /// <summary>
+        /// 获取临时文本
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public string GetTempContent()
+        {
+            ResponseMessage result = new ResponseMessage();
+            result.code = "-1";
+            result.msg = "发生异常";
+            result.result = "执行失败";
+
+            DataSet dsText = DataAccess.Instance.GetData("select top 1 TEXTCONTENT from TempText");
+            if (dsText != null && dsText.Tables.Count > 0 && dsText.Tables[0].Rows.Count > 0)
+            {
+                result.code = "0";
+                string content = SecurityHelper.UrlDecode(dsText.Tables[0].Rows[0][0].ToString(), Encoding.UTF8);
+                result.msg = content;
+                result.result = "查询成功";
+            }
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// 保存临时文本
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public string SetTempContent()
+        {
+            string Content = HttpContextRequest.Form["Content"];
+            ResponseMessage result = new ResponseMessage();
+            result.code = "-1";
+            result.msg = "发生异常";
+            result.result = "执行失败";
+
+            string updatesql = string.Format(@"update TempText set UserId='{0}',TextContent='{1}',UpdateTime='{2}',IP='{3}' ", "Everyone", SecurityHelper.UrlEncode(Content, Encoding.UTF8), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), HYRequest.GetIP());
+            bool setResult = DataAccess.Instance.PostData(updatesql);
+            if (setResult)
+            {
+                result.code = "0";
+                result.msg = "更新成功";
+                result.result = "更新成功";
+            }
+            return result.ToString();
         }
 
         [HttpPost]

@@ -7,7 +7,7 @@ var ApliuCommon = {};
 ApliuCommon.HttpSend = function (apiurl, options) {
     var v;
     if (options) {
-        if (options.params) {
+        if (options.params && options.method && options.method.toUpperCase() == "GET") {
             try {
                 if (typeof JSON.parse(options.params) == "object") {
                     apiurl += $.param(options.params);

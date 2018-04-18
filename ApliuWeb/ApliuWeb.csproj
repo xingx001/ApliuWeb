@@ -130,6 +130,7 @@
     </Compile>
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
+    <Compile Include="Controllers\textController.cs" />
     <Compile Include="Controllers\ToolApiController.cs" />
     <Compile Include="Controllers\ToolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -962,6 +963,7 @@
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\Game\Pins.cshtml" />
     <Content Include="Views\Tool\SMSSend.cshtml" />
+    <Content Include="Views\text\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

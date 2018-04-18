@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "文本临时保存";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    $(function () {
+        $("#clear").click(function () { $("#content").val(""); });
+        $("#getcontent").click(getcontent);
+        $("#save").click(save);
+        getcontent();
+    });
+    var getcontent = function () {
+        var content = document.getElementById("content").value;
+        if (content != null || content.lenght > 0) {
+            //apliualert("确定重新加载信息进行覆盖当前信息吗");
+            //return;
+        }
+        $(".qrcodebutton").attr("background", "#b8b8b8");
+        var apiurl = "/api/toolapi/GetTempContent";
+        $.when(ApliuCommon.HttpSend(apiurl)).then(function (rst) {
+            if (rst.code == "0") {
+                $("#content").val(rst.msg);
+            } else {
+                apliualert("恢复失败，详情：" + rst.msg);
+            }
+            $(".qrcodebutton").attr("background", "#ff463c");
+        }, function (rst) {
+            apliualert("未找到该方法");
+            $(".qrcodebutton").attr("background", "#ff463c");
+        });
+    }
+    var save = function () {
+        var content = document.getElementById("content").value;
+        if (content == null || content == "") {
+            apliualert("请输入文本内容");
+            return;
+        }
+        $(".qrcodebutton").attr("background", "#b8b8b8");
+        var apiurl = "/api/toolapi/SetTempContent";
+        var params = { Content: content };
+        $.when(ApliuCommon.HttpSend(apiurl, ApliuCommon.getoptions("Post", params, false))).then(function (rst) {
+            if (rst.code == "0") {
+                apliualert("保存成功");
+            } else {
+                apliualert("保存失败，详情：" + rst.msg);
+            }
+            $(".qrcodebutton").attr("background", "#ff463c");
+        }, function (rst) {
+            apliualert("未找到该方法");
+            $(".qrcodebutton").attr("background", "#ff463c");
+        });
+    }
+</script>
+<div style="text-align: center;">
+    <div>
+        <h3>文本临时保存</h3>
+    </div>
+    <div>
+        <textarea id="content" class="qrcodecontentinput" style="height: 12rem;" placeholder="请输入文本内容"></textarea>
+    </div>
+    <div>
+        <input id="clear" class="qrcodebutton" type="button" value="清空" />
+        <input id="getcontent" class="qrcodebutton" type="button" value="恢复" />
+        <input id="save" class="qrcodebutton" type="button" value="保存" />
+    </div>
+</div>
+
