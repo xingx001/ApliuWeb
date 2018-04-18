@@ -22,7 +22,7 @@
     alertFram.style.zIndex = "300";
     alertFram.style.borderRadius = "5px";
     alertFram.style.backgroundColor = "white";
-    alertFram.style.minWidth = "200px;";
+    alertFram.style.minWidth = "200px";
     strHtml = "<div>\n";
     strHtml += "<ul style=\"list-style:none;margin:0 auto;padding:0px;border-radius: 5px;\">\n";
     //strHtml += " <li style=\"background:#4794FA;text-align:left;padding-left:20px;font-size:14px;font-weight:bold;height:25px;line-height:25px;border:1px solid #F9CADE;color:white\">提示</li>\n";
@@ -32,6 +32,11 @@
     alertFram.innerHTML = strHtml;
     document.body.appendChild(alertFram);
     document.body.appendChild(shield);
+
+    //动态调整宽度
+    var width = $("#alertFram").outerWidth();
+    $("#alertFram").css("margin-left", -width / 2);
+
     this.doOk = function () {
         document.body.removeChild(alertFram);
         document.body.removeChild(shield);
