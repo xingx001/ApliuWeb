@@ -967,7 +967,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Function\" />
     <Folder Include="OldWeb\lovetime\cert\" />
   </ItemGroup>
   <ItemGroup>
