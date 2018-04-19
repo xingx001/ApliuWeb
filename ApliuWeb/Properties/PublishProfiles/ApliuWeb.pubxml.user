@@ -12,10 +12,10 @@
       <publishTime>03/27/2018 16:20:11</publishTime>
     </File>
     <File Include="bin/ApliuTools.dll">
-      <publishTime>04/03/2018 14:01:13</publishTime>
+      <publishTime>04/18/2018 14:35:49</publishTime>
     </File>
     <File Include="bin/ApliuWeb.dll">
-      <publishTime>04/03/2018 14:01:14</publishTime>
+      <publishTime>04/18/2018 14:35:50</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -1431,7 +1431,7 @@
       <publishTime>03/29/2018 13:40:34</publishTime>
     </File>
     <File Include="JsScript/CommonJs.js">
-      <publishTime>03/31/2018 17:16:39</publishTime>
+      <publishTime>04/18/2018 13:39:42</publishTime>
     </File>
     <File Include="JsScript/jquery-weui.min.js">
       <publishTime>03/31/2018 10:22:13</publishTime>
@@ -1977,31 +1977,31 @@
       <publishTime>03/20/2018 12:12:35</publishTime>
     </File>
     <File Include="OldWeb/cloudmain/php/allmessage.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/09/2018 23:57:59</publishTime>
     </File>
     <File Include="OldWeb/cloudmain/php/count.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/09/2018 23:58:27</publishTime>
     </File>
     <File Include="OldWeb/cloudmain/php/displaygame.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/09/2018 23:57:01</publishTime>
     </File>
     <File Include="OldWeb/cloudmain/php/displayliuyan.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/09/2018 23:58:56</publishTime>
     </File>
     <File Include="OldWeb/cloudmain/php/huifu.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/09/2018 23:59:24</publishTime>
     </File>
     <File Include="OldWeb/cloudmain/php/inputliuyan.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/09/2018 23:59:50</publishTime>
     </File>
     <File Include="OldWeb/cloudmain/php/monihuifu.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/10/2018 00:00:24</publishTime>
     </File>
     <File Include="OldWeb/cloudmain/php/moniliuyan.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/10/2018 00:00:44</publishTime>
     </File>
     <File Include="OldWeb/cloudmain/php/zan.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/10/2018 00:01:04</publishTime>
     </File>
     <File Include="OldWeb/cloudmain/qwer.mht">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -2145,7 +2145,7 @@
       <publishTime>03/20/2018 12:12:34</publishTime>
     </File>
     <File Include="OldWeb/Flappy2048/php/inputgame.php">
-      <publishTime>03/20/2018 12:12:34</publishTime>
+      <publishTime>04/10/2018 10:12:06</publishTime>
     </File>
     <File Include="OldWeb/game2048/css/styles.css">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -2256,13 +2256,13 @@
       <publishTime>03/20/2018 12:12:35</publishTime>
     </File>
     <File Include="OldWeb/login/php/boollogin.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/10/2018 10:16:10</publishTime>
     </File>
     <File Include="OldWeb/login/php/isexist.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/10/2018 10:15:44</publishTime>
     </File>
     <File Include="OldWeb/login/php/register.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/10/2018 10:16:38</publishTime>
     </File>
     <File Include="OldWeb/login/register.html">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -2409,7 +2409,7 @@
       <publishTime>03/20/2018 12:12:35</publishTime>
     </File>
     <File Include="OldWeb/mysql/config.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/09/2018 15:37:23</publishTime>
     </File>
     <File Include="OldWeb/pins/css/main.css">
       <publishTime>03/31/2018 17:43:14</publishTime>
@@ -2436,7 +2436,7 @@
       <publishTime>03/20/2018 12:12:35</publishTime>
     </File>
     <File Include="OldWeb/pins/php/inputgame.php">
-      <publishTime>03/20/2018 12:12:35</publishTime>
+      <publishTime>04/10/2018 10:15:16</publishTime>
     </File>
     <File Include="OldWeb/test/displayliuyan.php">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -2721,7 +2721,7 @@
       <publishTime>04/02/2018 11:32:32</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>04/03/2018 12:46:42</publishTime>
+      <publishTime>04/10/2018 23:12:58</publishTime>
     </File>
     <File Include="Views/Home/TestIndex.cshtml">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -2733,19 +2733,22 @@
       <publishTime>03/27/2018 15:59:59</publishTime>
     </File>
     <File Include="Views/Shared/Templet.cshtml">
-      <publishTime>03/31/2018 16:01:29</publishTime>
+      <publishTime>04/08/2018 15:05:35</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
       <publishTime>03/31/2018 16:46:08</publishTime>
     </File>
+    <File Include="Views/text/Index.cshtml">
+      <publishTime>04/18/2018 14:10:20</publishTime>
+    </File>
     <File Include="Views/Tool/QRCode.cshtml">
-      <publishTime>04/03/2018 13:34:45</publishTime>
+      <publishTime>04/03/2018 14:03:35</publishTime>
     </File>
     <File Include="Views/Tool/SMSSend.cshtml">
-      <publishTime>04/03/2018 13:59:05</publishTime>
+      <publishTime>04/03/2018 14:03:28</publishTime>
     </File>
     <File Include="Views/Tool/SqlServer.cshtml">
-      <publishTime>03/29/2018 18:23:29</publishTime>
+      <publishTime>04/03/2018 14:03:38</publishTime>
     </File>
     <File Include="Views/User/Login.cshtml">
       <publishTime>03/31/2018 15:59:15</publishTime>

@@ -11,19 +11,19 @@ if($id=="GameMax")$sql="(select username,game,score,max,usetime from Gamedata wh
 if($id=="Gameabout")$sql="select (select count(*) from Gamedata where game='Game2048') plays,(select max(score) from Gamedata where game='Game2048') maxscore UNION
 select (select count(*) from Gamedata where game='Flappy2048') plays,(select max(score) from Gamedata where game='Flappy2048') maxscore UNION
 select (select count(*) from Gamedata where game='pins') plays,(select max(score) from Gamedata where game='pins') maxscore;";
-$con = mysql_connect($connectphp,$dbuserphp,$dbpasswordphp);
+$con = mysqli_connect($connectphp,$dbuserphp,$dbpasswordphp);
 if (!$con)
 {
   //die('Could not connect: ' . mysql_error());
 }
-mysql_select_db($dbnamephp, $con);
-mysql_query("set character set 'utf8'");//读库
-$result = mysql_query($sql);
+mysqli_select_db($con,$dbnamephp);
+mysqli_query($con,"set character set 'utf8'");//读库
+$result = mysqli_query($con,$sql);
 $tablebody="";
 //id=gamerecord <li>Apliu 玩了 Ganme2048，得了 <b>5862</b>分</li>  username,game,score,data
 //id=Game2048   <table width="100%" cellpadding="0" cellspacing="0" class="yx"><tr class="tit"><td>会员</td><td>游戏</td><td>Max</td><td>用时</td><td align="right">分数</td></tr></table> username,game,score,max,usetime
 //$id=="Game2048about" <p>最高分：<b>2344</b><br/>人气：<b>111</b></p> plays  maxscore
-while($row = mysql_fetch_array($result))
+while($row = mysqli_fetch_array($result))
 {
 	if($id=="gamerecord") 
 		$tablebody ="<ul class='scorelist'><li>" . $row['username'] . "玩了" . $row['game'] . "，得了 <b>" . $row['score'] . "</b>分 " . $row['data'] . "</li></ul>" . $tablebody;
@@ -42,7 +42,7 @@ while($row = mysql_fetch_array($result))
 		$tablebody ="<p>最高分：<b>" . $row['maxscore'] . "</b><br/>人气：<b>" . $row['plays'] . "</b></p>" ."|". $tablebody;
 }
 echo $tablebody;
-mysql_close($con);
+mysqli_close($con);
 ?>
 </body>
 </html>

@@ -7,18 +7,18 @@ $password=$_POST['password'];
 $id=$_GET['id'];
 //Game2048
 $boollogin=false;
-$con = mysql_connect($connectphp,$dbuserphp,$dbpasswordphp);
+$con = mysqli_connect($connectphp,$dbuserphp,$dbpasswordphp);
 if (!$con)
 {
   //die('Could not connect: ' . mysql_error());
   header("Location:../login.html?login=false");
 }
 
-mysql_select_db($dbnamephp, $con);
-mysql_query("set character set 'utf8'");//读库
-$result = mysql_query("SELECT * FROM UserInfo");
+mysqli_select_db($con,$dbnamephp);
+mysqli_query($con,"set character set 'utf8'");//读库
+$result = mysqli_query($con,"SELECT * FROM UserInfo");
 
-while($row = mysql_fetch_array($result))
+while($row = mysqli_fetch_array($result))
   {
 	  if($row['status']=="1")
 	  {
@@ -64,7 +64,7 @@ while($row = mysql_fetch_array($result))
   {
 	  header("Location:../login.html?login=false");
   }
-mysql_close($con);
+mysqli_close($con);
 ?>
 </body>
 </html>

@@ -8,9 +8,9 @@ namespace ApliuWeb.Controllers
 {
     public class textController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
-            return View();
+            return View(id);
         }
     }
 }

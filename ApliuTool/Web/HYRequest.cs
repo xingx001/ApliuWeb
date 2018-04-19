@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using System.Web;
 
-
 namespace ApliuTools.Web
 {
     /// <summary>
@@ -86,7 +85,6 @@ namespace ApliuTools.Web
             return HttpContext.Current.Request.Url.Host;
         }
 
-
         /// <summary>
         /// 获取当前请求的原始 URL(URL 中域信息之后的部分,包括查询字符串(如果存在))
         /// </summary>
@@ -133,6 +131,15 @@ namespace ApliuTools.Web
         }
 
         /// <summary>
+        /// 获得当前Url的参数
+        /// </summary>
+        /// <returns></returns>
+        public static string GetUrlQuery()
+        {
+            return HttpContext.Current.Request.Url.Query.ToString();
+        }
+
+        /// <summary>
         /// 获得当前完整Url地址
         /// </summary>
         /// <returns>当前完整Url地址</returns>
@@ -140,7 +147,6 @@ namespace ApliuTools.Web
         {
             return HttpContext.Current.Request.Url.ToString();
         }
-
 
         /// <summary>
         /// 获得指定Url参数的值
@@ -174,7 +180,6 @@ namespace ApliuTools.Web
         {
             return HttpContext.Current.Request.Form.Count + HttpContext.Current.Request.QueryString.Count;
         }
-
 
         /// <summary>
         /// 获得指定表单参数的值
@@ -333,6 +338,7 @@ namespace ApliuTools.Web
                 HttpContext.Current.Request.Files[0].SaveAs(path);
             }
         }
+
         /// <summary>
         /// 是否为ip
         /// </summary>

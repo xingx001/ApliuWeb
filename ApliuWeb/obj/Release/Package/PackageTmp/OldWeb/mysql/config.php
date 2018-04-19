@@ -6,6 +6,6 @@
 
 $connectphp="localhost:3306";//数据库地址及端口 
 $dbuserphp="root";//用户名
-$dbpasswordphp="123456";//密码  
-$dbnamephp="417386447";//数据库名字
+$dbpasswordphp="apliu@2018";//密码  
+$dbnamephp="ApliuWeb";//数据库名字
 ?>

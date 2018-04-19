@@ -4,17 +4,17 @@
 include '../../mysql/config.php';
 $isExist=$_GET['username'];
 $boollogin=false;
-$con = mysql_connect($connectphp,$dbuserphp,$dbpasswordphp);
+$con = mysqli_connect($connectphp,$dbuserphp,$dbpasswordphp);
 if (!$con)
 {
   //die('Could not connect: ' . mysql_error());
 }
 
-mysql_select_db($dbnamephp, $con);
+mysqli_select_db($con,$dbnamephp);
 
-$result = mysql_query("SELECT * FROM UserInfo");
+$result = mysqli_query($con,"SELECT * FROM UserInfo");
 
-while($row = mysql_fetch_array($result))
+while($row = mysqli_fetch_array($result))
 {
 	if($isExist==$row['username'])
 	{
@@ -22,7 +22,7 @@ while($row = mysql_fetch_array($result))
 	}
 }
 echo $boollogin;
-mysql_close($con);
+mysqli_close($con);
 ?>
 </body>
 </html>

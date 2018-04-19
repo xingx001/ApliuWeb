@@ -8,7 +8,21 @@
         $("#getcontent").click(getcontent);
         $("#save").click(save);
         getcontent();
+        @*@{
+            if (Model == null)
+            {
+                @:getcontent();
+            }
+            else
+            {
+                @:$("#content").val(@Model.ToString());
+            }
+        }*@
     });
+
+    @{var _Key = Model == null ? "" : Model.ToString();}
+    var Key = '@_Key';
+
     var getcontent = function () {
         var content = document.getElementById("content").value;
         if (content != null || content.lenght > 0) {
@@ -16,7 +30,7 @@
             //return;
         }
         $(".qrcodebutton").attr("background", "#b8b8b8");
-        var apiurl = "/api/toolapi/GetTempContent";
+        var apiurl = "/api/toolapi/GetTempContent?Key=" + Key;
         $.when(ApliuCommon.HttpSend(apiurl)).then(function (rst) {
             if (rst.code == "0") {
                 $("#content").val(rst.msg);
@@ -37,7 +51,7 @@
         }
         $(".qrcodebutton").attr("background", "#b8b8b8");
         var apiurl = "/api/toolapi/SetTempContent";
-        var params = { Content: content };
+        var params = { Content: content, Key: Key };
         $.when(ApliuCommon.HttpSend(apiurl, ApliuCommon.getoptions("Post", params, false))).then(function (rst) {
             if (rst.code == "0") {
                 apliualert("保存成功");
@@ -66,8 +80,10 @@
     </div>
     <div><a href="/" class="common_a_calss">返回主页</a></div>
     <section style="color: #999; font-size: .6rem;">
-        <p>Copyright © Apliu 2018 all rights reserved<br />
-            赣ICP备18003600号-1 | 工信部</p>
+        <p>
+            Copyright © Apliu 2018 all rights reserved<br />
+            赣ICP备18003600号-1 | 工信部
+        </p>
     </section>
 </div>
 

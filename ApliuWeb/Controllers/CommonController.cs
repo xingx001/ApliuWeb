@@ -111,8 +111,8 @@ namespace ApliuWeb.Controllers
             ResponseMessage result = new ResponseMessage();
             result.code = "-1";
             result.msg = "用户未登录";
-            string userid = Common.GetSessionValue("UserId");
-            string username = Common.GetSessionValue("UserName");
+            string userid = UserInfo.GetUserInfo().UserId;
+            string username = UserInfo.GetUserInfo().UserName;
             if (!string.IsNullOrEmpty(userid) && !string.IsNullOrEmpty(username))
             {
                 result.code = "0";
@@ -147,7 +147,7 @@ namespace ApliuWeb.Controllers
             string usetime = HttpContextRequest.Form["usetime"];
             string stage = HttpContextRequest.Form["stage"];
 
-            string userid = Common.GetSessionValue("UserId");
+            string userid = UserInfo.GetUserInfo().UserId;
             if (string.IsNullOrEmpty(userid))
             {
                 result.code = "1";

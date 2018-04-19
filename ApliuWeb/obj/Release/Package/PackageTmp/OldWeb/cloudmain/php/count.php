@@ -3,18 +3,18 @@
 <?php
 include '../../mysql/config.php';
 $sql="";
-$con = mysql_connect($connectphp,$dbuserphp,$dbpasswordphp);
+$con = mysqli_connect($connectphp,$dbuserphp,$dbpasswordphp);
 if (!$con)
 {
 }
 
-mysql_select_db($dbnamephp, $con);
+mysqli_select_db($con,$dbnamephp);
 $sql="UPDATE Other set count=count+1 where id='1'";
 
-if (mysql_query($sql,$con))
+if (mysqli_query($con,$sql))
 {
 }
-mysql_close($con)
+mysqli_close($con)
 ?>
 </body>
 </html>

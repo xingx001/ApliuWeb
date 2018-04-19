@@ -135,9 +135,9 @@
     <Compile Include="Controllers\ToolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Function\Common.cs" />
-    <Compile Include="Function\DataAccess.cs" />
-    <Compile Include="Function\UserInfo.cs" />
+    <Compile Include="Models\Common.cs" />
+    <Compile Include="Models\DataAccess.cs" />
+    <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -967,7 +967,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Function\" />
     <Folder Include="OldWeb\lovetime\cert\" />
   </ItemGroup>
   <ItemGroup>
