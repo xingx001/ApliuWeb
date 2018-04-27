@@ -3,6 +3,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script>
+    @{var _Key = Model == null ? "" : Model.ToString();}
+    var Key = '@_Key';
+
     $(function () {
         $("#clear").click(function () { $("#content").val(""); });
         $("#getcontent").click(getcontent);
@@ -20,26 +23,20 @@
         }*@
     });
 
-    @{var _Key = Model == null ? "" : Model.ToString();}
-    var Key = '@_Key';
-
     var getcontent = function () {
-        var content = document.getElementById("content").value;
-        if (content != null || content.lenght > 0) {
-            //apliualert("确定重新加载信息进行覆盖当前信息吗");
-            //return;
-        }
         $(".qrcodebutton").attr("background", "#b8b8b8");
         var apiurl = "/api/toolapi/GetTempContent?Key=" + Key;
         $.when(ApliuCommon.HttpSend(apiurl)).then(function (rst) {
             if (rst.code == "0") {
-                $("#content").val(rst.msg);
+                $("#content").val(decodeURI(rst.msg));
+                if (rst.remark == null || rst.remark == "") { $("#updatetime").text("无"); }
+                else { $("#updatetime").text(rst.remark); }
             } else {
                 apliualert("恢复失败，详情：" + rst.msg);
             }
             $(".qrcodebutton").attr("background", "#ff463c");
         }, function (rst) {
-            apliualert("未找到该方法");
+            apliualert("发生未知异常");
             $(".qrcodebutton").attr("background", "#ff463c");
         });
     }
@@ -51,16 +48,17 @@
         }
         $(".qrcodebutton").attr("background", "#b8b8b8");
         var apiurl = "/api/toolapi/SetTempContent";
-        var params = { Content: content, Key: Key };
+        var params = { Content: encodeURI(content), Key: Key };
         $.when(ApliuCommon.HttpSend(apiurl, ApliuCommon.getoptions("Post", params, false))).then(function (rst) {
             if (rst.code == "0") {
                 apliualert("保存成功");
+                getcontent();
             } else {
                 apliualert("保存失败，详情：" + rst.msg);
             }
             $(".qrcodebutton").attr("background", "#ff463c");
         }, function (rst) {
-            apliualert("未找到该方法");
+            apliualert("发生未知异常");
             $(".qrcodebutton").attr("background", "#ff463c");
         });
     }
@@ -68,7 +66,10 @@
 
 <div style="text-align: center;">
     <div>
-        <h3>文本临时保存</h3>
+        <span style="font-weight: bold; font-size: 1rem;">文本临时保存</span>
+    </div>
+    <div style="font-size: .5rem; text-align: right; width: 90%; margin-bottom: .4rem;">
+        <span>最后更新时间：</span><span id="updatetime"></span>
     </div>
     <div>
         <textarea id="content" class="qrcodecontentinput" style="height: 12rem;" placeholder="请输入文本内容"></textarea>

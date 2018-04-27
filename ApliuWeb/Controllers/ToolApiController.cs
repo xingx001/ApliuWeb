@@ -175,19 +175,31 @@ namespace ApliuWeb.Controllers
             result.msg = "发生异常";
             result.result = "执行失败";
 
-            string Key = HttpContextRequest.QueryString["Key"];
-            string sqlWhere = string.IsNullOrEmpty(Key) ? " and TextKey is null " : " and TextKey= '" + Key + "' ";
-
+            string Key = System.Web.HttpContext.Current.Request.QueryString["Key"];
+            if (!string.IsNullOrEmpty(Key) && Key.Trim().Length >= 100)
+            {
+                result.msg = "标识符Key（text/key）长度必须小于100";
+                result.result = "执行失败";
+                return result.ToString();
+            }
+            string sqlWhere = string.IsNullOrEmpty(Key) ? " and TextKey is null " : " and TextKey= '" + SecurityHelper.UrlDecode(Key.Trim(), Encoding.UTF8) + "' ";
             string userid = UserInfo.GetUserInfo().UserId;
             sqlWhere += string.IsNullOrEmpty(userid) ? " and UserId = 'Everyone' " : " and UserId= '" + userid + "' ";
-            DataSet dsText = DataAccess.Instance.GetData("select top 1 TEXTCONTENT from TempText where 1=1 " + sqlWhere);
+
+            DataSet dsText = DataAccess.Instance.GetData("select top 1 TEXTCONTENT,UPDATETIME from TempText where 1=1 " + sqlWhere);
             if (dsText != null && dsText.Tables.Count > 0)
             {
                 result.code = "0";
                 string content = string.Empty;
-                if (dsText.Tables[0].Rows.Count > 0) content = SecurityHelper.UrlDecode(dsText.Tables[0].Rows[0][0].ToString(), Encoding.UTF8);
+                string datetime = string.Empty;
+                if (dsText.Tables[0].Rows.Count > 0)
+                {
+                    content = SecurityHelper.UrlDecode(dsText.Tables[0].Rows[0]["TEXTCONTENT"].ToString(), Encoding.UTF8);
+                    datetime = dsText.Tables[0].Rows[0]["UPDATETIME"].ToString();
+                }
                 result.msg = content;
                 result.result = "查询成功";
+                result.remark = datetime;
             }
             return result.ToString();
         }
@@ -204,10 +216,15 @@ namespace ApliuWeb.Controllers
             result.msg = "发生异常";
             result.result = "执行失败";
 
-            string Content = HttpContextRequest.Form["Content"];
-            string Key = HttpContextRequest.Form["Key"];//不存在key的时候，Key值为null
-            string sqlWhere = string.IsNullOrEmpty(Key) ? " and TextKey is null " : " and TextKey='" + Key + "' ";
-
+            string Content = System.Web.HttpContext.Current.Request.Form["Content"];
+            string Key = System.Web.HttpContext.Current.Request.Form["Key"];//不存在key的时候，Key值为null
+            if (!string.IsNullOrEmpty(Key) && Key.Trim().Length >= 100)
+            {
+                result.msg = "标识符Key（text/key）长度必须小于100";
+                result.result = "执行失败";
+                return result.ToString();
+            }
+            string sqlWhere = string.IsNullOrEmpty(Key) ? " and TextKey is null " : " and TextKey='" + SecurityHelper.UrlEncode(Key.Trim(), Encoding.UTF8) + "' ";
             string userid = string.IsNullOrEmpty(UserInfo.GetUserInfo().UserId) ? "Everyone" : UserInfo.GetUserInfo().UserId;
             sqlWhere += " and UserId = '" + userid + "'";
 
