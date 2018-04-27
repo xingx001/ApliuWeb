@@ -16,7 +16,7 @@ namespace ApliuWeb
             routes.MapRoute(
                 name: "Text",
                 url: "text/{id}",
-                defaults: new { controller = "text", action = "Index", id = "DefaultId" }
+                defaults: new { controller = "text", action = "Index", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(
