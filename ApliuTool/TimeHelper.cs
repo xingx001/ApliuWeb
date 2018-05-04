@@ -26,5 +26,18 @@ namespace ApliuTools
         {
             return (long)(dt.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
+
+        /// <summary>
+        /// 获取服务器当前时间
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        public static DateTime DataTimeNow
+        {
+            get
+            {
+                return DateTime.Now;
+            }
+        }
     }
 }

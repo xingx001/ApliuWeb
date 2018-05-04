@@ -28,6 +28,17 @@ namespace ApliuWeb.Controllers
                 result.msg = "用户名不能为空";
                 return result.ToString();
             }
+            CodeCase cc = SessionHelper.GetSessionValue(CodeType.Register.ToString()) as CodeCase;
+            if (cc == null || (TimeHelper.DataTimeNow - cc.CreateTime).Seconds > cc.Timeout)
+            {
+                result.msg = "请重新获取短信验证码";
+                return result.ToString();
+            }
+            if (cc.User != username || cc.Code != smscode)
+            {
+                result.msg = "短信验证码错误";
+                return result.ToString();
+            }
             if (string.IsNullOrEmpty(password))
             {
                 result.msg = "密码不能为空";

@@ -68,7 +68,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SMSMessage.cs" />
-    <Compile Include="TestClass.cs" />
     <Compile Include="TimeHelper.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Web\HttpContextRequest.cs" />

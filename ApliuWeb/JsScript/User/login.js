@@ -3,7 +3,6 @@ $(function () {
     $("#btn-login").click(function () {
         if (logincheck()) {
             var fromdata = { method: "POST", params: $(this.form).serialize() };
-            console.log(fromdata.params);
             $.when(ApliuCommon.HttpSend("/api/common/login", fromdata)).then(function (rst) {
                 if (rst.code == "0") {
                     window.location.href = "../Home/Index";
@@ -57,7 +56,7 @@ var logincheck = function () {
 var registercheck = function () {
     var user = "手机号码";
     var phone = $("#username").val();
-    var code = $("#code").val();
+    var smscode = $("#smscode").val();
     var password = $("#password").val();
     var passwordag = $("#passwordag").val();
     if (phone == "") {
@@ -66,6 +65,10 @@ var registercheck = function () {
     }
     if (!ApliuCommon.isPoneAvailable(phone)) {
         $.alert(user + "格式有误", "提示");
+        return false;
+    }
+    if (smscode == "") {
+        $.alert("请输入短信验证码", "提示");
         return false;
     }
     if (password == "") {
@@ -107,14 +110,34 @@ var registercheck = function () {
     });
 
     $getCode.on('click', function () {
+        var phone = $('#username').val();
+        if (phone == null || phone.length <= 0) {
+            apliualert("请输入手机号码");
+            return;
+        }
         var $this = $(this);
         dialog.loading.open('发送中...');
         // ajax 成功发送验证码后调用【start】
-        setTimeout(function () { //模拟ajax发送
+        var data = ApliuCommon.getoptions("Post", { Mobile: phone, codeType: 1 }, "false");
+        $.when(ApliuCommon.HttpSend("/api/toolapi/sendsmscode", data)).then(function (rst) {
+            if (rst.code == "0") {
+                dialog.loading.close();
+                $this.sendCode('start');
+                dialog.toast('已发送', 'success', 1500);
+            }
+            else {
+                dialog.loading.close();
+                apliualert("短信发送失败, 请重试");
+            }
+        }, function (error) {
             dialog.loading.close();
-            $this.sendCode('start');
-            dialog.toast('已发送', 'success', 1500);
-        }, 800);
+            apliualert("短信发送失败, 请重试");
+        })
+        //setTimeout(function () { //模拟ajax发送
+        //    dialog.loading.close();
+        //    $this.sendCode('start');
+        //    dialog.toast('已发送', 'success', 1500);
+        //}, 800);
     });
 
 }(window, jQuery);

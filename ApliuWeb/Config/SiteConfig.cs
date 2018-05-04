@@ -185,11 +185,13 @@ namespace ApliuWeb
             XmlDocument doc = new XmlDocument();
             doc.Load(configFilePath);
 
-            XmlNode node = null;
-            node = doc.SelectSingleNode("//configuration/appSettings/" + NodeName);
-            if (node != null)
+            XmlNode node = doc.SelectSingleNode("//configuration/appSettings");
+
+            XmlElement xElem = (XmlElement)node.SelectSingleNode("//add[@key='" + NodeName + "']");
+
+            if (xElem != null)
             {
-                value = node.InnerText.Trim();
+                value = xElem.GetAttribute("value");
             }
             return value;
         }

@@ -1,0 +1,37 @@
+2018/5/4 11:17:57 : 加载默认js、css完成
+2018/5/4 11:17:57 : 主程序启动完成201893241942
+2018/5/4 16:47:26 : 加载默认js、css完成
+2018/5/4 16:47:26 : 主程序启动完成201893241942
+2018/5/4 18:16:08 : 加载默认js、css完成
+2018/5/4 18:16:08 : 主程序启动完成201893241942
+2018/5/4 19:41:14 : 加载默认js、css完成
+2018/5/4 19:41:14 : 主程序启动完成201893241942
+2018/5/4 19:50:35 : 加载默认js、css完成
+2018/5/4 19:50:35 : 主程序启动完成201893241942
+2018/5/4 19:58:28 : 数据库查询失败，Sql：select 1 from ApUserInfo where UserId='18779182730' and Password='698D51A19D8A121CE581499D7B701668';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/5/4 19:59:03 : 数据库查询失败，Sql：select 1 from ApUserInfo where UserId='18779182730' and Password='698D51A19D8A121CE581499D7B701668';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/5/4 19:59:08 : 数据库查询失败，Sql：select 1 from ApUserInfo where UserId='18779182730' and Password='698D51A19D8A121CE581499D7B701668';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/5/4 19:59:10 : 数据库查询失败，Sql：select 1 from ApUserInfo where UserId='18779182730' and Password='698D51A19D8A121CE581499D7B701668';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/5/4 19:59:44 : 数据库查询失败，Sql：select 1 from ApUserInfo where UserId='18779182730' and Password='698D51A19D8A121CE581499D7B701668';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/5/4 19:59:59 : 数据库查询失败，Sql：select 1 from ApUserInfo where UserId='18779182730' and Password='698D51A19D8A121CE581499D7B701668';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/5/4 20:00:02 : 数据库查询失败，Sql：select 1 from ApUserInfo where UserId='18779182730' and Password='B59C67BF196A4758191E42F76670CEBA';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/5/4 20:00:43 : 数据库查询失败，Sql：select 1 from ApUserInfo where UserId='18779182730' and Password='B59C67BF196A4758191E42F76670CEBA';，详情：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+2018/5/4 21:03:00 : 加载默认js、css完成
+2018/5/4 21:03:00 : 主程序启动完成201893241942
+2018/5/4 21:40:11 : 加载默认js、css完成
+2018/5/4 21:40:11 : 主程序启动完成201893241942
+2018/5/4 21:47:06 : 加载默认js、css完成
+2018/5/4 21:47:06 : 主程序启动完成201893241942
+2018/5/4 21:47:28 :   sendurl:https://yun.tim.qq.com/v5/tlssmssvr/sendsms?sdkappid=1400075540&random=1553347241  sendjson:{
+                    "ext": "",
+                    "extend": "",
+                    "msg": "您好, 您的注册验证码是: 016483, 有效期2分钟, 如非本人发送, 请忽略该短信。",
+                    "sig": "CA15A79768A315B518AB42E2C30066813D3833C45350673B20AC6F170968E40A",
+                    "tel": {
+                        "mobile": "18779182730",
+                        "nationcode": "86"
+                    },
+                    "time": 1525441647,
+                    "type": 0
+                }  response:{"result":1014,"errmsg":"\u6A21\u7248\u672A\u5BA1\u6279\u6216\u5185\u5BB9\u4E0D\u5339\u914D\uFF0C\u9519\u8BEF\u8BE6\u89E3\u89C1:https://cloud.tencent.com/document/product/382/9558#5-1004.E9.94.99.E8.AF.AF.E8.AF.A6.E8.A7.A3","ext":""}  insertlog:insert into ApSMSHistory(SMSID,MobileNumber,SMSContent,SendTime,CreateUser,SMSType,Project,SendResult,SendMsg) 
+                        values('fe3313c9-a2d3-448a-b2a5-6c1479aa9255','18779182730','您好, 您的注册验证码是: 016483, 有效期2分钟, 如非本人发送, 请忽略该短信。','2018-05-04 21:47:28','Apliu','验证码','ApliuWeb','False','模版未审批或内容不匹配，错误详解见:https://cloud.tencent.com/document/product/382/9558#5-1004.E9.94.99.E8.AF.AF.E8.AF.A6.E8.A7.A3');

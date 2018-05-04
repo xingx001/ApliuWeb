@@ -142,6 +142,7 @@ namespace ApliuWeb.Controllers
             return result.ToString();
         }
 
+        ///api/toolapi/sendsms?mobile=18779182730&smscontent=您正在使用短信服务，短信验证码是ACBXDFF，2分钟之内有效，如非本人操作，请忽略本短信。&smsappid=1400075540&smsappkey=b0a0f4466492c96fcd3d1d334cc01749
         [HttpPost]
         public string SendSMS(string Mobile, string SMSContent, string SMSAppId, string SMSAppKey)
         {
@@ -152,7 +153,38 @@ namespace ApliuWeb.Controllers
 
             string SendMsg = "发生异常";
             SMSMessage sms = new TencentSMS();
-            sms.SendSMS(Mobile, SMSContent, out SendMsg, SMSAppId, SMSAppKey);
+            bool sendresult = sms.SendSMS(Mobile, SMSContent, out SendMsg, SMSAppId, SMSAppKey);
+            if (sendresult)
+            {
+                result.code = "0";
+            }
+            result.msg = SendMsg;
+            return result.ToString();
+        }
+
+        [HttpPost]
+        public string SendSMSCode()
+        {
+            ResponseMessage result = new ResponseMessage();
+            result.code = "-1";
+            result.msg = "发生异常";
+            result.result = "执行失败";
+
+            string Mobile = HttpContextRequest.Form["Mobile"];
+            CodeType codeType = (CodeType)HttpContextRequest.Form["codeType"].ToInt();
+
+            string SendMsg = "发生异常";
+            bool sendresult = VerificationCode.SendSMS(Mobile, codeType, out SendMsg);
+            if (sendresult)
+            {
+                result.code = "0";
+                result.result = "发送成功";
+            }
+            else
+            {
+                result.code = "1";
+                result.result = "发送失败";
+            }
             result.msg = SendMsg;
             return result.ToString();
         }
