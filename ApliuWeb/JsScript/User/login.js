@@ -33,6 +33,25 @@ $(function () {
             });
         }
     });
+
+    $("#btn-changepassword").click(function () {
+        if (changepassword()) {
+            var fromdata = { method: "POST", params: $(this.form).serialize() };
+            $.when(ApliuCommon.HttpSend("/api/common/changepassword", fromdata)).then(function (rst) {
+                if (rst.code == "0") {
+                    $.confirm(rst.msg + "，是否返回登录?", "提示", function () {
+                        window.location.href = "Login";
+                    }, function () {
+                        //取消操作
+                    });
+                } else {
+                    $.alert(rst.msg);
+                }
+            }, function (rst) {
+                $.alert(rst.msg);
+            });
+        }
+    });
 })
 
 var logincheck = function () {
@@ -94,6 +113,43 @@ var registercheck = function () {
     return true;
 }
 
+var changepassword = function () {
+    var user = "手机号码";
+    var phone = $("#username").val();
+    var smscode = $("#smscode").val();
+    var password = $("#password").val();
+    var passwordag = $("#passwordag").val();
+    if (phone == "") {
+        $.alert(user + "不能为空", "提示");
+        return false;
+    }
+    if (!ApliuCommon.isPoneAvailable(phone)) {
+        $.alert(user + "格式有误", "提示");
+        return false;
+    }
+    if (smscode == "") {
+        $.alert("请输入短信验证码", "提示");
+        return false;
+    }
+    if (password == "") {
+        $.alert("密码不能为空", "提示");
+        return false;
+    }
+    if (password.length < 3) {
+        $.alert("密码长度必须大于3", "提示");
+        return false;
+    }
+    if (passwordag == "") {
+        $.alert("请再次输入密码", "提示");
+        return false;
+    }
+    if (password != passwordag) {
+        $.alert("两次密码不一致", "提示");
+        return false;
+    }
+    return true;
+}
+
 !function (win, $) {
 
     var dialog = win.YDUI.dialog;
@@ -118,7 +174,8 @@ var registercheck = function () {
         var $this = $(this);
         dialog.loading.open('发送中...');
         // ajax 成功发送验证码后调用【start】
-        var data = ApliuCommon.getoptions("Post", { Mobile: phone, codeType: 1 }, "false");
+        var codetypevalue = $getCode.attr("codetype");
+        var data = ApliuCommon.getoptions("Post", { Mobile: phone, codeType: codetypevalue }, "false");
         $.when(ApliuCommon.HttpSend("/api/toolapi/sendsmscode", data)).then(function (rst) {
             if (rst.code == "0") {
                 dialog.loading.close();

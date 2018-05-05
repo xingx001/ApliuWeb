@@ -35,3 +35,7 @@
                     "type": 0
                 }  response:{"result":1014,"errmsg":"\u6A21\u7248\u672A\u5BA1\u6279\u6216\u5185\u5BB9\u4E0D\u5339\u914D\uFF0C\u9519\u8BEF\u8BE6\u89E3\u89C1:https://cloud.tencent.com/document/product/382/9558#5-1004.E9.94.99.E8.AF.AF.E8.AF.A6.E8.A7.A3","ext":""}  insertlog:insert into ApSMSHistory(SMSID,MobileNumber,SMSContent,SendTime,CreateUser,SMSType,Project,SendResult,SendMsg) 
                         values('fe3313c9-a2d3-448a-b2a5-6c1479aa9255','18779182730','您好, 您的注册验证码是: 016483, 有效期2分钟, 如非本人发送, 请忽略该短信。','2018-05-04 21:47:28','Apliu','验证码','ApliuWeb','False','模版未审批或内容不匹配，错误详解见:https://cloud.tencent.com/document/product/382/9558#5-1004.E9.94.99.E8.AF.AF.E8.AF.A6.E8.A7.A3');
+2018/5/4 21:59:59 : 加载默认js、css完成
+2018/5/4 21:59:59 : 主程序启动完成201893241942
+2018/5/4 22:03:54 : 加载默认js、css完成
+2018/5/4 22:03:54 : 主程序启动完成201893241942

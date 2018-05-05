@@ -173,6 +173,18 @@ namespace ApliuWeb.Controllers
             string Mobile = HttpContextRequest.Form["Mobile"];
             CodeType codeType = (CodeType)HttpContextRequest.Form["codeType"].ToInt();
 
+            if (codeType == CodeType.Register && !UserInfo.UserCheck(Mobile))
+            {
+                result.msg = "该用户已注册";
+                return result.ToString();
+            }
+
+            if ((codeType == CodeType.Login || codeType == CodeType.ChangePassword) && UserInfo.UserCheck(Mobile))
+            {
+                result.msg = "该用户未注册";
+                return result.ToString();
+            }
+
             string SendMsg = "发生异常";
             bool sendresult = VerificationCode.SendSMS(Mobile, codeType, out SendMsg);
             if (sendresult)

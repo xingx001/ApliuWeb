@@ -238,12 +238,13 @@ function gameover(level) {
 function startGame() {
     $("#gameover").hide();
     showtime();
-    var canvas = document.createElement("canvas");
-    canvas.height = "550rem";
-    canvas.style.marginTop = "-4rem";
-    canvas.id = "stage";
-    $("#gamemain").html('<canvas id="stage" height="550rem" style="margin-top: -4rem;"></canvas>');
-    gameinit();
+	gamestart();
+    //var canvas = document.createElement("canvas");
+    //canvas.height = "550rem";
+    //canvas.style.marginTop = "-4rem";
+    //canvas.id = "stage";
+    //$("#gamemain").html('<canvas id="stage" height="550rem" style="margin-top: -4rem;"></canvas>');
+    //gameinit();
     //document.location.href = document.location.href;
 }
 

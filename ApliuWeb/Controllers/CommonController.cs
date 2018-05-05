@@ -13,6 +13,69 @@ namespace ApliuWeb.Controllers
     public class CommonController : ApiController
     {
         [HttpPost]
+        public string changepassword()
+        {
+            string username = HttpContextRequest.Form["username"];
+            string smscode = HttpContextRequest.Form["smscode"];
+            string password = HttpContextRequest.Form["password"];
+            string passwordag = HttpContextRequest.Form["passwordag"];
+            ResponseMessage result = new ResponseMessage();
+            result.code = "-1";
+            result.msg = "发生异常";
+
+            if (string.IsNullOrEmpty(username))
+            {
+                result.msg = "用户名不能为空";
+                return result.ToString();
+            }
+            CodeCase cc = SessionHelper.GetSessionValue(CodeType.ChangePassword.ToString()) as CodeCase;
+            if (cc == null || (TimeHelper.DataTimeNow - cc.CreateTime).Seconds > cc.Timeout)
+            {
+                result.msg = "请重新获取短信验证码";
+                return result.ToString();
+            }
+            if (cc.User != username || cc.Code != smscode)
+            {
+                result.msg = "短信验证码错误";
+                return result.ToString();
+            }
+            if (string.IsNullOrEmpty(password))
+            {
+                result.msg = "密码不能为空";
+                return result.ToString();
+            }
+            if (password.Length < 3)
+            {
+                result.msg = "密码长度必须大于等于3";
+                return result.ToString();
+            }
+            if (string.IsNullOrEmpty(passwordag))
+            {
+                result.msg = "请再次输入密码";
+                return result.ToString();
+            }
+            if (password != passwordag)
+            {
+                result.msg = "两次密码输入不一致";
+                return result.ToString();
+            }
+
+            string id = Guid.NewGuid().ToString().ToUpper();
+            string regs = string.Format(@"update ApUserInfo set Password='{1}' where UserId='{0}';", username, SecurityHelper.MD5Encrypt(password, Encoding.UTF8));
+            if (DataAccess.Instance.PostData(regs))
+            {
+                result.code = "0";
+                result.msg = "修改成功";
+            }
+            else
+            {
+                result.msg = "修改失败";
+            }
+
+            return result.ToString();
+        }
+
+        [HttpPost]
         public string Register()
         {
             string username = HttpContextRequest.Form["username"];
@@ -163,7 +226,8 @@ namespace ApliuWeb.Controllers
             {
                 result.code = "1";
                 result.msg = "用户未登录";
-                return result.ToString();
+                if (stage.ToInt() > 6) userid = "Everyone";
+                else return result.ToString();
             }
 
             if (string.IsNullOrEmpty(gamename) || string.IsNullOrEmpty(score) || string.IsNullOrEmpty(usetime) || string.IsNullOrEmpty(stage))
@@ -174,10 +238,10 @@ namespace ApliuWeb.Controllers
 
             string id = Guid.NewGuid().ToString().ToUpper();
             string insertgame = string.Format(@"INSERT INTO GameData (ID ,UserId ,GameName ,Score,Stage ,UseTime
-,Remark,CreateTime)  VALUES ('{0}','{1}','{2}',{3},{4},{5},'{6}','{7}')", id, userid, gamename, score, stage, usetime, "", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+,Remark,CreateTime, IP)  VALUES ('{0}','{1}','{2}',{3},{4},{5},'{6}','{7}','{8}')", id, userid, gamename, score, stage, usetime, "", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), HYRequest.GetIP());
             if (DataAccess.Instance.PostData(insertgame))
             {
-                result.code = "0";
+                if (result.code == "-1") result.code = "0";
                 result.msg = "保存成绩成功";
             }
             return result.ToString();
