@@ -1,45 +1,9 @@
 <?php
 
 require 'config.php';
-
-function isMobile() { 
-  // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
-  if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
-    return true;
-  } 
-  // 如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
-  if (isset($_SERVER['HTTP_VIA'])) { 
-    // 找不到为flase,否则为true
-    return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
-  } 
-  // 脑残法，判断手机发送的客户端标志,兼容性有待提高。其中'MicroMessenger'是电脑微信
-  if (isset($_SERVER['HTTP_USER_AGENT'])) {
-    $clientkeywords = array('nokia','sony','ericsson','mot','samsung','htc','sgh','lg','sharp','sie-','philips','panasonic','alcatel','lenovo','iphone','ipod','blackberry','meizu','android','netfront','symbian','ucweb','windowsce','palm','operamini','operamobi','openwave','nexusone','cldc','midp','wap','mobile','MicroMessenger'); 
-    // 从HTTP_USER_AGENT中查找手机浏览器的关键字
-    if (preg_match("/(" . implode('|', $clientkeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
-      return true;
-    } 
-  } 
-  // 协议法，因为有可能不准确，放到最后判断
-  if (isset ($_SERVER['HTTP_ACCEPT'])) { 
-    // 如果只支持wml并且不支持html那一定是移动设备
-    // 如果支持wml和html但是wml在html之前则是移动设备
-    if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
-      return true;
-    } 
-  } 
-  return false;
-}
-
-
-
 if (!WF_Auth::isLogin()) {
 	wf_redirect('login.php?act=in');
 	exit;
-}
-
-if(isMobile()){
-		wf_redirect('indexsj.php');
 }
 ?>
 <!DOCTYPE html>
@@ -48,7 +12,7 @@ if(isMobile()){
 	<meta charset="UTF-8" />
 	<title>Apliu文件管理</title>
 <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
-	<link rel="stylesheet" href="static/css/style.css" />
+	<link rel="stylesheet" href="static/css/stylesj.css" />
 	<link rel="stylesheet" href="static/css/toolbar.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
 
@@ -63,30 +27,40 @@ if(isMobile()){
 <body id="body">
 <div id="loading">正在加载...</div>
 
-<div id="header">
+<div id="header" style="width: 360px;">
 	<h1 id="logo">
 		<a target="_blank" href="http://www.apliu.xyz">Apliu文件管理</a>
 	</h1>
 </div>
-
-<div id="main">
+<style>
+#main-menu li{
+display:inline-block;  
+	padding-left:1rem;
+}
+.ulmenu{
+	text-align: center;
+	margin:1rem 0;
+}
+.col-main1{
+}
+#list{
+margin:0 auto;
+float:none;
+}
+</style>
+<div style="margin-left:2px;">
 	<div class="top"></div>
-
-	<div class="col-sub">
+ <div class="ulmenu" style="width: 360px;">
 		<ul id="main-menu">
-		  	<?php if(WF_Auth::isAdmin() && is_dir('./admin')){?>
-		  		<li id="help8">
-		  			<span>
-		  				<i class="icon"></i>
-		  				<a target="_blank" href="./admin/">管理中心</a>
-		  			</span>
-		  		</li>
-		  	<?php }?>
-		  	<li id="help1">
+		  	<li id="help1" style="padding-left: 0rem;">
 		  		<span>
 		  			<i class="icon"></i>
 		  			<a href="javascript:void(0);" onclick="app.nfs.pathinfo();">目录详情</a>
 		  		</span>
+		  	</li>
+			<li id="help8">
+			<i class="icon"></i>
+	  <a id="toolback" class="btn" href="javascript:void(0);" onclick="app.nfs.nlist(app.nfs.cpath, true);">刷新目录</a>
 		  	</li>
 		  	<li id="help6">
 		  		<span>
@@ -100,20 +74,19 @@ if(isMobile()){
 		  			<a href="javascript:void(0);" onclick="app.mui.logout();">安全退出</a>
 		  		</span>
 		  	</li>
-		</ul>
-	</div>
-
-	<div class="col-main">
-		<div id="list">
+		</ul> 
+</div>
+	<div class="col-main1">
+		<div id="list" style="width: 360px;">
 			<div id="list_head">
 				<span id="list_head_left"></span>
-				<span id="list_head_center"></span>
+				<span id="list_head_center" style="width: 340px !important;"></span>
 				<span id="list_head_right"></span>
 				<div class="clean"></div>
 			</div>
-			<div id="list_main">
+			<div id="list_main" style="width: 360px;">
 				<span id="list_main_left"></span>
-				<div id="list_main_center">
+				<div id="list_main_center" style="width:340px;">
 					<table class="tree-browser" cellpadding="0" cellspacing="0" >
 						<tbody id="dirs-files-list">
 							<th><font color="green">文件列表加载中...</font></th>
@@ -124,9 +97,9 @@ if(isMobile()){
 				<div class="clean"></div>
 			</div>
 
-		  	<div id="list_foot">
+		  	<div id="list_foot" >
 		  		<span id="list_foot_left"></span>
-		  		<span id="list_foot_center"></span>
+		  		<span id="list_foot_center"  style="width: 340px;"></span>
 		  		<span id="list_foot_right"></span>
 		  		<div class="clean"></div>
 			</div>
@@ -134,22 +107,19 @@ if(isMobile()){
 	</div>
 
   	<div class="bottom"></div>
-</div>
-
+ 
 <div id="contextDirMenu"></div>
 <div id="contextFileMenu"></div>
-
+</div>
 <script id="tools-bar" type="text/template">
-  <div class="apptools">
+  <div class="apptools" style="width: 340px;">
 	<div class="clearfix apptools-inner">
-	  <a id="toolSelect" class="btn" href="javascript:app.mui.SelectAll();" title="选择"><span><img src="static/images/toolbar/select.gif" width="16" height="16" />选择</span></a> <span class="edge">|</span>
-	  <a id="toolback" class="btn" href="javascript:void(0);" onclick="app.nfs.nlist(app.nfs.cpath, true);"><span><img src="static/images/toolbar/folder_up.gif" width="16" height="16" />刷新</span></a> <span class="edge">|</span>
+
 	  <a id="toolNewDir" class="btn" href="javascript:void(0);" onclick="app.nfs.mkdir();"><span><img src="static/images/toolbar/folder_add.gif" width="16" height="16" />新建目录</span></a><span class="edge">|</span>
-	  <a id="toolNewDir" class="btn" href="javascript:void(0);" onclick="app.nfs.mkdir('file');"><span><img src="static/images/toolbar/file_add.gif" width="16" height="16" />新建文件</span></a><span class="edge">|</span>
 	  <a id="toolCut" class="btn" href="javascript:void(0);" onclick="app.nfs.cut(false);"><span><img src="static/images/toolbar/cut.gif" width="16" height="16" />剪切</span></a><span class="edge">|</span>
 	  <a id="toolCopy" class="btn" href="javascript:void(0);" onclick="app.nfs.copy(false);"><span><img src="static/images/toolbar/share.gif" width="16" height="16" />复制</span></a><span class="edge">|</span>
 	  <a id="toolPaste" class="btn" href="javascript:void(0);" onclick="app.nfs.paste(false);"><span><img src="static/images/toolbar/paste.gif" width="16" height="16" />粘贴</span></a><span class="edge">|</span>
-	  <a id="toolUploadFile" class="btn" href="javascript:void(0);" onclick="app.nfs.upload();"><span><img src="static/images/toolbar/file_up.gif" width="16" height="16" />上传</span></a> <span class="edge">|</span>
+	  <a id="toolUploadFile" class="btn" href="javascript:void(0);" onclick="app.nfs.upload();"><span><img src="static/images/toolbar/file_up.gif" width="16" height="16" />上传</span></a> <span class="edge">|</span><br />
 	  <a id="toolDelete" class="btn" href="javascript:void(0);" onclick="app.nfs.rmdir(false);"><span><img src="static/images/toolbar/file_del.gif" width="16" height="16" />删除</span></a><span class="edge">|</span>
 	  <a id="toolListView" class="btn" href="javascript:void(0);" onclick="app.mui.olist=!app.mui.olist;app.nfs.nlist(app.nfs.cpath, false);" title="切换视图"><span><img src="static/images/toolbar/view_thumb.gif" width="16" height="16" />视图</span></a><span class="edge">|</span>
 
@@ -175,14 +145,14 @@ if(isMobile()){
 <!--路径列表 - 模板 -->
 <script id="nlist-path" type="text/template">
 	<span id="list_head_left"></span>
-	<span id="list_head_center">当前目录：{@each paths as dir}<a href="javascript:app.nfs.nlist('${dir.path}');">${dir.name}/</a>{@/each}</span>
+	<span id="list_head_center" style="width:340px;">当前目录：{@each paths as dir}<a href="javascript:app.nfs.nlist('${dir.path}');">${dir.name}/</a>{@/each}</span>
 	<span id="list_head_right"></span>
 </script>
 
 <!--目录列表 - 模板 -->
 <script id="nlist-list-table" type="text/template">
 	{@include "#tools-bar", subData}
-	<table class="tree-browser" cellpadding="0" cellspacing="0">
+	<table class="tree-browser" style="width:340px;" cellpadding="0" cellspacing="0">
 		<tbody id="dirs-files-list">
 			<th><font color="green">文件列表加载中...</font></th>
 		</tbody>
@@ -194,10 +164,7 @@ if(isMobile()){
 	<tr class="nlist-list">
 		<td><input class="dir-disabled" name="dir-disabled" type="checkbox" value="" disabled /></td>
 		<td><span class="ext ext_folder_go"></span></td>
-		<td><a href="javascript:void(0);" onclick="app.nfs.nlist('${path.parent}');" class="js-slide-to">返回上级目录</a></td>
-		<td>修改时间</td>
-		<td>文件大小</td>
-		<td>文件权限</td>
+		<td><a href="javascript:void(0);" onclick="app.nfs.nlist('${path.parent}');" class="js-slide-to">返回上级目录</a></td>  
 		<td align="center" colspan="3">相关操作</td>
 	</tr>
 
@@ -206,10 +173,8 @@ if(isMobile()){
 		<tr class="dir-list-${idx}">
 			<td><input class="dir-checkbox-id" name="dir-checkbox" type="checkbox" value="${dir.path}" /></td>
 			<td><span class="ext ext_folder_open"></span></td>
-			<td><a href="javascript:void(0);" onclick="app.nfs.nlist('${dir.path}')" id="dir-id-${idx}" data-path="${dir.path}" data-name="${dir.name}" data-mtime="${dir.mtime}" data-chmod="${dir.chmod}">${dir.name}</a></td>
-			<td>${dir.fmtime}</td> <td>no size</td> <td title="${dir.fchmod}">${dir.chmod}</td>
-
-			<td><a href="javascript:app.nfs.zip('${dir.path}','${dir.name}')">打包</a></td>
+			<td  style="max-width: 200px;"><a href="javascript:void(0);" onclick="app.nfs.nlist('${dir.path}')" id="dir-id-${idx}" data-path="${dir.path}" data-name="${dir.name}" data-mtime="${dir.mtime}" data-chmod="${dir.chmod}">${dir.name}</a></td>
+ 
 			<td><a href="javascript:app.nfs.download('${dir.path}','${dir.name}','dir')">下载</a></td>
 			<td><a href="javascript:app.nfs.rmdir('${dir.path}','${dir.name}', 'dir')">删除</a></td>
 		</tr>
@@ -221,16 +186,12 @@ if(isMobile()){
 			<td><input class="file-checkbox-id" name="file-checkbox" type="checkbox" value="${file.path}" /></td>
 			<td><span class="ext ext_${file.ext}"></span></td>
 			{@if file.ext=='jpg' || file.ext=='png' || file.ext=='gif' || file.ext=='bmp'}
-				<td><a href="${nfs.host}${nfs.path}${file.path}" onclick="return false;" id="file-id-${idx}" data-path="${file.path}" data-name="${file.name}" data-ext="${file.ext}" data-mtime="${file.mtime}" data-chmod="${file.chmod}" title="双击预览图片" rel="show" colortitle="文件名称：<font color=red>${file.name}&nbsp;&nbsp;&nbsp;&nbsp;</font>图片大小: <font color=red>${file.fsize}</font>">${file.name}</a></td>
+				<td style="max-width: 200px;"><a href="${nfs.host}${nfs.path}${file.path}" onclick="return false;" id="file-id-${idx}" data-path="${file.path}" data-name="${file.name}" data-ext="${file.ext}" data-mtime="${file.mtime}" data-chmod="${file.chmod}" title="双击预览图片" rel="show" colortitle="文件名称：<font color=red>${file.name}&nbsp;&nbsp;&nbsp;&nbsp;</font>图片大小: <font color=red>${file.fsize}</font>">${file.name}</a></td>
 			{@else}
-				<td><a href="${nfs.host}${nfs.path}${file.path}" id="file-id-${idx}" data-path="${file.path}" data-name="${file.name}" data-ext="${file.ext}" title="${file.name}" data-mtime="${file.mtime}" data-chmod="${file.chmod}" target="_blank" >${file.name}</a></td>
-			{@/if}
-			<td>${file.fmtime}</td> <td>${file.fsize}</td>
-			<td title="${file.fchmod}">${file.chmod}</td>
-
+				<td style="max-width: 200px;"><a href="${nfs.host}${nfs.path}${file.path}" id="file-id-${idx}" data-path="${file.path}" data-name="${file.name}" data-ext="${file.ext}" title="${file.name}" data-mtime="${file.mtime}" data-chmod="${file.chmod}" target="_blank" >${file.name}</a></td>
+			{@/if} 
 			<td><a href="javascript:app.nfs.download('${file.path}', '${file.name}', 'file')">下载</a></td>
 			<td><a href="javascript:app.nfs.rmdir('${file.path}', '${file.name}', 'file')">删除</a></td>
-			<td>--</td>
 		</tr>
 	{@/each}
 </script>
@@ -259,7 +220,7 @@ if(isMobile()){
 							<font color="blue">${dir.name}</font>
 						</ol>
 						<span style="position:absolute;left:10px;top:85px;">
-							<input class="dir-checkbox-id" name="dir-checkbox" type="checkbox" value="${dir.path}" />
+							<input class="dir-checkbox-idmulu" name="dir-checkbox" type="checkbox" value="${dir.path}" />
 						</span>
 					</div>
 				{@/each}
@@ -284,7 +245,7 @@ if(isMobile()){
 							<font color="red">${file.name}</font>
 						</ol>
 						<span style="position:absolute;left:10px;top:85px;">
-							<input class="file-checkbox-id" name="file-checkbox" type="checkbox" value="${file.path}" />
+							<input class="file-checkbox-idmulu" name="file-checkbox" type="checkbox" value="${file.path}" />
 						</span>
 					</div>
 				{@/each}
@@ -488,4 +449,4 @@ $(function () {
 });
 </script>
 </body>
-</html> 
+</html>

@@ -19,12 +19,13 @@ $error = wf_gpc('wf_error', 'S');
 ?>
 <html>
 <head>
+<meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="renderer" content="webkit">
     <title>Apliu文件管理</title>
     <style type="text/css">
         html { }
-        body { color:#fff; font-size:14px; padding:0; overflow:hidden; margin:0; width:100%; height:100%; min-height:400px;}
+        body { color:#fff; font-size:16px; padding:0; overflow:hidden; margin:0; width:100%; height:100%; min-height:400px;}
         h1 { font-wieght:bold; font-size:20px; padding:0 28px; margin:0; text-shadow:0 1px 2px rgba(0, 0, 0, 0.4); }
         #login_form { position:absolute; width:500px; }
 
@@ -32,11 +33,28 @@ $error = wf_gpc('wf_error', 'S');
         .input { font-family: Georgia, serif;margin-left:5px;font-size: 22px; padding-left: 12px; padding-right: 0px; width: 234px; height:30px; background:url(static/images/login/spacer.gif); color:#383838; outline:medium none; border:none; }
         .input_div { position:absolute; margin-top:14px; width:290px; height:80px; background:url(static/images/login/login_input_bg.png) 0 10px; }
         .input_div input { position:absolute; top:26px; }
-        .heightlight { background-position:0 -71px; }
         .input_bg_text {position:absolute; line-height:28px; top:26px; color:#A2AFC2; padding-left:13px; font-size: 22px; white-space:nowrap; }
         .submit_bg { background:url(static/images/login/login_submit.png); width:80px; height:42px; position:absolute; overflow:hidden; margin-top:34px; }
         .submit_text { position:absolute; text-shadow:0 2px 1px rgba(255, 255, 255, 0.4); color:#4F3400; font-weight:bold; width:80px; height:42px; text-align:center; line-height:40px; cursor:pointer; -moz-user-select:none; user-select:none; selcte:none; font-size:20px; }
-        .submit_bg_hover { background-position:0 -80px; }
+		#submit_bg{
+		margin:0 auto !important;
+		position: fixed !important;
+    top: 10rem !important;
+	left:0 !important;
+	right:0 !important;
+		width:5rem;
+	margin-top: 80px !important;
+
+		}
+		.iptpassword{
+		margin:0 auto !important;
+				position: fixed !important;
+    top:10rem !important;
+		background-position: 0 -71px !important;
+	left:0 !important;
+	right:0 !important;
+		width:20rem;
+		}
     </style>
     <script type="text/javascript">
     var userAgent = navigator.userAgent.toLowerCase();
@@ -44,13 +62,6 @@ $error = wf_gpc('wf_error', 'S');
     var is_ie = navigator.appName == "Microsoft Internet Explorer" ? true : false;
     var ie = (userAgent.indexOf('msie') != -1 && !is_opera) && userAgent.substr(userAgent.indexOf('msie') + 5, 3);
 
-    function heightlight(obj) {
-    	obj.className = 'input_div heightlight';
-    	if (is_ie && ie < 7) {
-    		var ie6bg = obj.getElementsByTagName('*')[0].getElementsByTagName('*')[0];
-    		ie6bg.style.top = '-71px';
-    	}
-    }
     function offlight(obj) {
     	obj.className = 'input_div';
     	if (is_ie && ie < 7) {
@@ -108,7 +119,7 @@ $error = wf_gpc('wf_error', 'S');
     }
     </script>
 </head>
-<body scroll="no">
+<body scroll="no" style="background-color:#C0C0C0;">
 <div id="body">
   <table border="0" align="center" height="100%" width="500">
     <tr>
@@ -122,26 +133,26 @@ $error = wf_gpc('wf_error', 'S');
       <td height="200" valign="top"><div id="login_form">
           <form method="post" id="myform" onSubmit="return check_submit(this);" action="login.php?act=login_check">
             <input type="hidden" name="forward" value="" />
-            <div style="position:absolute;margin-left:-60px;">
+            <div style="position:absolute;margin-left:-60px;display:none;">
               <h1>管理员登录</h1>
             </div>
-            <div class="input_div" style="margin-left:-60px;">
+            <div class="input_div" style="margin-left:-60px;display:none;">
               <!--[if lt IE 6.9]><div class="input_bg_forie6"><div class="inputbg"></div></div><![endif]-->
               <div style="padding:28px;">
                 <div class="input_bg_text" id="input_default_text_username">用户名</div>
-                <input tabindex="1" type="text" size="30" name="wf_uname" id="username" value="" class="input" onKeyDown="input_key_down(event)" onKeyUp="input_key_up(event,this,'username');" onFocus="heightlight(this.parentNode.parentNode)" onBlur="offlight(this.parentNode.parentNode)" />
+                <input tabindex="1" type="text" size="30" name="wf_uname" id="username" value="admin" class="input" onKeyDown="input_key_down(event)" onKeyUp="input_key_up(event,this,'username');" />
               </div>
             </div>
-            <div class="input_div" style="margin-left:193px;">
+            <div class="input_div iptpassword" style="margin-left:193px;">
               <div class="input_bg_forie6">
                 <div class="inputbg"></div>
               </div>
               <div style="padding:28px;">
                 <div class="input_bg_text" id="input_default_text_password">密码</div>
-                <input tabindex="2" type="password" name="wf_upawd" size="30" id="password" value="" class="input" onKeyDown="input_key_down(event);input_key_up(event,this,'password');" onFocus="heightlight(this.parentNode.parentNode)" onBlur="offlight(this.parentNode.parentNode)"  style="font-family:Tahoma,Simsun,Helvetica,sans-serif;" />
+                <input tabindex="2" type="password" name="wf_upawd" size="30" id="password" value="" class="input" onKeyDown="input_key_down(event);input_key_up(event,this,'password');" style="font-family:Tahoma,Simsun,Helvetica,sans-serif;" />
               </div>
             </div>
-            <div class="submit_bg" id="submit_bg" style="margin-left:475px;">
+            <div class="btnlogin submit_bg"  id="submit_bg" style="margin-left:475px;">
               <!--[if lt IE 6.9]><div class="submit_bg_forie6"><div class="inputbg"></div></div><![endif]-->
               <div style="widht:1px;height:1px;overflow:hidden;">
                 <input tabindex="3" onFocus="show_hover()" onBlur="show_up();" type="submit" value="_" />

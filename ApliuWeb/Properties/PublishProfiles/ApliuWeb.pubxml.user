@@ -15,7 +15,7 @@
       <publishTime>05/04/2018 21:58:21</publishTime>
     </File>
     <File Include="bin/ApliuWeb.dll">
-      <publishTime>05/04/2018 22:04:36</publishTime>
+      <publishTime>05/05/2018 18:34:22</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -1437,7 +1437,7 @@
       <publishTime>03/31/2018 10:22:13</publishTime>
     </File>
     <File Include="JsScript/User/login.js">
-      <publishTime>05/04/2018 21:32:51</publishTime>
+      <publishTime>05/05/2018 18:20:31</publishTime>
     </File>
     <File Include="JsScript/ydui.js">
       <publishTime>03/31/2018 12:47:37</publishTime>
@@ -2430,7 +2430,7 @@
       <publishTime>03/20/2018 12:12:35</publishTime>
     </File>
     <File Include="OldWeb/pins/js/game.js">
-      <publishTime>04/02/2018 12:23:24</publishTime>
+      <publishTime>05/04/2018 22:27:16</publishTime>
     </File>
     <File Include="OldWeb/pins/js/jquery-1.8.3.min.js">
       <publishTime>03/20/2018 12:12:35</publishTime>
@@ -3441,10 +3441,10 @@
       <publishTime>03/31/2018 15:59:15</publishTime>
     </File>
     <File Include="Views/User/Password.cshtml">
-      <publishTime>03/31/2018 23:57:31</publishTime>
+      <publishTime>05/05/2018 18:24:20</publishTime>
     </File>
     <File Include="Views/User/Register.cshtml">
-      <publishTime>05/04/2018 21:33:37</publishTime>
+      <publishTime>05/05/2018 18:11:09</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>03/25/2018 15:05:09</publishTime>

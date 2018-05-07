@@ -12,7 +12,7 @@ if(!WF_Auth::isLogin()){
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <meta name="renderer" content="webkit">
     <title> 文件上传组件</title>
-
+<meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
     <script src="static/js/jquery-1.7.2.min.js"></script>
     <script src="static/plupload/plupload.min.js"></script>
      <!-- <script src="static/plupload/plupload.js"></script>

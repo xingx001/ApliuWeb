@@ -53,7 +53,7 @@ img,iframe,fieldset{border:0;}
 .ext_folder_open { background-image:url(../images/toolbar/folder_open.gif);  }
 
 
-.ext_big { background-image:url(../images/mime/unknown_big.png);  }
+.ext_big { background-image:url(../images/mime/unknown_big.png); background-size:100%; }
 .ext_big_dir { background-image:url(../images/toolbar/floder_big.png); }
 .ext_big_upto { background-image:url(../images/toolbar/floder_parent_big.png); }
 
