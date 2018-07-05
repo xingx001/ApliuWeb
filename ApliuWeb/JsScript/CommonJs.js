@@ -5,6 +5,7 @@
 });
 var ApliuCommon = {};
 ApliuCommon.HttpSend = function (apiurl, options) {
+    jQuery.support.cors = true;
     var v;
     if (options) {
         if (options.params && options.method && options.method.toUpperCase() == "GET") {
@@ -39,15 +40,23 @@ ApliuCommon.HttpSend = function (apiurl, options) {
         try {
             rst = JSON.parse(data);
         } catch (e) {
-
+            try {
+                rst = "readyState：" + data.readyState + "    \n    " + "responseText：" + data.responseText;
+            } catch (ex) {
+                rst = data;
+            }
         }
         deferred.resolve(rst);
     }).fail(function (error) {
         var rst;
         try {
-            rst = JSON.parse(data);
+            rst = JSON.parse(error);
         } catch (e) {
-
+            try {
+                rst = "readyState：" + error.readyState + "    \n    " + "responseText：" + error.responseText;
+            } catch (ex) {
+                rst = error;
+            }
         }
         deferred.reject(rst);
     });

@@ -142,7 +142,7 @@ namespace ApliuWeb.Controllers
             return result.ToString();
         }
 
-        ///api/toolapi/sendsms?mobile=18779182730&smscontent=您正在使用短信服务，短信验证码是ACBXDFF，2分钟之内有效，如非本人操作，请忽略本短信。&smsappid=1400075540&smsappkey=b0a0f4466492c96fcd3d1d334cc01749
+        ///https://www.apliu.xyz/api/toolapi/sendsms?mobile=18779182730&smscontent=您正在使用短信服务，短信验证码是ACBXDFF，2分钟之内有效，如非本人操作，请忽略本短信。&smsappid=1400075540&smsappkey=b0a0f4466492c96fcd3d1d334cc01749
         [HttpPost]
         public string SendSMS(string Mobile, string SMSContent, string SMSAppId, string SMSAppKey)
         {
@@ -157,6 +157,27 @@ namespace ApliuWeb.Controllers
             if (sendresult)
             {
                 result.code = "0";
+                result.result = "发送成功";
+            }
+            result.msg = SendMsg;
+            return result.ToString();
+        }
+
+        [HttpGet]
+        public string SendSMSGet(string Mobile, string SMSContent, string SMSAppId, string SMSAppKey)
+        {
+            ResponseMessage result = new ResponseMessage();
+            result.code = "-1";
+            result.msg = "发生异常";
+            result.result = "执行失败";
+
+            string SendMsg = "发生异常";
+            SMSMessage sms = new TencentSMS();
+            bool sendresult = sms.SendSMS(Mobile, SMSContent, out SendMsg, SMSAppId, SMSAppKey);
+            if (sendresult)
+            {
+                result.code = "0";
+                result.result = "发送成功";
             }
             result.msg = SendMsg;
             return result.ToString();
@@ -204,9 +225,9 @@ namespace ApliuWeb.Controllers
         [HttpPost]
         public string ApliuAjax(object value)
         {
-            return "{\"errorCode\":\"-1\",\"errorMsg\":\"默认方法\"}";
+            return "{\"errorCode\":\"-1\",\"errorMsg\":\"默认方法\",\"value\":\"" + value + "\"}";
         }
-
+        
         /// <summary>
         /// 获取临时文本
         /// </summary>

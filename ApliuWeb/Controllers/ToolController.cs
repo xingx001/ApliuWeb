@@ -26,6 +26,16 @@ namespace ApliuWeb.Controllers
             return View();
         }
 
+        public ActionResult Drawing()
+        {
+            return View();
+        }
+
+        public ActionResult HttpSend()
+        {
+            return View();
+        }
+
         //
         // GET: /Tool/Details/5
 

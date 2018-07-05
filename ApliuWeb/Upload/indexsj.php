@@ -24,7 +24,7 @@ if (!WF_Auth::isLogin()) {
 		};
 	</script>
 </head>
-<body id="body">
+<body id="body" style="background-image:url('static/images/indexsj.jpg');">
 <div id="loading">正在加载...</div>
 
 <div id="header" style="width: 360px;">
@@ -48,7 +48,7 @@ margin:0 auto;
 float:none;
 }
 </style>
-<div style="margin-left:2px;">
+<div style="margin-left:2px;background-color:rgba(255, 255, 255, 0.69);padding-bottom:10px;">
 	<div class="top"></div>
  <div class="ulmenu" style="width: 360px;">
 		<ul id="main-menu">

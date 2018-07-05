@@ -60,7 +60,7 @@ if(isMobile()){
 		};
 	</script>
 </head>
-<body id="body">
+<body id="body" style="background-image:url('static/images/indexpc.jpg');">
 <div id="loading">正在加载...</div>
 
 <div id="header">

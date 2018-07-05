@@ -25,7 +25,8 @@ $error = wf_gpc('wf_error', 'S');
     <title>Apliu文件管理</title>
     <style type="text/css">
         html { }
-        body { color:#fff; font-size:16px; padding:0; overflow:hidden; margin:0; width:100%; height:100%; min-height:400px;}
+        body { color:#fff; font-size:16px; padding:0; overflow:hidden; margin:0; width:100%; height:100%; min-height:400px;
+		background-image:url('static/images/body.jpg');}
         h1 { font-wieght:bold; font-size:20px; padding:0 28px; margin:0; text-shadow:0 1px 2px rgba(0, 0, 0, 0.4); }
         #login_form { position:absolute; width:500px; }
 

@@ -201,7 +201,9 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="CssStyle\CommonStyle.css" />
+    <Content Include="CssStyle\drawing.css" />
     <Content Include="CssStyle\jquery-weui.min.css" />
+    <Content Include="CssStyle\jquery.bigcolorpicker.css" />
     <Content Include="CssStyle\User\login.css" />
     <Content Include="CssStyle\weui.min.css" />
     <Content Include="CssStyle\ydui.css" />
@@ -522,7 +524,9 @@
     <Content Include="Images\Icon\tips.png" />
     <Content Include="JsScript\apliualert.js" />
     <Content Include="JsScript\CommonJs.js" />
+    <Content Include="JsScript\drawing.js" />
     <Content Include="JsScript\jquery-weui.min.js" />
+    <Content Include="JsScript\jquery.bigcolorpicker.min.js" />
     <Content Include="JsScript\User\login.js" />
     <Content Include="JsScript\ydui.js" />
     <Content Include="Log\ReadMe.txt" />
@@ -951,6 +955,9 @@
     <Content Include="Upload\static\bootstrap\js\html5.js" />
     <Content Include="Upload\static\css\style.css" />
     <Content Include="Upload\static\css\toolbar.css" />
+    <Content Include="Upload\static\images\body.jpg" />
+    <Content Include="Upload\static\images\indexpc.jpg" />
+    <Content Include="Upload\static\images\indexsj.jpg" />
     <Content Include="Upload\static\images\list\border_01.gif" />
     <Content Include="Upload\static\images\list\border_02.gif" />
     <Content Include="Upload\static\images\list\border_03.gif" />
@@ -1150,6 +1157,9 @@
     <Content Include="Upload\static\plupload\jquery.plupload.queue\jquery.plupload.queue.min.js" />
     <Content Include="Upload\static\plupload\plupload.min.js" />
     <Content Include="Upload\static\plupload\plupload.swf" />
+    <Content Include="Views\Tool\Drawing.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1195,6 +1205,9 @@
     <Content Include="Upload\login.php" />
     <Content Include="Upload\upload.php" />
     <Content Include="Upload\webftp.php" />
+    <Content Include="Upload\indexsj.php" />
+    <Content Include="Views\Shared\_None.cshtml" />
+    <Content Include="Views\Tool\HttpSend.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
