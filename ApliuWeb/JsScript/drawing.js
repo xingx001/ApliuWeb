@@ -87,7 +87,7 @@ thick.onclick = function(){
   thin.classList.remove('active')
   thick.classList.add('active')
 }
-usersizes.onclick = function(){
+usersizes.onchange = function () {
   lineWidth = usersizes.value
   thin.classList.remove('active')
   thick.classList.remove('active')
