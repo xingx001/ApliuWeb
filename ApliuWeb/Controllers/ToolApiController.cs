@@ -227,7 +227,7 @@ namespace ApliuWeb.Controllers
         {
             return "{\"errorCode\":\"-1\",\"errorMsg\":\"默认方法\",\"value\":\"" + value + "\"}";
         }
-        
+
         /// <summary>
         /// 获取临时文本
         /// </summary>
@@ -312,6 +312,106 @@ namespace ApliuWeb.Controllers
                 result.msg = "更新成功";
                 result.result = "更新成功";
             }
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// 字符串处理
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public string Security()
+        {
+            ResponseMessage result = new ResponseMessage();
+            result.code = "-1";
+            result.msg = "发生异常";
+            result.result = "执行失败";
+
+            string type = System.Web.HttpContext.Current.Request.QueryString["type"];
+            string content = System.Web.HttpContext.Current.Request.QueryString["content"];
+            if (!type.Equals("GUID") && (String.IsNullOrEmpty(type) || String.IsNullOrEmpty(content)))
+            {
+                result.msg = "处理类型或内容不能为空";
+                result.result = "执行失败";
+                return result.ToString();
+            }
+
+            String srcContent = String.Empty;
+            switch (type)
+            {
+                case "MD5": srcContent = SecurityHelper.MD5Encrypt(content, Encoding.UTF8);
+                    break;
+                case "GUID": srcContent = Guid.NewGuid().ToString().ToUpper();
+                    break;
+                case "ToUpper": srcContent = content.ToString().ToUpper();
+                    break;
+                case "ToLower": srcContent = content.ToString().ToLower();
+                    break;
+                case "UrlDecode": srcContent = SecurityHelper.UrlDecode(content, Encoding.UTF8);
+                    break;
+                case "UrlEncode": srcContent = SecurityHelper.UrlEncode(content, Encoding.UTF8);
+                    break;
+                case "ASCIIEncode":
+                    byte[] array = System.Text.Encoding.UTF8.GetBytes(content);
+                    for (int i = 0; i < array.Length; i++)
+                    {
+                        int asciicode = (int)(array[i]);
+                        if (!String.IsNullOrEmpty(srcContent)) srcContent += "-";
+                        srcContent += Convert.ToString(asciicode);
+                    }
+                    break;
+                case "ASCIIDecode":
+                    if (content.ToByte() != 0) srcContent = System.Text.Encoding.UTF8.GetString(new Byte[] { content.ToByte() });
+                    else srcContent = "ASCII码 格式有误，只能单个码值转单字符";
+                    break;
+                default: break;
+            }
+
+            result.code = "0";
+            result.msg = srcContent;
+            result.result = "处理成功";
+
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// 进制转换
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public string BaseConver()
+        {
+            ResponseMessage result = new ResponseMessage();
+            result.code = "-1";
+            result.msg = "发生异常";
+            result.result = "执行失败";
+
+            Int32 from = System.Web.HttpContext.Current.Request.QueryString["from"].ToString().ToInt();
+            Int32 to = System.Web.HttpContext.Current.Request.QueryString["to"].ToString().ToInt();
+            string content = System.Web.HttpContext.Current.Request.QueryString["content"];
+            if (from <= 0 || to <= 0 || String.IsNullOrEmpty(content))
+            {
+                result.msg = "进制类型或内容不能为空";
+                result.result = "执行失败";
+                return result.ToString();
+            }
+
+            String srcContent = String.Empty;
+            try
+            {
+                Int32 temp10 = Convert.ToInt32(content, from);
+                srcContent = Convert.ToString(temp10, to).ToUpper();
+
+                result.code = "0";
+                result.msg = srcContent;
+                result.result = "处理成功";
+            }
+            catch (Exception ex)
+            {
+                result.msg = ex.Message;
+                result.result = "处理失败";
+            }
+
             return result.ToString();
         }
 

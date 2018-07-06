@@ -67,6 +67,18 @@ namespace ApliuTools
         /// </summary>
         /// <param name="stringtemp"></param>
         /// <returns></returns>
+        public static Byte ToByte(this string stringtemp)
+        {
+            Byte temp = 0;
+            Byte.TryParse(stringtemp, out temp);
+            return temp;
+        }
+
+        /// <summary>
+        /// 不能转换则返回0
+        /// </summary>
+        /// <param name="stringtemp"></param>
+        /// <returns></returns>
         public static double ToDouble(this string stringtemp)
         {
             double temp = 0;

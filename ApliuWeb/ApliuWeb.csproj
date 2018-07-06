@@ -1208,6 +1208,8 @@
     <Content Include="Upload\indexsj.php" />
     <Content Include="Views\Shared\_None.cshtml" />
     <Content Include="Views\Tool\HttpSend.cshtml" />
+    <Content Include="Views\Tool\Security.cshtml" />
+    <Content Include="Views\Tool\BaseConver.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

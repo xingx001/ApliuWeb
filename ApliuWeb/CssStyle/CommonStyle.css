@@ -153,3 +153,9 @@ body {
     display: block;
     color: #ff463c;
 }
+
+.commonselect {
+    height: 1.1rem;
+    width: 5rem;
+    border-radius: 5px;
+}
