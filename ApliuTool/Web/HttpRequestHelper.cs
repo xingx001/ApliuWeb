@@ -74,6 +74,11 @@ namespace ApliuTools.Web
             return result;
         }
 
+        /// <summary>
+        /// 返回HTTP响应消息
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static HttpResponseMessage encapResult(string s)
         {
             return new HttpResponseMessage()

@@ -53,6 +53,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -128,21 +129,32 @@
     <Compile Include="Controllers\CommonController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
-    <Compile Include="Controllers\textController.cs" />
+    <Compile Include="Controllers\TextController.cs" />
     <Compile Include="Controllers\ToolApiController.cs" />
     <Compile Include="Controllers\ToolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WxController.cs" />
     <Compile Include="Models\Common.cs" />
     <Compile Include="Models\DataAccess.cs" />
+    <Compile Include="Models\HttpContextRequest.cs" />
     <Compile Include="Models\SessionHelper.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\VerificationCode.cs" />
+    <Compile Include="Models\Tencent\Cryptography.cs" />
+    <Compile Include="Models\Tencent\Sample.cs" />
+    <Compile Include="Models\WeChart\WeChartBase.cs" />
+    <Compile Include="Models\Tencent\WXBizMsgCrypt.cs" />
+    <Compile Include="Models\WeChart\WxDefaultMenu.cs" />
+    <Compile Include="Models\WeChart\WxMessageHelp.cs" />
+    <Compile Include="Models\WeChart\WxTokenManager.cs" />
+    <Compile Include="Models\WeChart\WxOpenId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -530,6 +542,7 @@
     <Content Include="JsScript\User\login.js" />
     <Content Include="JsScript\ydui.js" />
     <Content Include="Log\ReadMe.txt" />
+    <Content Include="Models\Tencent\Readme.txt" />
     <Content Include="OldWeb\bgmusic\adgy.ogg" />
     <Content Include="OldWeb\cloudmain\php\allmessage.php" />
     <Content Include="OldWeb\cloudmain\php\count.php" />
@@ -1184,7 +1197,7 @@
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\Game\Pins.cshtml" />
     <Content Include="Views\Tool\SMSSend.cshtml" />
-    <Content Include="Views\text\Index.cshtml" />
+    <Content Include="Views\Text\Index.cshtml" />
     <Content Include="Upload\config.php" />
     <Content Include="Upload\core\AuthLocal.class.php" />
     <Content Include="Upload\core\AuthRemote.class.php" />
@@ -1216,6 +1229,7 @@
     <Folder Include="OldWeb\lovetime\cert\" />
     <Folder Include="Upload\data\logs\" />
     <Folder Include="Upload\data\nfs\新建文件夹\" />
+    <Folder Include="Views\WeChart\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

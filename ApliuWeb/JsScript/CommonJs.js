@@ -41,7 +41,8 @@ ApliuCommon.HttpSend = function (apiurl, options) {
             rst = JSON.parse(data);
         } catch (e) {
             try {
-                rst = "readyState：" + data.readyState + "    \n    " + "responseText：" + data.responseText;
+                if (data.readyState == null) rst = data;
+                else rst = "readyState：" + data.readyState + "    \n    " + "responseText：" + data.responseText;
             } catch (ex) {
                 rst = data;
             }
@@ -53,7 +54,8 @@ ApliuCommon.HttpSend = function (apiurl, options) {
             rst = JSON.parse(error);
         } catch (e) {
             try {
-                rst = "readyState：" + error.readyState + "    \n    " + "responseText：" + error.responseText;
+                if (data.readyState == null) rst = data;
+                else rst = "readyState：" + error.readyState + "    \n    " + "responseText：" + error.responseText;
             } catch (ex) {
                 rst = error;
             }

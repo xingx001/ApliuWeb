@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace ApliuWeb.Controllers
 {
-    public class textController : Controller
+    public class TextController : Controller
     {
         public ActionResult Index(string id)
         {

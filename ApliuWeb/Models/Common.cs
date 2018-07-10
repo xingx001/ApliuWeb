@@ -9,6 +9,28 @@ namespace ApliuWeb
 {
     public class Common
     {
+        /// <summary>
+        /// 程序跟目录 需要先初始化
+        /// </summary>
+        private static string _RootDirectory = String.Empty;
+        public static string RootDirectory
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(_RootDirectory))
+                {
+                    throw new Exception("程序跟目录未初始化");
+                }
+                else return _RootDirectory;
+            }
+            set
+            {
+                _RootDirectory = value;
+                //同时初始化日志路径
+                Logger.RootDirectory = _RootDirectory;
+            }
+        }
+
         private static string SecurityKey = SiteConfig.GetConfigNodeValue("PublicKey");
         /// <summary>
         /// 设置Session的值

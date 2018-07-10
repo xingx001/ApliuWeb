@@ -1,4 +1,5 @@
 ﻿using ApliuTools;
+using ApliuWeb.WeChart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,21 +21,27 @@ namespace ApliuWeb
         {
             try
             {
+                Logger.WriteLogWeb("主程序开始启动");
                 AreaRegistration.RegisterAllAreas();
 
                 WebApiConfig.Register(GlobalConfiguration.Configuration);
                 FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                 RouteConfig.RegisterRoutes(RouteTable.Routes);
                 BundleConfig.RegisterBundles(BundleTable.Bundles);
-                
+
+                //加载配置文件
                 SiteConfig.LoadConfig();
 
-                //DataAccess.Instance.Ceshi();
-                //SMSMessage sms = new TencentSMS();
-                //string msg;
-                //bool result = sms.SendSMS("18779182730", "验证码：100000，有效期1分钟", out msg, SiteConfig.GetConfigNodeValue("SMSAppId"), SiteConfig.GetConfigNodeValue("SMSAppKey"));
+                //初始化程序跟目录
+                Common.RootDirectory = HttpContext.Current.Server.MapPath("~");
 
-                Logger.WriteLogWeb("主程序启动完成201893241942");
+                //启动access_token管理任务
+                WxTokenManager.TokenTaskStart();
+
+                //创建自定义菜单
+                WxDefaultMenu.CreateMenus();
+
+                Logger.WriteLogWeb("主程序启动完成");
             }
             catch (Exception ex)
             {
