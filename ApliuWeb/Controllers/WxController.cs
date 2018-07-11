@@ -24,6 +24,12 @@ namespace ApliuWeb.Controllers
             string timestamp = HttpContext.Current.Request.QueryString["timestamp"];
             string nonce = HttpContext.Current.Request.QueryString["nonce"];
             string echostr = HttpContext.Current.Request.QueryString["echostr"];
+            string openid = HttpContext.Current.Request.QueryString["openid"];
+            //用于验证加密内容的签名
+            string msg_signature = HttpContext.Current.Request.QueryString["msg_signature"];
+            string encrypt_type = HttpContext.Current.Request.QueryString["encrypt_type"];
+
+            Logger.WriteLog("请求方式：" + HttpContext.Current.Request.HttpMethod.ToUpper() + "，请求原地址：" + HttpContext.Current.Request.Url.ToString());
 
             //验证消息是否来自微信服务器
             if (WeChartBase.CheckSignature(signature, timestamp, nonce))
@@ -47,15 +53,15 @@ namespace ApliuWeb.Controllers
                             string postString = WeChartBase.WxEncoding.GetString(postBytes);
                             if (!string.IsNullOrEmpty(postString))
                             {
-                                if (WeChartBase.IsSecurity)
+                                if ("aes".Equals(encrypt_type))//(WeChartBase.IsSecurity)
                                 {
                                     Tencent.WXBizMsgCrypt wxcpt = new Tencent.WXBizMsgCrypt(WeChartBase.WxToken, WeChartBase.WxEncodingAESKey, WeChartBase.WxAppId);
                                     string reqData = String.Empty;  //解析之后的明文
-                                    int reqRet = wxcpt.DecryptMsg(signature, timestamp, nonce, postString, ref reqData);
+                                    int reqRet = wxcpt.DecryptMsg(msg_signature, timestamp, nonce, postString, ref reqData);
                                     if (reqRet == 0)
                                     {
                                         WxMessageHelp wxMsgHelp = new WxMessageHelp();
-                                        String retMessage = wxMsgHelp.ReturnMessage(reqData);
+                                        String retMessage = wxMsgHelp.MessageHandle(reqData);
                                         string respData = String.Empty; //xml格式的密文
                                         int resqRet = wxcpt.EncryptMsg(retMessage, timestamp, nonce, ref respData);
                                         if (resqRet == 0)
@@ -75,7 +81,7 @@ namespace ApliuWeb.Controllers
                                 else
                                 {
                                     WxMessageHelp wxMsgHelp = new WxMessageHelp();
-                                    String retMessage = wxMsgHelp.ReturnMessage(postString);
+                                    String retMessage = wxMsgHelp.MessageHandle(postString);
                                     respContent = retMessage;
                                 }
                             }

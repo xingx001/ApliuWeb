@@ -183,9 +183,6 @@ namespace Tencent
                 return 0;
             else
             {
-                //Apliu 由于此处一直出现签名错误，故加上判断
-                ApliuTools.Logger.WriteLog("微信公众号消息解密签名判断，Hash：" + hash + "，Sigture：" + sSigture);
-                return 0;
                 return (int)WXBizMsgCryptErrorCode.WXBizMsgCrypt_ValidateSignature_Error;
             }
         }

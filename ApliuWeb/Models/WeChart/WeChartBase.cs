@@ -38,7 +38,9 @@ namespace ApliuWeb.WeChart
 
         /// <summary>
         /// 微信公众号消息模式是否是安全模式（加密消息）
+        /// 更改设置由公众号配置决定是否加密
         /// </summary>
+        [Obsolete]
         public static Boolean IsSecurity = SiteConfig.GetConfigNodeValue("IsSecurity").ToBoolean();
 
         /// <summary>

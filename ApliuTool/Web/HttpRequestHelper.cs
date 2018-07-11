@@ -5,12 +5,18 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace ApliuTools.Web
 {
     public class HttpRequestHelper
     {
+        /// <summary>
+        /// Get请求
+        /// </summary>
+        /// <param name="getUrl"></param>
+        /// <returns></returns>
         public static string HttpGet(string getUrl)
         {
             string result = string.Empty;
@@ -34,6 +40,13 @@ namespace ApliuTools.Web
             return result;
         }
 
+        /// <summary>
+        /// Post请求
+        /// </summary>
+        /// <param name="postUrl"></param>
+        /// <param name="paramData"></param>
+        /// <param name="headerDic"></param>
+        /// <returns></returns>
         public static string HttpPost(string postUrl, string paramData, Dictionary<string, string> headerDic = null)
         {
             string result = string.Empty;
@@ -72,6 +85,33 @@ namespace ApliuTools.Web
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 异步Post提交数据 主要用于微信公众号
+        /// </summary>
+        /// <param name="reqUrl">请求地址</param>
+        /// <param name="encoding">编码方式</param>
+        /// <param name="reqData">请求内容</param>
+        /// <returns></returns>
+        public static async Task<HttpResponseMessage> HttpPostAsync(String reqUrl, Encoding encoding, String reqData)
+        {
+            HttpClient http = new HttpClient();
+            HttpContent cont = new StringContent(reqData, encoding, "text/html");
+            HttpResponseMessage response = await http.PostAsync(reqUrl, cont);
+            return response;
+        }
+
+        /// <summary>
+        /// 异步Get请求数据 主要用于微信公众号
+        /// </summary>
+        /// <param name="reqUrl"></param>
+        /// <returns></returns>
+        public static async Task<HttpResponseMessage> HttpGetAsync(String reqUrl)
+        {
+            HttpClient http = new HttpClient();
+            HttpResponseMessage response = await http.GetAsync(reqUrl);
+            return response;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using ApliuTools;
+using ApliuTools.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace ApliuWeb.WeChart
         /// </summary>
         public static async void CreateMenus()
         {
-            string uri = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + WxTokenManager.AccessToken;
+            string reqUri = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + WxTokenManager.AccessToken;
             string menuStr = @"{{
     ""button"": [
         {{
@@ -85,11 +86,9 @@ namespace ApliuWeb.WeChart
     ]
 }}";
             //""url"":""https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={0}%2Fwx%2Fbind.html&response_type=code&scope=snsapi_base&state=%2Fwx%2Frepay.html""
-            String defaultMenu = string.Format(menuStr, WeChartBase.WxDomain);//HttpUtility.UrlEncode(WeChartBase.WxDomain)
+            String defaultMenuContent = string.Format(menuStr, WeChartBase.WxDomain);//HttpUtility.UrlEncode(WeChartBase.WxDomain)
 
-            HttpClient http = new HttpClient();
-            HttpContent cont = new StringContent(defaultMenu, WeChartBase.WxEncoding, "text/html");
-            HttpResponseMessage response = await http.PostAsync(uri, cont);
+            HttpResponseMessage response = await HttpRequestHelper.HttpPostAsync(reqUri, WeChartBase.WxEncoding, defaultMenuContent);
             String content = await response.Content.ReadAsStringAsync();
             Logger.WriteLog("微信公众号创建自定义菜单完成，详情：" + content);
         }

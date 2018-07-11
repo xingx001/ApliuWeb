@@ -1,4 +1,5 @@
 ﻿using ApliuTools;
+using ApliuTools.Web;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace ApliuWeb.WeChart
         /// <summary>
         /// 获取access_token的地址
         /// </summary>
-        public static string requestUri
+        public static string requestAccessTokenUri
         {
             get
             {
@@ -53,13 +54,12 @@ namespace ApliuWeb.WeChart
         }
 
         [Obsolete]
-        private static string jsapiTicket;
+        private static string _jsApiTicket;
 
         [Obsolete]
-        public static string JSapiTicket
+        public static string jsApiTicket
         {
-            get { return jsapiTicket; }
-            set { jsapiTicket = value; }
+            get { return _jsApiTicket; }
         }
         #endregion
 
@@ -68,30 +68,32 @@ namespace ApliuWeb.WeChart
         /// </summary>
         private static void GetAccessToken()
         {
-            HttpClient http = new HttpClient();
             try
             {
                 //AccessToken
-                Task<HttpResponseMessage> taskResponse = http.GetAsync(requestUri);
-                HttpResponseMessage response = taskResponse.Result;
-                response.EnsureSuccessStatusCode();
-                Task<String> taskContent = response.Content.ReadAsStringAsync();
-                String content = taskContent.Result;
-                JObject jObj = Newtonsoft.Json.JsonConvert.DeserializeObject(content) as JObject;
-                if (jObj["access_token"] == null)
+                HttpResponseMessage respAccessToken = HttpRequestHelper.HttpGetAsync(requestAccessTokenUri).Result;
+                respAccessToken.EnsureSuccessStatusCode();
+                String accessTokenContent = respAccessToken.Content.ReadAsStringAsync().Result;
+                JObject jObjAccessToken = Newtonsoft.Json.JsonConvert.DeserializeObject(accessTokenContent) as JObject;
+                if (jObjAccessToken["access_token"] == null)
                 {
-                    throw new Exception(content);
+                    throw new Exception(accessTokenContent);
                 }
-                _accessToken = jObj["access_token"].ToString();
-                expires_in = jObj["expires_in"].ToString();
+                _accessToken = jObjAccessToken["access_token"].ToString();
+                expires_in = jObjAccessToken["expires_in"].ToString();
+                Logger.WriteLog("初始化Access_Token完成，Access_Token：" + AccessToken);
 
-                Logger.WriteLog("初始化access_token完成，access_token：" + AccessToken);
-                //jsTicket
-                //response = await http.GetAsync(requestJsTicketUri);
-                //response.EnsureSuccessStatusCode();
-                //content = await response.Content.ReadAsStringAsync();
-                //jObj = Newtonsoft.Json.JsonConvert.DeserializeObject(content) as JObject;
-                //jsapiTicket = jObj["ticket"].ToString();
+                //JsApiTicket
+                //HttpResponseMessage respJsTicket = HttpRequestHelper.GetAsync(requestJsTicketUri).Result; 
+                //respJsTicket.EnsureSuccessStatusCode();
+                //String jsTicketContent = respJsTicket.Content.ReadAsStringAsync().Result;
+                //JObject jObjJsTicket = Newtonsoft.Json.JsonConvert.DeserializeObject(jsTicketContent) as JObject;
+                //if (jObjJsTicket["ticket"] == null)
+                //{
+                //    throw new Exception(jsTicketContent);
+                //}
+                //_jsApiTicket = jObjJsTicket["ticket"].ToString();
+                //Logger.WriteLog("初始化JsApiTicket完成，JsApiTicket：" + _jsApiTicket);
             }
             catch (Exception ex)
             {
