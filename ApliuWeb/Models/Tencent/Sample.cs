@@ -8,32 +8,43 @@ namespace MsgCryptTest
     class Sample
     {
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             //公众平台上开发者设置的token, appID, EncodingAESKey
             string sToken = "QDG6eK";
             string sAppID = "wx5823bf96d3bd56c7";
             string sEncodingAESKey = "jWmYm7qr5nMoAUwZRjGtBxmz3KA1tkAj3ykkR6q2B2C";
 
+            sToken = "apliutoolstoken";
+            sAppID = "wx42b1ba627b298cdd";
+            sEncodingAESKey = "MLOzScgA47lmhqxHrILUJ91kwuU3iTwwGxwjMZD74ts";
+
+
             Tencent.WXBizMsgCrypt wxcpt = new Tencent.WXBizMsgCrypt(sToken, sEncodingAESKey, sAppID);
-            
-             /* 1. 对用户回复的数据进行解密。
-             * 用户回复消息或者点击事件响应时，企业会收到回调消息，假设企业收到的推送消息：
-             * 	POST /cgi-bin/wxpush? msg_signature=477715d11cdb4164915debcba66cb864d751f3e6&timestamp=1409659813&nonce=1372623149 HTTP/1.1
-	            Host: qy.weixin.qq.com
-                Content-Length: 613
-             *
-             * 	<xml>
-	                <ToUserName><![CDATA[wx5823bf96d3bd56c7]]></ToUserName>
-	                <Encrypt><![CDATA[RypEvHKD8QQKFhvQ6QleEB4J58tiPdvo+rtK1I9qca6aM/wvqnLSV5zEPeusUiX5L5X/0lWfrf0QADHHhGd3QczcdCUpj911L3vg3W/sYYvuJTs3TUUkSUXxaccAS0qhxchrRYt66wiSpGLYL42aM6A8dTT+6k4aSknmPj48kzJs8qLjvd4Xgpue06DOdnLxAUHzM6+kDZ+HMZfJYuR+LtwGc2hgf5gsijff0ekUNXZiqATP7PF5mZxZ3Izoun1s4zG4LUMnvw2r+KqCKIw+3IQH03v+BCA9nMELNqbSf6tiWSrXJB3LAVGUcallcrw8V2t9EL4EhzJWrQUax5wLVMNS0+rUPA3k22Ncx4XXZS9o0MBH27Bo6BpNelZpS+/uh9KsNlY6bHCmJU9p8g7m3fVKn28H3KDYA5Pl/T8Z1ptDAVe0lXdQ2YoyyH2uyPIGHBZZIs2pDBS8R07+qN+E7Q==]]></Encrypt>
-                </xml>
-             */
+
+            /* 1. 对用户回复的数据进行解密。
+            * 用户回复消息或者点击事件响应时，企业会收到回调消息，假设企业收到的推送消息：
+            * 	POST /cgi-bin/wxpush? msg_signature=477715d11cdb4164915debcba66cb864d751f3e6&timestamp=1409659813&nonce=1372623149 HTTP/1.1
+               Host: qy.weixin.qq.com
+               Content-Length: 613
+            *
+            * 	<xml>
+                   <ToUserName><![CDATA[wx5823bf96d3bd56c7]]></ToUserName>
+                   <Encrypt><![CDATA[RypEvHKD8QQKFhvQ6QleEB4J58tiPdvo+rtK1I9qca6aM/wvqnLSV5zEPeusUiX5L5X/0lWfrf0QADHHhGd3QczcdCUpj911L3vg3W/sYYvuJTs3TUUkSUXxaccAS0qhxchrRYt66wiSpGLYL42aM6A8dTT+6k4aSknmPj48kzJs8qLjvd4Xgpue06DOdnLxAUHzM6+kDZ+HMZfJYuR+LtwGc2hgf5gsijff0ekUNXZiqATP7PF5mZxZ3Izoun1s4zG4LUMnvw2r+KqCKIw+3IQH03v+BCA9nMELNqbSf6tiWSrXJB3LAVGUcallcrw8V2t9EL4EhzJWrQUax5wLVMNS0+rUPA3k22Ncx4XXZS9o0MBH27Bo6BpNelZpS+/uh9KsNlY6bHCmJU9p8g7m3fVKn28H3KDYA5Pl/T8Z1ptDAVe0lXdQ2YoyyH2uyPIGHBZZIs2pDBS8R07+qN+E7Q==]]></Encrypt>
+               </xml>
+            */
             string sReqMsgSig = "477715d11cdb4164915debcba66cb864d751f3e6";
             string sReqTimeStamp = "1409659813";
             string sReqNonce = "1372623149";
             string sReqData = "<xml><ToUserName><![CDATA[wx5823bf96d3bd56c7]]></ToUserName><Encrypt><![CDATA[RypEvHKD8QQKFhvQ6QleEB4J58tiPdvo+rtK1I9qca6aM/wvqnLSV5zEPeusUiX5L5X/0lWfrf0QADHHhGd3QczcdCUpj911L3vg3W/sYYvuJTs3TUUkSUXxaccAS0qhxchrRYt66wiSpGLYL42aM6A8dTT+6k4aSknmPj48kzJs8qLjvd4Xgpue06DOdnLxAUHzM6+kDZ+HMZfJYuR+LtwGc2hgf5gsijff0ekUNXZiqATP7PF5mZxZ3Izoun1s4zG4LUMnvw2r+KqCKIw+3IQH03v+BCA9nMELNqbSf6tiWSrXJB3LAVGUcallcrw8V2t9EL4EhzJWrQUax5wLVMNS0+rUPA3k22Ncx4XXZS9o0MBH27Bo6BpNelZpS+/uh9KsNlY6bHCmJU9p8g7m3fVKn28H3KDYA5Pl/T8Z1ptDAVe0lXdQ2YoyyH2uyPIGHBZZIs2pDBS8R07+qN+E7Q==]]></Encrypt></xml>";
+
+            sReqMsgSig = "d489c1b9bb7632d4d8fc9a8f1f0671b7c4f87c18";
+            sReqTimeStamp = "1531278210";
+            sReqNonce = "687149772";
+            sReqData = @"<xml><ToUserName><![CDATA[wx42b1ba627b298cdd]]></ToUserName><Encrypt><![CDATA[R3tZqWzHaPus/wiWejqWnYThZzCrHdX1qhhgwFGyNzdi5E1x+H47BhjGRT0mMLVtJMwk9yHQgaXWBFOkMygW4vquQxG7WmWR/YXTNkmNzx9LiwOSsEIGDrh3pEAO0kYunaKGwp55XaDOvDoMS2WbihU52giKEr0972sKriJPEzXx9ZUmwybfWfv9wS3aUBomflxSKCytx96IcLYQxM3g6fQp0NGoadk0GDE79AZzQceWi+Npi/hVLJEOevReVENurFiZBAX/SN14lWLo+3aO6FIKOXNJE6LZQGDL6Y8dP2pT8xgYDObRRukulkVD+gEQ+GU/N2IIY7gn414U7R45ww9cseRBXjmGhIMbS18vs4mG/4JpwTvl+raIv67IB6cUS78+sMqGw7hL9nKiY+wN5VnVegf71eZszT7KXDhQiyBZt4V9zxsIMw3rCVbKo+E0Sz0aU+i9ecZ0E3Ja0UDLCQ==]]></Encrypt></xml>";
+
             string sMsg = "";  //解析之后的明文
-			int ret = 0;
+            int ret = 0;
             ret = wxcpt.DecryptMsg(sReqMsgSig, sReqTimeStamp, sReqNonce, sReqData, ref sMsg);
             if (ret != 0)
             {

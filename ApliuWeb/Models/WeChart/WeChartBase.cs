@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Web;
+using ApliuTools;
 
 namespace ApliuWeb.WeChart
 {
@@ -36,7 +37,12 @@ namespace ApliuWeb.WeChart
         public static Encoding WxEncoding = Encoding.UTF8;
 
         /// <summary>
-        /// 验证消息的确来自微信服务器
+        /// 微信公众号消息模式是否是安全模式（加密消息）
+        /// </summary>
+        public static Boolean IsSecurity = SiteConfig.GetConfigNodeValue("IsSecurity").ToBoolean();
+
+        /// <summary>
+        /// 验证消息是否来自微信服务器
         /// </summary>
         /// <param name="signature">微信加密签名</param>
         /// <param name="timestamp">时间戳</param>
@@ -44,9 +50,9 @@ namespace ApliuWeb.WeChart
         /// <param name="echostr">随机字符串</param>
         /// <param name="token">公众号基本配置中填写的Token</param>
         /// <returns></returns>
-        public static bool CheckSignature(string signature, string timestamp, string nonce, string echostr)
+        public static bool CheckSignature(string signature, string timestamp, string nonce)
         {
-            if (String.IsNullOrEmpty(signature) || String.IsNullOrEmpty(timestamp) || String.IsNullOrEmpty(nonce) || String.IsNullOrEmpty(echostr))
+            if (String.IsNullOrEmpty(signature) || String.IsNullOrEmpty(timestamp) || String.IsNullOrEmpty(nonce))
             {
                 return false;
             }

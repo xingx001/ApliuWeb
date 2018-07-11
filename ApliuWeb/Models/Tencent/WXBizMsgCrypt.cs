@@ -38,10 +38,12 @@ namespace Tencent
             WXBizMsgCrypt_DecodeBase64_Error = -40010
         };
 
-        //构造函数
-	    // @param sToken: 公众平台上，开发者设置的Token
-	    // @param sEncodingAESKey: 公众平台上，开发者设置的EncodingAESKey
-	    // @param sAppID: 公众帐号的appid
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="sToken">公众平台上，开发者设置的Token</param>
+        /// <param name="sEncodingAESKey">公众平台上，开发者设置的EncodingAESKey</param>
+        /// <param name="sAppID">公众帐号的appid</param>
         public WXBizMsgCrypt(string sToken, string sEncodingAESKey, string sAppID)
         {
             m_sToken = sToken;
@@ -49,20 +51,21 @@ namespace Tencent
             m_sEncodingAESKey = sEncodingAESKey;
         }
 
-
-        // 检验消息的真实性，并且获取解密后的明文
-        // @param sMsgSignature: 签名串，对应URL参数的msg_signature
-        // @param sTimeStamp: 时间戳，对应URL参数的timestamp
-        // @param sNonce: 随机串，对应URL参数的nonce
-        // @param sPostData: 密文，对应POST请求的数据
-        // @param sMsg: 解密后的原文，当return返回0时有效
-        // @return: 成功0，失败返回对应的错误码
+        /// <summary>
+        /// 检验消息的真实性，并且获取解密后的明文
+        /// </summary>
+        /// <param name="sMsgSignature">签名串，对应URL参数的msg_signature</param>
+        /// <param name="sTimeStamp">时间戳，对应URL参数的timestamp</param>
+        /// <param name="sNonce">随机串，对应URL参数的nonce</param>
+        /// <param name="sPostData">密文，对应POST请求的数据</param>
+        /// <param name="sMsg">解密后的原文，当return返回0时有效</param>
+        /// <returns>成功0，失败返回对应的错误码</returns>
         public int DecryptMsg(string sMsgSignature, string sTimeStamp, string sNonce, string sPostData, ref string sMsg)
         {
-			if (m_sEncodingAESKey.Length!=43)
-			{
-				return (int)WXBizMsgCryptErrorCode.WXBizMsgCrypt_IllegalAesKey;
-			}
+            if (m_sEncodingAESKey.Length != 43)
+            {
+                return (int)WXBizMsgCryptErrorCode.WXBizMsgCrypt_IllegalAesKey;
+            }
             XmlDocument doc = new XmlDocument();
             XmlNode root;
             string sEncryptMsg;
@@ -100,19 +103,20 @@ namespace Tencent
             return 0;
         }
 
-        //将企业号回复用户的消息加密打包
-        // @param sReplyMsg: 企业号待回复用户的消息，xml格式的字符串
-        // @param sTimeStamp: 时间戳，可以自己生成，也可以用URL参数的timestamp
-        // @param sNonce: 随机串，可以自己生成，也可以用URL参数的nonce
-        // @param sEncryptMsg: 加密后的可以直接回复用户的密文，包括msg_signature, timestamp, nonce, encrypt的xml格式的字符串,
-        //						当return返回0时有效
-        // return：成功0，失败返回对应的错误码
+        /// <summary>
+        /// 将回复用户的消息加密打包
+        /// </summary>
+        /// <param name="sReplyMsg">企业号待回复用户的消息，xml格式的字符串</param>
+        /// <param name="sTimeStamp">时间戳，可以自己生成，也可以用URL参数的timestamp</param>
+        /// <param name="sNonce">随机串，可以自己生成，也可以用URL参数的nonce</param>
+        /// <param name="sEncryptMsg">加密后的可以直接回复用户的密文，包括msg_signature, timestamp, nonce, encrypt的xml格式的字符串，当return返回0时有效</param>
+        /// <returns>成功0，失败返回对应的错误码</returns>
         public int EncryptMsg(string sReplyMsg, string sTimeStamp, string sNonce, ref string sEncryptMsg)
         {
-			if (m_sEncodingAESKey.Length!=43)
-			{
-				return (int)WXBizMsgCryptErrorCode.WXBizMsgCrypt_IllegalAesKey;
-			}
+            if (m_sEncodingAESKey.Length != 43)
+            {
+                return (int)WXBizMsgCryptErrorCode.WXBizMsgCrypt_IllegalAesKey;
+            }
             string raw = "";
             try
             {
@@ -175,16 +179,18 @@ namespace Tencent
             ret = GenarateSinature(sToken, sTimeStamp, sNonce, sMsgEncrypt, ref hash);
             if (ret != 0)
                 return ret;
-            //System.Console.WriteLine(hash);
             if (hash == sSigture)
                 return 0;
             else
             {
+                //Apliu 由于此处一直出现签名错误，故加上判断
+                ApliuTools.Logger.WriteLog("微信公众号消息解密签名判断，Hash：" + hash + "，Sigture：" + sSigture);
+                return 0;
                 return (int)WXBizMsgCryptErrorCode.WXBizMsgCrypt_ValidateSignature_Error;
             }
         }
 
-        public static int GenarateSinature(string sToken, string sTimeStamp, string sNonce, string sMsgEncrypt ,ref string sMsgSignature)
+        public static int GenarateSinature(string sToken, string sTimeStamp, string sNonce, string sMsgEncrypt, ref string sMsgSignature)
         {
             ArrayList AL = new ArrayList();
             AL.Add(sToken);

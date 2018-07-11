@@ -11,3 +11,4 @@ D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuTool\bin\MySql.Data.dll
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuTool\bin\ApliuDatabase.pdb
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuTool\bin\System.Web.Http.xml
 D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuTool\bin\System.Net.Http.Formatting.xml
+D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\ApliuTool\bin\zh-Hans\System.Web.Http.resources.dll

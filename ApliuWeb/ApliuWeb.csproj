@@ -142,15 +142,19 @@
     <Compile Include="Models\DataAccess.cs" />
     <Compile Include="Models\HttpContextRequest.cs" />
     <Compile Include="Models\SessionHelper.cs" />
+    <Compile Include="Models\Tencent\Cryptography.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Tencent\WXBizMsgCrypt.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\VerificationCode.cs" />
-    <Compile Include="Models\Tencent\Cryptography.cs" />
     <Compile Include="Models\Tencent\Sample.cs" />
     <Compile Include="Models\WeChart\WeChartBase.cs" />
-    <Compile Include="Models\Tencent\WXBizMsgCrypt.cs" />
     <Compile Include="Models\WeChart\WxDefaultMenu.cs" />
     <Compile Include="Models\WeChart\WxMessageHelp.cs" />
     <Compile Include="Models\WeChart\WxTokenManager.cs" />

@@ -63,6 +63,18 @@ namespace ApliuTools
         }
 
         /// <summary>
+        /// 转换为Boolean，如果不能转换，返回false
+        /// </summary>
+        /// <param name="stringtemp"></param>
+        /// <returns></returns>
+        public static Boolean ToBoolean(this string stringtemp)
+        {
+            Boolean temp = false;
+            Boolean.TryParse(stringtemp, out temp);
+            return temp;
+        }
+
+        /// <summary>
         /// 不能转换则返回0
         /// </summary>
         /// <param name="stringtemp"></param>
