@@ -1168,7 +1168,7 @@ input[type="button"].btn-hollow, input[type="submit"].btn-hollow {
 
 @font-face {
     font-family: 'YDUI-ICONS';
-    src: url('http://at.alicdn.com/t/font_1461139240_0312312.ttf') format('truetype');
+    src: url('https://at.alicdn.com/t/font_1461139240_0312312.ttf') format('truetype');
 }
 
 [class^="icon-"]:before, [class*=" icon-"]:before {

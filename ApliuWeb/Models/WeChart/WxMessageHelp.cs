@@ -15,13 +15,13 @@ namespace ApliuWeb.WeChart
         /// <summary>
         /// 处理微信公众号的消息
         /// </summary>
-        /// <param name="postStr">详细报文（明文）</param>
+        /// <param name="reqData">详细报文（明文）</param>
         /// <returns>返回报文（明文）</returns>
-        public string MessageHandle(string postStr)
+        public string MessageHandle(string reqData)
         {
-            string responseContent = "";
+            string responseContent = String.Empty;
             XmlDocument xmldoc = new XmlDocument();
-            xmldoc.Load(new System.IO.MemoryStream(WeChartBase.WxEncoding.GetBytes(postStr)));
+            xmldoc.Load(new System.IO.MemoryStream(WeChartBase.WxEncoding.GetBytes(reqData)));
             XmlNode MsgType = xmldoc.SelectSingleNode("/xml/MsgType");
             if (MsgType != null)
             {

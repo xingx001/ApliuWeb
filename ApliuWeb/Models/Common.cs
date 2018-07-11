@@ -30,8 +30,10 @@ namespace ApliuWeb
                 Logger.RootDirectory = _RootDirectory;
             }
         }
-
-        private static string SecurityKey = SiteConfig.GetConfigNodeValue("PublicKey");
+        /// <summary>
+        /// Session加密秘钥
+        /// </summary>
+        private static string SessionSecurityKey = SiteConfig.GetConfigNodeValue("SessionSecurityKey");
         /// <summary>
         /// 设置Session的值
         /// </summary>
@@ -44,8 +46,8 @@ namespace ApliuWeb
             bool Result = false;
             try
             {
-                if (HttpContext.Current.Session[Name] == null) HttpContext.Current.Session.Add(Name, SecurityHelper.DESEncrypt(Value, SecurityKey));
-                else HttpContext.Current.Session[Name] = SecurityHelper.DESEncrypt(Value, SecurityKey);
+                if (HttpContext.Current.Session[Name] == null) HttpContext.Current.Session.Add(Name, SecurityHelper.DESEncrypt(Value, SessionSecurityKey));
+                else HttpContext.Current.Session[Name] = SecurityHelper.DESEncrypt(Value, SessionSecurityKey);
                 Result = true;
             }
             catch (Exception ex)
@@ -67,7 +69,7 @@ namespace ApliuWeb
             try
             {
                 if (HttpContext.Current.Session[Name] == null) Result = string.Empty;
-                else Result = SecurityHelper.DESDecrypt(HttpContext.Current.Session[Name].ToString(), SecurityKey);
+                else Result = SecurityHelper.DESDecrypt(HttpContext.Current.Session[Name].ToString(), SessionSecurityKey);
             }
             catch (Exception ex)
             {

@@ -50,18 +50,18 @@ namespace ApliuWeb.Controllers
                         {
                             Byte[] postBytes = new Byte[stream.Length];
                             stream.Read(postBytes, 0, (Int32)stream.Length);
-                            string postString = WeChartBase.WxEncoding.GetString(postBytes);
-                            if (!string.IsNullOrEmpty(postString))
+                            string beforeReqData = WeChartBase.WxEncoding.GetString(postBytes);
+                            if (!string.IsNullOrEmpty(beforeReqData))
                             {
                                 if ("aes".Equals(encrypt_type))//(WeChartBase.IsSecurity)
                                 {
                                     Tencent.WXBizMsgCrypt wxcpt = new Tencent.WXBizMsgCrypt(WeChartBase.WxToken, WeChartBase.WxEncodingAESKey, WeChartBase.WxAppId);
-                                    string reqData = String.Empty;  //解析之后的明文
-                                    int reqRet = wxcpt.DecryptMsg(msg_signature, timestamp, nonce, postString, ref reqData);
+                                    string afterReqData = String.Empty;  //解析之后的明文
+                                    int reqRet = wxcpt.DecryptMsg(msg_signature, timestamp, nonce, beforeReqData, ref afterReqData);
                                     if (reqRet == 0)
                                     {
                                         WxMessageHelp wxMsgHelp = new WxMessageHelp();
-                                        String retMessage = wxMsgHelp.MessageHandle(reqData);
+                                        String retMessage = wxMsgHelp.MessageHandle(afterReqData);
                                         string respData = String.Empty; //xml格式的密文
                                         int resqRet = wxcpt.EncryptMsg(retMessage, timestamp, nonce, ref respData);
                                         if (resqRet == 0)
@@ -81,7 +81,7 @@ namespace ApliuWeb.Controllers
                                 else
                                 {
                                     WxMessageHelp wxMsgHelp = new WxMessageHelp();
-                                    String retMessage = wxMsgHelp.MessageHandle(postString);
+                                    String retMessage = wxMsgHelp.MessageHandle(beforeReqData);
                                     respContent = retMessage;
                                 }
                             }

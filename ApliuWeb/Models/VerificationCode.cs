@@ -111,10 +111,10 @@ namespace ApliuWeb
         /// <returns></returns>
         private static bool SendSMS(string Mobile, string SMSContent, out string SendMsg)
         {
-            string SMSAppId = SiteConfig.GetConfigNodeValue("SMSAppId");
-            string SMSAppKey = SiteConfig.GetConfigNodeValue("SMSAppKey");
+            string TcSMSAppId = SiteConfig.GetConfigNodeValue("TcSMSAppId");
+            string TcSMSAppKey = SiteConfig.GetConfigNodeValue("TcSMSAppKey");
             SMSMessage sms = new TencentSMS();
-            bool resutl = sms.SendSMS(Mobile, SMSContent, out SendMsg, SMSAppId, SMSAppKey);
+            bool resutl = sms.SendSMS(Mobile, SMSContent, out SendMsg, TcSMSAppId, TcSMSAppKey);
             return resutl;
         }
 

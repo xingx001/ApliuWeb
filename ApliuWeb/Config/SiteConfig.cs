@@ -65,7 +65,7 @@ namespace ApliuWeb
         /// <summary>
         /// 腾讯云账号的APPID
         /// </summary>
-        public string AppId
+        public string TcAppId
         {
             get { return _AppId; }
             set { _AppId = value; }
@@ -73,9 +73,9 @@ namespace ApliuWeb
 
         private string _SecretId;
         /// <summary>
-        /// 腾讯云API密钥上申请的标识身份的 SecretId
+        /// 腾讯云API密钥上申请的标识身份的 TcSecretId
         /// </summary>
-        public string SecretId
+        public string TcSecretId
         {
             get { return _SecretId; }
             set { _SecretId = value; }
@@ -83,9 +83,9 @@ namespace ApliuWeb
 
         private string _SecretKey;
         /// <summary>
-        /// SecretId 对应唯一的 SecretKey , 而 SecretKey 会用来生成请求签名 Signature
+        /// TcSecretId 对应唯一的 TcSecretKey , 而 TcSecretKey 会用来生成请求签名 Signature
         /// </summary>
-        public string SecretKey
+        public string TcSecretKey
         {
             get { return _SecretKey; }
             set { _SecretKey = value; }
@@ -124,22 +124,22 @@ namespace ApliuWeb
                 config.DatabaseConnection = node.InnerText.Trim();
             }
 
-            node = doc.SelectSingleNode("//configuration/appSettings/AppId");
+            node = doc.SelectSingleNode("//configuration/appSettings/TcAppId");
             if (node != null)
             {
-                config.AppId = node.InnerText.Trim();
+                config.TcAppId = node.InnerText.Trim();
             }
 
-            node = doc.SelectSingleNode("//configuration/appSettings/SecretId");
+            node = doc.SelectSingleNode("//configuration/appSettings/TcSecretId");
             if (node != null)
             {
-                config.SecretId = node.InnerText.Trim();
+                config.TcSecretId = node.InnerText.Trim();
             }
 
-            node = doc.SelectSingleNode("//configuration/appSettings/SecretKey");
+            node = doc.SelectSingleNode("//configuration/appSettings/TcSecretKey");
             if (node != null)
             {
-                config.SecretKey = node.InnerText.Trim();
+                config.TcSecretKey = node.InnerText.Trim();
             }
             configFileModifyDate = DateTime.Now;
         }
