@@ -34,7 +34,7 @@ namespace ApliuWeb.WeChart
         }
 
         /// <summary>
-        /// AccessToken有效时间 秒
+        /// AccessToken有效时间 秒，同时也一起刷新jsApiTicket
         /// </summary>
         private static String expires_in;
 
@@ -43,8 +43,9 @@ namespace ApliuWeb.WeChart
         /// </summary>
         private static System.Timers.Timer timer = null;
 
-        #region jsapiTicket 暂时未用到
-        [Obsolete]
+        /// <summary>
+        /// 获取jsapi_ticket的地址
+        /// </summary>
         public static string requestJsTicketUri
         {
             get
@@ -53,15 +54,14 @@ namespace ApliuWeb.WeChart
             }
         }
 
-        [Obsolete]
         private static string _jsApiTicket;
-
-        [Obsolete]
+        /// <summary>
+        /// jsapi_ticket是公众号用于调用微信JS接口的临时票据
+        /// </summary>
         public static string jsApiTicket
         {
             get { return _jsApiTicket; }
         }
-        #endregion
 
         /// <summary>
         /// 重新获取AccessToken
@@ -84,16 +84,16 @@ namespace ApliuWeb.WeChart
                 Logger.WriteLog("初始化Access_Token完成，Access_Token：" + AccessToken);
 
                 //JsApiTicket
-                //HttpResponseMessage respJsTicket = HttpRequestHelper.GetAsync(requestJsTicketUri).Result; 
-                //respJsTicket.EnsureSuccessStatusCode();
-                //String jsTicketContent = respJsTicket.Content.ReadAsStringAsync().Result;
-                //JObject jObjJsTicket = Newtonsoft.Json.JsonConvert.DeserializeObject(jsTicketContent) as JObject;
-                //if (jObjJsTicket["ticket"] == null)
-                //{
-                //    throw new Exception(jsTicketContent);
-                //}
-                //_jsApiTicket = jObjJsTicket["ticket"].ToString();
-                //Logger.WriteLog("初始化JsApiTicket完成，JsApiTicket：" + _jsApiTicket);
+                HttpResponseMessage respJsTicket = HttpRequestHelper.HttpGetAsync(requestJsTicketUri).Result;
+                respJsTicket.EnsureSuccessStatusCode();
+                String jsTicketContent = respJsTicket.Content.ReadAsStringAsync().Result;
+                JObject jObjJsTicket = Newtonsoft.Json.JsonConvert.DeserializeObject(jsTicketContent) as JObject;
+                if (jObjJsTicket["ticket"] == null)
+                {
+                    throw new Exception(jsTicketContent);
+                }
+                _jsApiTicket = jObjJsTicket["ticket"].ToString();
+                Logger.WriteLog("初始化JsApiTicket完成，JsApiTicket：" + _jsApiTicket);
             }
             catch (Exception ex)
             {

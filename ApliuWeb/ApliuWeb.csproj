@@ -137,6 +137,7 @@
     <Compile Include="Controllers\ToolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WeChartController.cs" />
     <Compile Include="Controllers\WxController.cs" />
     <Compile Include="Models\Common.cs" />
     <Compile Include="Models\DataAccess.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Models\Tencent\Sample.cs" />
     <Compile Include="Models\WeChart\WeChartBase.cs" />
     <Compile Include="Models\WeChart\WxDefaultMenu.cs" />
+    <Compile Include="Models\WeChart\WxJSSDKHelper.cs" />
     <Compile Include="Models\WeChart\WxMessageHelp.cs" />
     <Compile Include="Models\WeChart\WxTokenManager.cs" />
     <Compile Include="Models\WeChart\WxOpenId.cs" />
@@ -1227,13 +1229,13 @@
     <Content Include="Views\Tool\HttpSend.cshtml" />
     <Content Include="Views\Tool\Security.cshtml" />
     <Content Include="Views\Tool\BaseConver.cshtml" />
+    <Content Include="Views\WeChart\JSSDK.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="OldWeb\lovetime\cert\" />
     <Folder Include="Upload\data\logs\" />
     <Folder Include="Upload\data\nfs\新建文件夹\" />
-    <Folder Include="Views\WeChart\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

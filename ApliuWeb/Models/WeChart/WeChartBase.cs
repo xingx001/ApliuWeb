@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Text;
 using System.Web;
 using ApliuTools;
+using System.Collections;
+using System.Security.Cryptography;
 
 namespace ApliuWeb.WeChart
 {
@@ -80,6 +82,48 @@ namespace ApliuWeb.WeChart
             }
         }
 
+        /// <summary>
+        /// 微信公众号JS-SDK使用权限签名算法
+        /// </summary>
+        /// <param name="nonceStr"></param>
+        /// <param name="jsApiTicket"></param>
+        /// <param name="timesamp"></param>
+        /// <param name="reqUrl"></param>
+        /// <param name="signature"></param>
+        /// <returns></returns>
+        public static int GenarateSinature(string nonceStr, string jsApiTicket, string timesamp, string reqUrl, String signature)
+        {
+            ArrayList AL = new ArrayList();
+            AL.Add(nonceStr);
+            AL.Add(jsApiTicket);
+            AL.Add(timesamp);
+            AL.Add(reqUrl);
+            AL.Sort(new Tencent.WXBizMsgCrypt.DictionarySort());
+            string raw = "";
+            for (int i = 0; i < AL.Count; ++i)
+            {
+                raw += AL[i];
+            }
+
+            SHA1 sha;
+            ASCIIEncoding enc;
+            string hash = "";
+            try
+            {
+                sha = new SHA1CryptoServiceProvider();
+                enc = new ASCIIEncoding();
+                byte[] dataToHash = enc.GetBytes(raw);
+                byte[] dataHashed = sha.ComputeHash(dataToHash);
+                hash = BitConverter.ToString(dataHashed).Replace("-", "");
+                hash = hash.ToLower();
+            }
+            catch (Exception)
+            {
+                return 40001;
+            }
+            signature = hash;
+            return 0;
+        }
         /// <summary>
         /// 返回HTTP响应消息
         /// </summary>
