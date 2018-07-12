@@ -81,7 +81,7 @@ namespace ApliuWeb.WeChart
                 }
                 _accessToken = jObjAccessToken["access_token"].ToString();
                 expires_in = jObjAccessToken["expires_in"].ToString();
-                Logger.WriteLog("初始化Access_Token完成，Access_Token：" + AccessToken);
+                if (timer == null) Logger.WriteLog("初始化Access_Token完成，Access_Token：" + AccessToken);
 
                 //JsApiTicket
                 HttpResponseMessage respJsTicket = HttpRequestHelper.HttpGetAsync(requestJsTicketUri).Result;
@@ -93,7 +93,7 @@ namespace ApliuWeb.WeChart
                     throw new Exception(jsTicketContent);
                 }
                 _jsApiTicket = jObjJsTicket["ticket"].ToString();
-                Logger.WriteLog("初始化JsApiTicket完成，JsApiTicket：" + _jsApiTicket);
+                if (timer == null) Logger.WriteLog("初始化JsApiTicket完成，JsApiTicket：" + _jsApiTicket);
             }
             catch (Exception ex)
             {
@@ -125,7 +125,7 @@ namespace ApliuWeb.WeChart
                 timer.Elapsed += Timer_Elapsed;
                 timer.Start();
 
-                Logger.WriteLog("启动access_token管理任务完成，access_token：" + AccessToken);
+                Logger.WriteLog("启动access_token管理任务完成");
             }
         }
 

@@ -50,7 +50,7 @@
 
     wx.error(function (res) {
         console.log(res);
-        alert('验证失败');
+        alert('验证失败:' + JSON.stringify(res));
     });
     var url = 'https://apliu.xyz';
     var link = url + '@(Request.Url.PathAndQuery)';
@@ -97,6 +97,26 @@
             }
         });
     }
+    var testlocation = function () {
+        wx.getLocation({
+            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            success: function (res) {
+                var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                var speed = res.speed; // 速度，以米/每秒计
+                var accuracy = res.accuracy; // 位置精度
+
+                wx.openLocation({
+                    latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+                    longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+                    name: '当前位置', // 位置名
+                    address: '当前位置', // 地址详情说明
+                    scale: 20, // 地图缩放级别,整形值,范围从1~28。默认为1最大
+                    infoUrl: 'https://apliu.xyz' // 在查看位置界面底部显示的超链接,可点击跳转
+                });
+            }
+        });
+    }
     var testf = function () {
         //转发给朋友
         wx.onMenuShareAppMessage({
@@ -122,5 +142,6 @@
     <input type="button" class="loginwelcome" onclick="testf()" value="转发给朋友" />
     <input type="button" class="loginwelcome" onclick="testqrcode()" value="扫描二维码" />
     <input type="button" class="loginwelcome" onclick="testphone()" value="拍照或选图" />
+    <input type="button" class="loginwelcome" onclick="testlocation()" value="查看位置" />
     <div><a href="/" class="loginwelcome">返回主页</a></div>
 </div>
