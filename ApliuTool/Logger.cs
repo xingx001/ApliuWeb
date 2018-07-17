@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Web;
@@ -13,10 +14,11 @@ namespace ApliuTools
         private static readonly string logPath = "Log/";
         private static SemaphoreSlim sthread = new SemaphoreSlim(1);
 
-        /// <summary>
-        /// 程序跟目录 需要先初始化
-        /// </summary>
         private static string _RootDirectory = String.Empty;
+        /// <summary>
+        /// 程序跟目录 需要先初始化 C:/LogPath/
+        /// </summary>
+        /// </summary>
         public static string RootDirectory
         {
             get
@@ -84,7 +86,11 @@ namespace ApliuTools
             try
             {
                 sthread.Wait();
-                string filename = System.IO.Directory.GetCurrentDirectory() + logPath + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+                //string filename = System.IO.Directory.GetCurrentDirectory() +"/"+ logPath + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+                Assembly assem = Assembly.GetExecutingAssembly();
+                string assemDir = Path.GetDirectoryName(assem.Location);
+                string filename = Path.Combine(assemDir, logPath + DateTime.Now.ToString("yyyyMMdd") + ".txt");
+
                 using (StreamWriter sw = new StreamWriter(filename, true, Encoding.UTF8))
                 {
                     sw.WriteLine(DateTime.Now.ToString() + " : " + Msg);
