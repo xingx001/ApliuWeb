@@ -61,14 +61,13 @@ namespace ApliuWeb.Controllers
             Sql = Sql.Trim();
             if (string.IsNullOrEmpty(Sql)) return result.ToString();
 
-            string databaseType = string.Empty;
-            string databaseConnection = string.Empty;
-            SiteConfig.GetDatabaseConfig("DatabaseTest", out databaseType, out databaseConnection);
-            DataAccess.LoadDataAccess("DatabaseTest", databaseType, databaseConnection);
+            string databaseType = SiteConfig.GetConfigAppSettingsValue("TesDatabaseTypet");
+            string databaseConnection = SiteConfig.GetConfigAppSettingsValue("TesDatabaseConnection");
+            DataAccess.LoadDataAccess("TestDatabase", databaseType, databaseConnection);
             switch (Type.ToUpper())
             {
                 case "GET":
-                    DataSet sqlds = DataAccess.InstanceKey["DatabaseTest"].GetData(Sql);
+                    DataSet sqlds = DataAccess.InstanceKey["TestDatabase"].GetData(Sql);
                     if (sqlds != null && sqlds.Tables.Count > 0)
                     {
                         result.code = "0";
@@ -77,7 +76,7 @@ namespace ApliuWeb.Controllers
                     }
                     break;
                 case "POST":
-                    int rank = DataAccess.InstanceKey["DatabaseTest"].PostDataInt(Sql, null);
+                    int rank = DataAccess.InstanceKey["TestDatabase"].PostDataInt(Sql, null);
                     if (rank >= 0)
                     {
                         result.code = "0";
@@ -113,15 +112,19 @@ namespace ApliuWeb.Controllers
 
             string conn = string.Format(@"Data Source={0};Initial Catalog={1};Integrated Security=False;User ID={2};Password={3};Connect Timeout=15;Encrypt=False;TrustServerCertificate=False", source, database, userid, password);
 
-            string databaseType = "0";
+            string databaseType = "SqlServer";
             string databaseConnection = conn;
-            string ip = HYRequest.GetIP();//以客户端IP作为Key，避免重复加载数据库链接对象
-            string key = SecurityHelper.MD5Encrypt(ip, System.Text.Encoding.UTF8);
-            if (string.IsNullOrEmpty(ip)) key = Guid.NewGuid().ToString().Replace("-", "");
-            DataAccess.LoadDataAccess(key, databaseType, databaseConnection);
+            #region 考虑到外部调用API接口会导致DataAccess对象越来越多，而占用过多内存，改成创建临时DataAccess对象进行服务
+            //string ip = HYRequest.GetIP();//以客户端IP作为Key，避免重复加载数据库链接对象
+            //string key = SecurityHelper.MD5Encrypt(ip, System.Text.Encoding.UTF8);
+            //if (string.IsNullOrEmpty(ip)) key = Guid.NewGuid().ToString().Replace("-", "");
+            //DataAccess.LoadDataAccess(key, databaseType, databaseConnection);
+
+            DataAccess dataAccess = new DataAccess(databaseType, databaseConnection);
+            #endregion
             if (sql.ToUpper().Contains("UPDATE") || sql.ToUpper().Contains("DELETE") || sql.ToUpper().Contains("INSERT"))
             {
-                int rank = DataAccess.InstanceKey[key].PostDataInt(sql, null);
+                int rank = dataAccess.PostDataInt(sql, null);//DataAccess.InstanceKey[key].PostDataInt(sql, null);
                 if (rank >= 0)
                 {
                     result.code = "0";
@@ -131,7 +134,7 @@ namespace ApliuWeb.Controllers
             }
             else
             {
-                DataSet sqlds = DataAccess.InstanceKey[key].GetData(sql);
+                DataSet sqlds = dataAccess.GetData(sql);//DataAccess.InstanceKey[key].GetData(sql);
                 if (sqlds != null && sqlds.Tables.Count > 0)
                 {
                     result.code = "0";

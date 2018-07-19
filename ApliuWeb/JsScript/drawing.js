@@ -1,10 +1,10 @@
 var yyy = document.getElementById('xxx');
 var context = yyy.getContext('2d');
-var lineWidth = 5
+var lineWidth = 2;
 
-autoSetCanvasSize(yyy)
+autoSetCanvasSize(yyy);
 
-listenToUser(yyy)
+listenToUser(yyy);
 
 
 var eraserEnabled = false

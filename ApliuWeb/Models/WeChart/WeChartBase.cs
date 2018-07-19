@@ -13,25 +13,34 @@ namespace ApliuWeb.WeChart
     public class WeChartBase
     {
         /// <summary>
-        /// 绑定的服务器域名
+        /// 微信服务器绑定域名  格式 https://www.xxxxxx.com
         /// </summary>
-        public static String WxDomain = SiteConfig.GetConfigNodeValue("WxDomain");
+        public static String WxDomain
+        {
+            get
+            {
+                String wxDomain = SiteConfig.GetConfigAppSettingsValue("WxDomain").Trim();
+                if (wxDomain.EndsWith("/")) wxDomain = wxDomain.Substring(0, wxDomain.Length - 1);
+                return wxDomain;
+            }
+        }
+
         /// <summary>
         /// 开发者ID
         /// </summary>
-        public static String WxAppId = SiteConfig.GetConfigNodeValue("WxAppId");
+        public static String WxAppId = SiteConfig.GetConfigAppSettingsValue("WxAppId").Trim();
         /// <summary>
         /// 开发者密码
         /// </summary>
-        public static String WxAppSecret = SiteConfig.GetConfigNodeValue("WxAppSecret");
+        public static String WxAppSecret = SiteConfig.GetConfigAppSettingsValue("WxAppSecret").Trim();
         /// <summary>
         /// 用户设置的令牌(Token)
         /// </summary>
-        public static String WxToken = SiteConfig.GetConfigNodeValue("WxToken");
+        public static String WxToken = SiteConfig.GetConfigAppSettingsValue("WxToken").Trim();
         /// <summary>
         /// 消息加解密密钥
         /// </summary>
-        public static String WxEncodingAESKey = SiteConfig.GetConfigNodeValue("WxEncodingAESKey");
+        public static String WxEncodingAESKey = SiteConfig.GetConfigAppSettingsValue("WxEncodingAESKey").Trim();
 
         /// <summary>
         /// 微信公众号解析统一编码
@@ -43,7 +52,7 @@ namespace ApliuWeb.WeChart
         /// 更改设置由公众号配置决定是否加密
         /// </summary>
         [Obsolete]
-        public static Boolean IsSecurity = SiteConfig.GetConfigNodeValue("IsSecurity").ToBoolean();
+        public static Boolean IsSecurity = SiteConfig.GetConfigAppSettingsValue("IsSecurity").ToBoolean();
 
         /// <summary>
         /// 验证消息是否来自微信服务器

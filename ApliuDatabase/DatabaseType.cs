@@ -6,23 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApliuDatabase
 {
-    public class DatabaseType
-    {
-        private DatabaseTypeEnum _dbType = DatabaseTypeEnum.SqlServer;
-        public DatabaseTypeEnum dbType
-        {
-            get
-            {
-                return _dbType;
-            }
-            set
-            {
-                _dbType = value;
-            }
-        }
-    }
-
-    public enum DatabaseTypeEnum
+    public enum DatabaseType
     {
         SqlServer = 0,
         Oracle = 1,

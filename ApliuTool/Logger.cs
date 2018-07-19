@@ -40,8 +40,14 @@ namespace ApliuTools
             try
             {
                 sthread.Wait();
-                string filename = RootDirectory + logPath + DateTime.Now.ToString("yyyyMMdd") + ".txt";
-                using (StreamWriter sw = new StreamWriter(filename, true))
+                string filePath = RootDirectory + logPath;
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+
+                string fileName = filePath + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+                using (StreamWriter sw = new StreamWriter(fileName, true))
                 {
                     sw.WriteLine(DateTime.Now.ToString() + " : " + Msg);
                     sw.Flush();
@@ -63,8 +69,14 @@ namespace ApliuTools
             try
             {
                 sthread.Wait();
-                string filename = HttpContext.Current.Server.MapPath("~/" + logPath + DateTime.Now.ToString("yyyyMMdd") + ".txt");
-                using (StreamWriter sw = new StreamWriter(filename, true))
+                string filePath = HttpContext.Current.Server.MapPath("~/" + logPath);
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+
+                string fileName = filePath + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+                using (StreamWriter sw = new StreamWriter(fileName, true))
                 {
                     sw.WriteLine(DateTime.Now.ToString() + " : " + Msg);
                     sw.Flush();
@@ -89,9 +101,14 @@ namespace ApliuTools
                 //string filename = System.IO.Directory.GetCurrentDirectory() +"/"+ logPath + DateTime.Now.ToString("yyyyMMdd") + ".txt";
                 Assembly assem = Assembly.GetExecutingAssembly();
                 string assemDir = Path.GetDirectoryName(assem.Location);
-                string filename = Path.Combine(assemDir, logPath + DateTime.Now.ToString("yyyyMMdd") + ".txt");
+                string filePath = Path.Combine(assemDir, logPath);
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
 
-                using (StreamWriter sw = new StreamWriter(filename, true, Encoding.UTF8))
+                string fileName = filePath + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+                using (StreamWriter sw = new StreamWriter(fileName, true, Encoding.UTF8))
                 {
                     sw.WriteLine(DateTime.Now.ToString() + " : " + Msg);
                     sw.Flush();

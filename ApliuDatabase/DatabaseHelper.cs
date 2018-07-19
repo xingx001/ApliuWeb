@@ -11,8 +11,101 @@ namespace ApliuDatabase
 {
     public class DatabaseHelper
     {
-        public string databaseConnection = string.Empty;
-        public DatabaseTypeEnum databaseType = DatabaseTypeEnum.SqlServer;
+        /// <summary>
+        /// 数据库类型
+        /// </summary>
+        public DatabaseType databaseType = DatabaseType.SqlServer;
+        /// <summary>
+        /// 最大连接数
+        /// </summary>
+        public int MaxPool = 10;
+        /// <summary>
+        /// 最小连接数
+        /// </summary>
+        public int MinPool = 3;
+        /// <summary>
+        /// 异步访问数据库
+        /// </summary>
+        public bool Asyn_Process = true;
+        /// <summary>
+        /// 连接等待时间 单位秒
+        /// </summary>
+        public int Conn_Timeout = 10;
+        /// <summary>
+        /// 连接的生命周期 单位秒
+        /// </summary>
+        public int Conn_Lifetime = 120;
+        /// <summary>
+        /// 连接池对象
+        /// </summary>
+        private SqlConnection sqlConnection = null;
+        /// <summary>
+        /// 连接池对象
+        /// </summary>
+        private MySqlConnection mySqlConnection = null;
+
+        private string _databaseConnection = String.Empty;
+        /// <summary>
+        /// 数据库链接字符串 System.Data.SqlClient.SqlConnectionStringBuilder
+        /// </summary>
+        public string databaseConnection
+        {
+            // Data Source={0};Initial Catalog={1};Integrated Security=False;User ID={2};Password={3};Connect Timeout=15;Encrypt=False;TrustServerCertificate=False
+            get
+            {
+                String dbConnStr = String.Empty;
+                switch (databaseType)
+                {
+                    case DatabaseType.SqlServer:
+                        dbConnStr = _databaseConnection + ";"
+                                + "Max Pool Size=" + MaxPool + ";"
+                                + "Min Pool Size=" + MinPool + ";"
+                                + "Connect Timeout=" + Conn_Timeout + ";"
+                                + "Connection Lifetime=" + Conn_Lifetime + ";"
+                                + "Asynchronous Processing=" + Asyn_Process + ";";
+                        break;
+                    case DatabaseType.Oracle:
+                        break;
+                    case DatabaseType.MySql:
+                        break;
+                    case DatabaseType.Access:
+                        break;
+                    default:
+                        break;
+                }
+                return dbConnStr;
+            }
+            set
+            {
+                if (value.EndsWith(";")) _databaseConnection = value.Substring(0, value.Length);
+                else _databaseConnection = value;
+            }
+        }
+
+        /// <summary>
+        /// 初始化数据库链接
+        /// </summary>
+        [Obsolete]
+        public void InitializtionConnection()
+        {
+            switch (databaseType)
+            {
+                case DatabaseType.SqlServer:
+                    sqlConnection = new SqlConnection(databaseConnection);
+                    //sqlConnection.OpenAsync();
+                    break;
+                case DatabaseType.Oracle:
+                    break;
+                case DatabaseType.MySql:
+                    mySqlConnection = new MySqlConnection(databaseConnection);
+                    //mySqlConnection.OpenAsync();
+                    break;
+                case DatabaseType.Access:
+                    break;
+                default:
+                    break;
+            }
+        }
 
         /// <summary>
         /// 查询数据库
@@ -21,7 +114,7 @@ namespace ApliuDatabase
         /// <returns></returns>
         public DataSet GetData(string Sql)
         {
-            return ExecuteGet(databaseConnection, CommandType.Text, Sql, new object[0]);
+            return ExecuteGet(CommandType.Text, Sql, new object[0]);
         }
 
         /// <summary>
@@ -31,7 +124,7 @@ namespace ApliuDatabase
         /// <returns></returns>
         public int PostData(string Sql)
         {
-            return ExecutePost(databaseConnection, CommandType.Text, Sql, new object[0]);
+            return ExecutePost(CommandType.Text, Sql, new object[0]);
         }
 
         /// <summary>
@@ -41,7 +134,7 @@ namespace ApliuDatabase
         /// <returns></returns>
         public DataSet GetData(string Sql, params object[] Args)
         {
-            return ExecuteGet(databaseConnection, CommandType.Text, Sql, Args);
+            return ExecuteGet(CommandType.Text, Sql, Args);
         }
 
         /// <summary>
@@ -51,39 +144,37 @@ namespace ApliuDatabase
         /// <returns></returns>
         public int PostData(string Sql, params object[] Args)
         {
-            return ExecutePost(databaseConnection, CommandType.Text, Sql, Args);
+            return ExecutePost(CommandType.Text, Sql, Args);
         }
 
         /// <summary>
         /// PostData
         /// </summary>
         /// <returns>返回受影响的行数</returns>
-        public int ExecutePost(string connectionString, CommandType cmdType, string cmdText, params object[] commandParameters)
+        public int ExecutePost(CommandType cmdType, string cmdText, params object[] commandParameters)
         {
             int val = -1;
             switch (databaseType)
             {
-                case DatabaseTypeEnum.SqlServer:
-                    SqlCommand cmdsqlmain = new SqlCommand();
-                    using (SqlConnection connection = new SqlConnection(connectionString))
+                case DatabaseType.SqlServer:
+                    using (SqlCommand cmdsqlmain = new SqlCommand())
                     {
-                        PrepareCommand(cmdsqlmain, connection, null, cmdType, cmdText, commandParameters as SqlParameter[]);
+                        PrepareCommand(cmdsqlmain, sqlConnection, null, cmdType, cmdText, commandParameters as SqlParameter[]);
                         val = cmdsqlmain.ExecuteNonQuery();
                         cmdsqlmain.Parameters.Clear();
                     }
                     break;
-                case DatabaseTypeEnum.Oracle:
+                case DatabaseType.Oracle:
                     break;
-                case DatabaseTypeEnum.MySql:
-                    MySqlCommand cmdmysql = new MySqlCommand();
-                    using (MySqlConnection connection = new MySqlConnection(connectionString))
+                case DatabaseType.MySql:
+                    using (MySqlCommand cmdmysql = new MySqlCommand())
                     {
-                        PrepareCommand(cmdmysql, connection, null, cmdType, cmdText, commandParameters as MySqlParameter[]);
+                        PrepareCommand(cmdmysql, mySqlConnection, null, cmdType, cmdText, commandParameters as MySqlParameter[]);
                         val = cmdmysql.ExecuteNonQuery();
                         cmdmysql.Parameters.Clear();
                     }
                     break;
-                case DatabaseTypeEnum.Access:
+                case DatabaseType.Access:
                     break;
                 default:
                     break;
@@ -95,36 +186,42 @@ namespace ApliuDatabase
         /// GetData
         /// </summary>
         /// <returns>返回查询结果</returns>
-        public DataSet ExecuteGet(string connectionString, CommandType commandType, string commandText, params object[] commandParameters)
+        public DataSet ExecuteGet(CommandType commandType, string commandText, params object[] commandParameters)
         {
             DataSet dsData = null;
             switch (databaseType)
             {
-                case DatabaseTypeEnum.SqlServer:
-                    using (SqlConnection cn = new SqlConnection(connectionString))
+                case DatabaseType.SqlServer:
+                    using (sqlConnection = new SqlConnection(databaseConnection))
                     {
-                        dsData = new DataSet();
-                        cn.Open();
-                        SqlCommand cmd = new SqlCommand();
-                        PrepareCommand(cmd, cn, (SqlTransaction)null, commandType, commandText, commandParameters as SqlParameter[]);
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        da.Fill(dsData);
+                        if (sqlConnection.State != ConnectionState.Open) sqlConnection.Open();
+                        using (SqlCommand cmd = new SqlCommand())
+                        {
+                            dsData = new DataSet();
+                            PrepareCommand(cmd, sqlConnection, (SqlTransaction)null, commandType, commandText, commandParameters as SqlParameter[]);
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            da.Fill(dsData);
+                        }
+                        sqlConnection.Close();
                     }
                     break;
-                case DatabaseTypeEnum.Oracle:
+                case DatabaseType.Oracle:
                     break;
-                case DatabaseTypeEnum.MySql:
-                    using (MySqlConnection cn = new MySqlConnection(connectionString))
+                case DatabaseType.MySql:
+                    using (mySqlConnection = new MySqlConnection(databaseConnection))
                     {
-                        dsData = new DataSet();
-                        cn.Open();
-                        MySqlCommand cmd = new MySqlCommand();
-                        PrepareCommand(cmd, cn, (MySqlTransaction)null, commandType, commandText, commandParameters as MySqlParameter[]);
-                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                        da.Fill(dsData);
+                        if (mySqlConnection.State != ConnectionState.Open) mySqlConnection.Open();
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            dsData = new DataSet();
+                            PrepareCommand(cmd, mySqlConnection, (MySqlTransaction)null, commandType, commandText, commandParameters as MySqlParameter[]);
+                            MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                            da.Fill(dsData);
+                        }
+                        mySqlConnection.Close();
                     }
                     break;
-                case DatabaseTypeEnum.Access:
+                case DatabaseType.Access:
                     break;
                 default:
                     break;
@@ -137,9 +234,6 @@ namespace ApliuDatabase
         /// </summary>
         private void PrepareCommand(SqlCommand cmd, SqlConnection conn, SqlTransaction trans, CommandType cmdType, string cmdText, SqlParameter[] commandParameters)
         {
-            if (conn.State != ConnectionState.Open)
-                conn.Open();
-
             cmd.Connection = conn;
             cmd.CommandText = cmdText;
             cmd.CommandType = cmdType;
@@ -159,9 +253,6 @@ namespace ApliuDatabase
         /// </summary>
         private void PrepareCommand(MySqlCommand cmd, MySqlConnection conn, MySqlTransaction trans, CommandType cmdType, string cmdText, MySqlParameter[] commandParameters)
         {
-            if (conn.State != ConnectionState.Open)
-                conn.Open();
-
             cmd.Connection = conn;
             cmd.CommandText = cmdText;
             cmd.CommandType = cmdType;

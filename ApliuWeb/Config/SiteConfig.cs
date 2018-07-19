@@ -27,7 +27,7 @@ namespace ApliuWeb
         #region ==属性字段==
         private string _Domain;
         /// <summary>
-        /// 网站域名
+        /// 网站域名 格式 https://www.xxxxxx.com/
         /// </summary>
         public string Domain
         {
@@ -38,7 +38,6 @@ namespace ApliuWeb
 
                 return _Domain + "/";
             }
-            set { _Domain = value; }
         }
 
         private string _DatabaseConnection;
@@ -48,7 +47,6 @@ namespace ApliuWeb
         public string DatabaseConnection
         {
             get { return _DatabaseConnection; }
-            set { _DatabaseConnection = value; }
         }
 
         private string _DatabaseType;
@@ -58,37 +56,33 @@ namespace ApliuWeb
         public string DatabaseType
         {
             get { return _DatabaseType; }
-            set { _DatabaseType = value; }
         }
 
-        private string _AppId;
+        private string _TcAppId;
         /// <summary>
         /// 腾讯云账号的APPID
         /// </summary>
         public string TcAppId
         {
-            get { return _AppId; }
-            set { _AppId = value; }
+            get { return _TcAppId; }
         }
 
-        private string _SecretId;
+        private string _TcSecretId;
         /// <summary>
         /// 腾讯云API密钥上申请的标识身份的 TcSecretId
         /// </summary>
         public string TcSecretId
         {
-            get { return _SecretId; }
-            set { _SecretId = value; }
+            get { return _TcSecretId; }
         }
 
-        private string _SecretKey;
+        private string _TcSecretKey;
         /// <summary>
         /// TcSecretId 对应唯一的 TcSecretKey , 而 TcSecretKey 会用来生成请求签名 Signature
         /// </summary>
         public string TcSecretKey
         {
-            get { return _SecretKey; }
-            set { _SecretKey = value; }
+            get { return _TcSecretKey; }
         }
         #endregion
 
@@ -105,81 +99,47 @@ namespace ApliuWeb
             node = doc.SelectSingleNode("//configuration/Domain");
             if (node != null)
             {
-                config.Domain = node.InnerText.Trim();
+                config._Domain = node.InnerText.Trim();
             }
 
-            string[] dbtype = new string[2] { "0", "SqlServerPath" };
             node = doc.SelectSingleNode("//configuration/DatabaseType");
             if (node != null)
             {
-                dbtype = node.InnerText.Trim().Split('-');
-                if (dbtype.Length != 2) config.DatabaseType = "0";
-                else config.DatabaseType = dbtype[0];
+                config._DatabaseType = node.InnerText.Trim();
             }
 
-            if (dbtype.Length != 2) node = doc.SelectSingleNode("//configuration/" + "SqlServerPath");
-            else node = doc.SelectSingleNode("//configuration/" + dbtype[1]);
+            node = doc.SelectSingleNode("//configuration/DatabaseConnection");
             if (node != null)
             {
-                config.DatabaseConnection = node.InnerText.Trim();
+                config._DatabaseConnection = node.InnerText.Trim();
             }
 
             node = doc.SelectSingleNode("//configuration/appSettings/TcAppId");
             if (node != null)
             {
-                config.TcAppId = node.InnerText.Trim();
+                config._TcAppId = node.InnerText.Trim();
             }
 
             node = doc.SelectSingleNode("//configuration/appSettings/TcSecretId");
             if (node != null)
             {
-                config.TcSecretId = node.InnerText.Trim();
+                config._TcSecretId = node.InnerText.Trim();
             }
 
             node = doc.SelectSingleNode("//configuration/appSettings/TcSecretKey");
             if (node != null)
             {
-                config.TcSecretKey = node.InnerText.Trim();
+                config._TcSecretKey = node.InnerText.Trim();
             }
             configFileModifyDate = DateTime.Now;
         }
 
         /// <summary>
-        /// 获取指定链接库配置
-        /// </summary>
-        /// <param name="DatabaseTypeSelect"></param>
-        public static void GetDatabaseConfig(string DatabaseTypeSelect, out string databaseType, out string databaseConnection)
-        {
-            databaseType = string.Empty;
-            databaseConnection = string.Empty;
-            XmlDocument doc = new XmlDocument();
-            doc.Load(configFilePath);
-
-            XmlNode node = null;
-            string[] dbtype = new string[] { };
-            node = doc.SelectSingleNode("//configuration/" + DatabaseTypeSelect);
-            if (node != null)
-            {
-                dbtype = node.InnerText.Trim().Split('-');
-                if (dbtype.Length == 2) databaseType = dbtype[0];
-            }
-
-            if (dbtype.Length == 2)
-            {
-                node = doc.SelectSingleNode("//configuration/" + dbtype[1]);
-                if (node != null)
-                {
-                    databaseConnection = node.InnerText.Trim();
-                }
-            }
-        }
-
-        /// <summary>
-        /// 获取base.config文件appSettings中指定节点的值
+        /// 获取BaseConfig.config文件appSettings中指定节点的值
         /// </summary>
         /// <param name="NodeName"></param>
         /// <returns></returns>
-        public static string GetConfigNodeValue(string NodeName)
+        public static string GetConfigAppSettingsValue(string NodeName)
         {
             string value = null;
             XmlDocument doc = new XmlDocument();
@@ -192,6 +152,25 @@ namespace ApliuWeb
             if (xElem != null)
             {
                 value = xElem.GetAttribute("value");
+            }
+            return value;
+        }
+
+        /// <summary>
+        /// 获取BaseConfig.config文件指定根节点的值
+        /// </summary>
+        /// <param name="NodeName"></param>
+        /// <returns></returns>
+        public static string GetConfigRootValue(string NodeName)
+        {
+            string value = null;
+            XmlDocument doc = new XmlDocument();
+            doc.Load(configFilePath);
+
+            XmlNode node = doc.SelectSingleNode("//configuration/" + NodeName);
+            if (node != null)
+            {
+                value = node.InnerText.Trim();
             }
             return value;
         }

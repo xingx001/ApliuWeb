@@ -33,7 +33,7 @@ namespace ApliuWeb
         /// <summary>
         /// Session加密秘钥
         /// </summary>
-        private static string SessionSecurityKey = SiteConfig.GetConfigNodeValue("SessionSecurityKey");
+        private static string SessionSecurityKey = SiteConfig.GetConfigAppSettingsValue("SessionSecurityKey");
         /// <summary>
         /// 设置Session的值
         /// </summary>

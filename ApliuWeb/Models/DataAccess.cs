@@ -44,6 +44,17 @@ namespace ApliuWeb
         private DatabaseHelper dbHelper = new DatabaseHelper();
 
         /// <summary>
+        /// 无参构造函数
+        /// </summary>
+        public DataAccess() { }
+
+        public DataAccess(string databaseType, string databaseConnection)
+        {
+            this.dbHelper.databaseType = (DatabaseType)Enum.Parse(typeof(DatabaseType), databaseType);
+            this.dbHelper.databaseConnection = databaseConnection;
+        }
+
+        /// <summary>
         /// 初始化数据库连接通道
         /// </summary>
         public static void LoadDataAccess(string instanceKey, string databaseType, string databaseConnection)
@@ -53,13 +64,15 @@ namespace ApliuWeb
                 if (!_Instance.ContainsKey(instanceKey))
                 {
                     DataAccess dataAccess = new DataAccess();
-                    dataAccess.dbHelper.databaseType = (DatabaseTypeEnum)Enum.Parse(typeof(DatabaseTypeEnum), databaseType);
+                    dataAccess.dbHelper.databaseType = (DatabaseType)Enum.Parse(typeof(DatabaseType), databaseType);
                     dataAccess.dbHelper.databaseConnection = databaseConnection;
+                    //dataAccess.dbHelper.InitializtionConnection();
                     _Instance.Add(instanceKey, dataAccess);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.WriteLog("加载数据库配置失败，详情：" + ex.Message);
             }
         }
 
