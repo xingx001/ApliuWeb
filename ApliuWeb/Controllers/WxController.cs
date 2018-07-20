@@ -106,11 +106,13 @@ namespace ApliuWeb.Controllers
         [HttpPost]
         public String Test()
         {
-            //　SELECT * FROM sysprocesses where loginame='apliuweb'
+            //SELECT * FROM sysprocesses where loginame='apliuweb'
+            //select * from test;waitfor delay '00:00:05';
             String respContent = "ERROR";
             try
             {
-                DataSet ds = DataAccess.Instance.GetData("select * from test;waitfor delay '00:00:05';");
+                //DataAccess.Instance.TestCeshi();
+                DataSet ds = DataAccess.Instance.GetData("select top 1 * from test;waitfor delay '00:00:32';");
                 if (ds != null && ds.Tables.Count > 0) respContent = JsonHelper.JsonSerialize(ds.Tables[0]);
             }
             catch (Exception ex)
@@ -120,26 +122,6 @@ namespace ApliuWeb.Controllers
 
             //MsgCryptTest.Sample.Main(null);
             //Logger.WriteLog("Api Wx Test");
-            return respContent;
-        }
-
-        [HttpGet]
-        public String Test1()
-        {
-            //　SELECT * FROM sysprocesses where loginame='apliuweb'
-            String respContent = "ERROR";
-            try
-            {
-                DataSet ds = DataAccess.Instance.GetData("select * from ApUserInfo;waitfor delay '00:00:05';");
-                if (ds != null && ds.Tables.Count > 0) respContent = JsonHelper.JsonSerialize(ds.Tables[0]);
-            }
-            catch (Exception ex)
-            {
-                respContent = ex.Message;
-            }
-
-            //MsgCryptTest.Sample.Main(null);
-            //Logger.WriteLog("Api Wx ApUserInfo");
             return respContent;
         }
     }

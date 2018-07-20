@@ -6,6 +6,7 @@ using System.Collections;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using System.Data.Common;
 
 namespace ApliuDatabase
 {
@@ -35,14 +36,15 @@ namespace ApliuDatabase
         /// 连接的生命周期 单位秒
         /// </summary>
         public int Conn_Lifetime = 120;
+
         /// <summary>
-        /// 连接池对象
+        /// 数据库事务对象
         /// </summary>
-        private SqlConnection sqlConnection = null;
+        private DbTransaction dbTransaction = null;
         /// <summary>
-        /// 连接池对象
+        /// 是否由外界操控事务交或回滚
         /// </summary>
-        private MySqlConnection mySqlConnection = null;
+        private Boolean outTrans = false;
 
         private string _databaseConnection = String.Empty;
         /// <summary>
@@ -91,13 +93,13 @@ namespace ApliuDatabase
             switch (databaseType)
             {
                 case DatabaseType.SqlServer:
-                    sqlConnection = new SqlConnection(databaseConnection);
+                    SqlConnection sqlConnection = new SqlConnection(databaseConnection);
                     //sqlConnection.OpenAsync();
                     break;
                 case DatabaseType.Oracle:
                     break;
                 case DatabaseType.MySql:
-                    mySqlConnection = new MySqlConnection(databaseConnection);
+                    MySqlConnection mySqlConnection = new MySqlConnection(databaseConnection);
                     //mySqlConnection.OpenAsync();
                     break;
                 case DatabaseType.Access:
@@ -108,71 +110,65 @@ namespace ApliuDatabase
         }
 
         /// <summary>
-        /// 查询数据库
+        /// 执行SQL语句查询数据库
         /// </summary>
-        /// <param name="Sql"></param>
-        /// <returns></returns>
+        /// <param name="Sql">Sql语句</param>
+        /// <returns>结果集</returns>
         public DataSet GetData(string Sql)
         {
-            return ExecuteGet(CommandType.Text, Sql, new object[0]);
+            return GetDataExecute(CommandType.Text, Sql, 30, null);
         }
 
         /// <summary>
-        /// 更新数据库
+        /// 执行SQL语句更新数据库
         /// </summary>
-        /// <param name="Sql"></param>
-        /// <returns></returns>
+        /// <param name="Sql">Sql语句</param>
+        /// <returns>受影响的行数</returns>
         public int PostData(string Sql)
         {
-            return ExecutePost(CommandType.Text, Sql, new object[0]);
+            return PostDataExecute(CommandType.Text, Sql, 30, null);
         }
 
         /// <summary>
-        /// 查询数据库
+        /// 获取数据库事务
         /// </summary>
-        /// <param name="Sql"></param>
         /// <returns></returns>
-        public DataSet GetData(string Sql, params object[] Args)
+        [Obsolete]
+        public DbTransaction BeginTransaction()
         {
-            return ExecuteGet(CommandType.Text, Sql, Args);
+            System.Transactions.TransactionOptions transactionOption = new System.Transactions.TransactionOptions();
+            //设置事务隔离级别
+            transactionOption.IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+            // 设置事务超时时间为120秒
+            transactionOption.Timeout = new TimeSpan(0, 0, 120);
+
+            using (System.Transactions.TransactionScope scope = new System.Transactions.TransactionScope(System.Transactions.TransactionScopeOption.Required, transactionOption))
+            {
+            }
+            return null;
         }
 
+        #region 执行 Transact-SQL 语句并返回受影响的行数
         /// <summary>
-        /// 更新数据库
+        /// 执行 Transact-SQL 语句并返回受影响的行数
         /// </summary>
-        /// <param name="Sql"></param>
-        /// <returns></returns>
-        public int PostData(string Sql, params object[] Args)
-        {
-            return ExecutePost(CommandType.Text, Sql, Args);
-        }
-
-        /// <summary>
-        /// PostData
-        /// </summary>
+        /// <param name="commandType">指定如何解释命令字符串</param>
+        /// <param name="commandText">Sql语句或存储过程</param>
+        /// <param name="commandTimeout">语句执行的超时时间</param>
+        /// <param name="commandParameters">语句参数 </param>
         /// <returns>返回受影响的行数</returns>
-        public int ExecutePost(CommandType cmdType, string cmdText, params object[] commandParameters)
+        public int PostDataExecute(CommandType commandType, string commandText, int commandTimeout, params object[] commandParameters)
         {
             int val = -1;
             switch (databaseType)
             {
                 case DatabaseType.SqlServer:
-                    using (SqlCommand cmdsqlmain = new SqlCommand())
-                    {
-                        PrepareCommand(cmdsqlmain, sqlConnection, null, cmdType, cmdText, commandParameters as SqlParameter[]);
-                        val = cmdsqlmain.ExecuteNonQuery();
-                        cmdsqlmain.Parameters.Clear();
-                    }
+                    SqlServerExecuteNonQuery(commandType, commandText, commandTimeout, out val, commandParameters);
                     break;
                 case DatabaseType.Oracle:
                     break;
                 case DatabaseType.MySql:
-                    using (MySqlCommand cmdmysql = new MySqlCommand())
-                    {
-                        PrepareCommand(cmdmysql, mySqlConnection, null, cmdType, cmdText, commandParameters as MySqlParameter[]);
-                        val = cmdmysql.ExecuteNonQuery();
-                        cmdmysql.Parameters.Clear();
-                    }
+                    MySqlExecuteNonQuery(commandType, commandText, commandTimeout, out val, commandParameters);
                     break;
                 case DatabaseType.Access:
                     break;
@@ -183,43 +179,108 @@ namespace ApliuDatabase
         }
 
         /// <summary>
-        /// GetData
+        /// Sql Server具体执行PostData
         /// </summary>
-        /// <returns>返回查询结果</returns>
-        public DataSet ExecuteGet(CommandType commandType, string commandText, params object[] commandParameters)
+        /// <param name="commandType"></param>
+        /// <param name="commandText"></param>
+        /// <param name="commandTimeout"></param>
+        /// <param name="val"></param>
+        /// <param name="commandParameters"></param>
+        private void SqlServerExecuteNonQuery(CommandType commandType, string commandText, int commandTimeout, out int val, params object[] commandParameters)
+        {
+            SqlTransaction sqlTransaction = null;
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(databaseConnection))
+                {
+                    if (sqlConnection.State != ConnectionState.Open) sqlConnection.Open();
+                    sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+
+                    using (SqlCommand sqlCommand = new SqlCommand(commandText, sqlConnection))
+                    {
+                        sqlCommand.CommandTimeout = commandTimeout;
+                        sqlCommand.CommandType = commandType;
+                        sqlCommand.Transaction = sqlTransaction;
+                        if (commandParameters != null)
+                        {
+                            foreach (SqlParameter parm in commandParameters) sqlCommand.Parameters.Add(parm);
+                        }
+                        val = sqlCommand.ExecuteNonQuery();
+                        if (val >= 0) sqlTransaction.Commit();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                val = -1;
+                sqlTransaction.Rollback();
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// MySql具体执行GetData
+        /// </summary>
+        /// <param name="commandType"></param>
+        /// <param name="commandText"></param>
+        /// <param name="commandTimeout"></param>
+        /// <param name="val"></param>
+        /// <param name="commandParameters"></param>
+        private void MySqlExecuteNonQuery(CommandType commandType, string commandText, int commandTimeout, out int val, params object[] commandParameters)
+        {
+            MySqlTransaction mySqlTransaction = null;
+            try
+            {
+                using (MySqlConnection mySqlConnection = new MySqlConnection(databaseConnection))
+                {
+                    if (mySqlConnection.State != ConnectionState.Open) mySqlConnection.Open();
+                    mySqlTransaction = mySqlConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    using (MySqlCommand mySqlCommand = new MySqlCommand(commandText, mySqlConnection, mySqlTransaction))
+                    {
+                        mySqlCommand.CommandTimeout = commandTimeout;
+                        mySqlCommand.CommandType = commandType;
+                        if (commandParameters != null)
+                        {
+                            foreach (MySqlParameter parm in commandParameters)
+                                mySqlCommand.Parameters.Add(parm);
+                        }
+                        MySqlDataAdapter da = new MySqlDataAdapter(mySqlCommand);
+
+                        val = mySqlCommand.ExecuteNonQuery();
+                        if (val >= 0) mySqlTransaction.Commit();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mySqlTransaction.Rollback();
+                val = -1;
+                throw ex;
+            }
+        }
+        #endregion
+
+        #region 执行Transact-SQL语句或存储过程，并返回查询结果
+        /// <summary>
+        /// 执行Transact-SQL语句或存储过程，并返回查询结果
+        /// </summary>
+        /// <param name="commandType">指定如何解释命令字符串</param>
+        /// <param name="commandText">Sql语句或存储过程</param>
+        /// <param name="commandTimeout">语句执行的超时时间</param>
+        /// <param name="commandParameters">语句参数</param>
+        /// <returns>返回结果集</returns>
+        public DataSet GetDataExecute(CommandType commandType, string commandText, int commandTimeout, params object[] commandParameters)
         {
             DataSet dsData = null;
             switch (databaseType)
             {
                 case DatabaseType.SqlServer:
-                    using (sqlConnection = new SqlConnection(databaseConnection))
-                    {
-                        if (sqlConnection.State != ConnectionState.Open) sqlConnection.Open();
-                        using (SqlCommand cmd = new SqlCommand())
-                        {
-                            dsData = new DataSet();
-                            PrepareCommand(cmd, sqlConnection, (SqlTransaction)null, commandType, commandText, commandParameters as SqlParameter[]);
-                            SqlDataAdapter da = new SqlDataAdapter(cmd);
-                            da.Fill(dsData);
-                        }
-                        sqlConnection.Close();
-                    }
+                    SqlServerDataAdapter(commandType, commandText, commandTimeout, out dsData, commandParameters);
                     break;
                 case DatabaseType.Oracle:
                     break;
                 case DatabaseType.MySql:
-                    using (mySqlConnection = new MySqlConnection(databaseConnection))
-                    {
-                        if (mySqlConnection.State != ConnectionState.Open) mySqlConnection.Open();
-                        using (MySqlCommand cmd = new MySqlCommand())
-                        {
-                            dsData = new DataSet();
-                            PrepareCommand(cmd, mySqlConnection, (MySqlTransaction)null, commandType, commandText, commandParameters as MySqlParameter[]);
-                            MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                            da.Fill(dsData);
-                        }
-                        mySqlConnection.Close();
-                    }
+                    MySqlDataAdapter(commandType, commandText, commandTimeout, out dsData, commandParameters);
                     break;
                 case DatabaseType.Access:
                     break;
@@ -230,91 +291,120 @@ namespace ApliuDatabase
         }
 
         /// <summary>
-        /// SqlServer 设置SqlCommand
+        /// Sql Server具体执行GetData
         /// </summary>
-        private void PrepareCommand(SqlCommand cmd, SqlConnection conn, SqlTransaction trans, CommandType cmdType, string cmdText, SqlParameter[] commandParameters)
+        /// <param name="commandType"></param>
+        /// <param name="commandText"></param>
+        /// <param name="dsData"></param>
+        /// <param name="commandParameters"></param>
+        private void SqlServerDataAdapter(CommandType commandType, string commandText, int commandTimeout, out DataSet dsData, params object[] commandParameters)
         {
-            cmd.Connection = conn;
-            cmd.CommandText = cmdText;
-            cmd.CommandType = cmdType;
-
-            if (trans != null)
-                cmd.Transaction = trans;
-
-            if (commandParameters != null)
+            try
             {
-                foreach (SqlParameter parm in commandParameters)
-                    cmd.Parameters.Add(parm);
+                using (SqlConnection sqlConnection = new SqlConnection(databaseConnection))
+                {
+                    if (sqlConnection.State != ConnectionState.Open) sqlConnection.Open();
+                    SqlTransaction sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    using (SqlCommand sqlCommand = new SqlCommand(commandText, sqlConnection))
+                    {
+                        sqlCommand.CommandTimeout = commandTimeout;
+                        sqlCommand.CommandType = commandType;
+                        sqlCommand.Transaction = sqlTransaction;
+                        if (commandParameters != null)
+                        {
+                            foreach (SqlParameter parm in commandParameters) sqlCommand.Parameters.Add(parm);
+                        }
+                        SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
+
+                        dsData = new DataSet();
+                        da.Fill(dsData);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                dsData = null;
+                throw ex;
             }
         }
 
         /// <summary>
-        /// MySql 设置MySqlCommand
+        /// MySql具体执行GetData
         /// </summary>
-        private void PrepareCommand(MySqlCommand cmd, MySqlConnection conn, MySqlTransaction trans, CommandType cmdType, string cmdText, MySqlParameter[] commandParameters)
+        /// <param name="commandType"></param>
+        /// <param name="commandText"></param>
+        /// <param name="dsData"></param>
+        /// <param name="commandParameters"></param>
+        private void MySqlDataAdapter(CommandType commandType, string commandText, int commandTimeout, out DataSet dsData, params object[] commandParameters)
         {
-            cmd.Connection = conn;
-            cmd.CommandText = cmdText;
-            cmd.CommandType = cmdType;
-
-            if (trans != null)
-                cmd.Transaction = trans;
-
-            if (commandParameters != null)
+            try
             {
-                foreach (MySqlParameter parm in commandParameters)
-                    cmd.Parameters.Add(parm);
+                using (MySqlConnection mySqlConnection = new MySqlConnection(databaseConnection))
+                {
+                    if (mySqlConnection.State != ConnectionState.Open) mySqlConnection.Open();
+                    MySqlTransaction mySqlTransaction = mySqlConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    using (MySqlCommand mySqlCommand = new MySqlCommand(commandText, mySqlConnection, mySqlTransaction))
+                    {
+                        mySqlCommand.CommandTimeout = commandTimeout;
+                        mySqlCommand.CommandType = commandType;
+                        if (commandParameters != null)
+                        {
+                            foreach (MySqlParameter parm in commandParameters)
+                                mySqlCommand.Parameters.Add(parm);
+                        }
+                        MySqlDataAdapter da = new MySqlDataAdapter(mySqlCommand);
+
+                        dsData = new DataSet();
+                        da.Fill(dsData);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                dsData = null;
+                throw ex;
             }
         }
+        #endregion
 
         /// <summary>
-        /// SqlServer 初始化参数
+        /// Sql初始化参数 MakeParam("@name" , 枚举.VarChar.ToString() , 50 ,value) as SqlParameter
         /// </summary>
-        /// <param name="ParamName"></param>
-        /// <param name="DbType"></param>
-        /// <param name="Size"></param>
-        /// <param name="Direction">默认 ParameterDirection.Input</param>
-        /// <param name="Value"></param>
-        /// <returns></returns>
-        public SqlParameter MakeParamSqlServer(string ParamName, SqlDbType DbType, Int32 Size, ParameterDirection Direction, object Value)
+        /// <param name="paramName">参数名称</param>
+        /// <param name="dbType">SqlDbType/MySqlDbType枚举</param>
+        /// <param name="size">参数长度</param>
+        /// <param name="direction">参数类型</param>
+        /// <param name="value">参数值</param>
+        /// <returns>SqlParameter/MySqlParameter类型</returns>
+        public DbParameter MakeParam(string paramName, String dbType, Int32 size, ParameterDirection direction, object value)
         {
-            SqlParameter param;
+            DbParameter dbParameter = null;
+            switch (databaseType)
+            {
+                case DatabaseType.SqlServer:
+                    dbParameter = new SqlParameter();
+                    ((SqlParameter)dbParameter).SqlDbType = (SqlDbType)Enum.Parse(typeof(SqlDbType), dbType);
+                    break;
+                case DatabaseType.Oracle:
+                    break;
+                case DatabaseType.MySql:
+                    dbParameter = new MySqlParameter();
+                    ((MySqlParameter)dbParameter).MySqlDbType = (MySqlDbType)Enum.Parse(typeof(MySqlDbType), dbType);
+                    break;
+                case DatabaseType.Access:
+                    break;
+                default:
+                    break;
+            }
+            dbParameter.ParameterName = paramName;
+            if (size > 0) dbParameter.Size = size;
+            dbParameter.Direction = direction;
 
-            if (Size > 0)
-                param = new SqlParameter(ParamName, DbType, Size);
-            else
-                param = new SqlParameter(ParamName, DbType);
+            if ((direction == ParameterDirection.Input || direction == ParameterDirection.InputOutput) && value != null) dbParameter.Value = value;
 
-            param.Direction = Direction;
-            if (!(Direction == ParameterDirection.Output && Value == null))
-                param.Value = Value;
+            //if (!(direction == ParameterDirection.Output && value == null)) dbParameter.Value = value;
 
-            return param;
-        }
-
-        /// <summary>
-        /// Msql 初始化参数
-        /// </summary>
-        /// <param name="ParamName"></param>
-        /// <param name="DbType"></param>
-        /// <param name="Size"></param>
-        /// <param name="Direction">默认 ParameterDirection.Input</param>
-        /// <param name="Value"></param>
-        /// <returns></returns>
-        public MySqlParameter MakeParamMySql(string ParamName, MySqlDbType DbType, Int32 Size, ParameterDirection Direction, object Value)
-        {
-            MySqlParameter param;
-
-            if (Size > 0)
-                param = new MySqlParameter(ParamName, DbType, Size);
-            else
-                param = new MySqlParameter(ParamName, DbType);
-
-            param.Direction = Direction;
-            if (!(Direction == ParameterDirection.Output && Value == null))
-                param.Value = Value;
-
-            return param;
+            return dbParameter;
         }
     }
 }

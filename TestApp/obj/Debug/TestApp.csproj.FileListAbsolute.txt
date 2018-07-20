@@ -1,9 +1,0 @@
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\TestApp\bin\Debug\TestApp.exe.config
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\TestApp\obj\Debug\TestApp.csprojResolveAssemblyReference.cache
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\TestApp\obj\Debug\TestApp.Form1.resources
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\TestApp\obj\Debug\TestApp.Properties.Resources.resources
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\TestApp\obj\Debug\TestApp.csproj.GenerateResource.Cache
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\TestApp\bin\Debug\TestApp.exe
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\TestApp\bin\Debug\TestApp.pdb
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\TestApp\obj\Debug\TestApp.exe
-D:\Other\PhoneWeb\ApliuWebAsp\ApliuWeb\TestApp\obj\Debug\TestApp.pdb

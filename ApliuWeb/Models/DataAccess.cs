@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -77,117 +78,102 @@ namespace ApliuWeb
         }
 
         /// <summary>
-        /// 查询数据库 Select
+        /// 执行SQL语句查询数据库
         /// </summary>
-        /// <param name="Sql"></param>
-        /// <returns></returns>
+        /// <param name="Sql">Sql语句</param>
+        /// <returns>结果集</returns>
         public DataSet GetData(string Sql)
         {
-            return GetData(Sql, null);
+            return GetDataExecute(CommandType.Text, Sql, 30, null);
         }
 
         /// <summary>
-        /// 更新数据库 Delete Update Insert
+        /// 执行SQL语句更新数据库
         /// </summary>
-        /// <param name="Sql"></param>
-        /// <returns></returns>
+        /// <param name="Sql">Sql语句</param>
+        /// <returns>受影响的行数</returns>
         public bool PostData(string Sql)
         {
-            return PostData(Sql, null);
+            int val = PostDataExecute(CommandType.Text, Sql, 30, null);
+            if (val >= 0) return true;
+            else return false;
         }
 
         /// <summary>
         /// 测试用例
         /// </summary>
         [Obsolete]
-        public void Ceshi()
+        public void TestCeshi()
         {
             string guid = Guid.NewGuid().ToString().ToLower();
             string sql = "insert into Test values(@name1,@name2,@name3);";
             SqlParameter[] myprams = { 
-                        MakeInParam("@name1" , SqlDbType.VarChar , 50 ,guid) ,
-                        MakeInParam("@name2" , SqlDbType.VarChar , 50 ,"CeshiPrams"),
-                        MakeInParam("@name3" , SqlDbType.VarChar , 50 ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) 
+                        MakeParam("@name1" , SqlDbType.VarChar.ToString() , 50 ,guid) as SqlParameter ,
+                        MakeParam("@name2" , SqlDbType.VarChar.ToString() , 50 ,"CeshiPrams") as SqlParameter,
+                        MakeParam("@name3" , SqlDbType.VarChar.ToString() , 50 ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) as SqlParameter
                     };
-            bool p1 = PostData(sql, myprams);
+            int p1 = PostDataExecute(CommandType.Text, sql, 30, myprams);
 
-            bool p2 = PostData("update Test set Msg='Ceshi' where ID='" + guid + "';");
+            bool p2 = PostData("update Test set Msg=Msg+'Ceshi' where ID='" + guid + "';");
+
+            DataSet ds = GetData("select * from Test;");
         }
 
         /// <summary>
-        /// 查询数据库
+        /// 执行Transact-SQL语句或存储过程，并返回查询结果
         /// </summary>
-        /// <param name="Sql"></param>
-        /// <param name="Args"></param>
-        /// <returns></returns>
-        public DataSet GetData(string Sql, params SqlParameter[] Args)
+        /// <param name="commandType">指定如何解释命令字符串</param>
+        /// <param name="commandText">Sql语句或存储过程</param>
+        /// <param name="commandTimeout">语句执行的超时时间</param>
+        /// <param name="commandParameters">语句参数</param>
+        /// <returns>返回结果集</returns>
+        public DataSet GetDataExecute(CommandType commandType, string commandText, int commandTimeout, params object[] commandParameters)
         {
             DataSet dsData = null;
             try
             {
-                dsData = dbHelper.GetData(Sql, Args);
+                dsData = dbHelper.GetDataExecute(commandType, commandText, commandTimeout, commandParameters);
             }
             catch (Exception ex)
             {
-                Logger.WriteLogWeb("数据库查询失败，Sql：" + Sql + "，详情：" + ex.Message);
+                Logger.WriteLogWeb("数据库查询失败，Sql：" + commandText + "，详情：" + ex.Message);
             }
             return dsData;
         }
 
         /// <summary>
-        /// 更新数据库
+        /// 执行 Transact-SQL 语句并返回受影响的行数
         /// </summary>
-        /// <param name="Sql"></param>
-        /// <param name="Args"></param>
-        /// <returns></returns>
-        public bool PostData(string Sql, params SqlParameter[] Args)
-        {
-            bool result = false;
-            try
-            {
-                if (dbHelper.PostData(Sql, Args) >= 0)
-                {
-                    result = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.WriteLogWeb("数据库更新失败，Sql：" + Sql + "，详情：" + ex.Message);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Post 返回受影响数据条数
-        /// </summary>
-        /// <param name="Sql"></param>
-        /// <param name="Args"></param>
-        /// <returns></returns>
-        public int PostDataInt(string Sql, params SqlParameter[] Args)
+        /// <param name="commandType">指定如何解释命令字符串</param>
+        /// <param name="commandText">Sql语句或存储过程</param>
+        /// <param name="commandTimeout">语句执行的超时时间</param>
+        /// <param name="commandParameters">语句参数 </param>
+        /// <returns>返回受影响的行数</returns>
+        public int PostDataExecute(CommandType commandType, string commandText, int commandTimeout, params object[] commandParameters)
         {
             int result = -1;
             try
             {
-                result = dbHelper.PostData(Sql, Args);
+                result = dbHelper.PostDataExecute(commandType, commandText, commandTimeout, commandParameters);
             }
             catch (Exception ex)
             {
-                Logger.WriteLogWeb("数据库更新失败，Sql：" + Sql + "，详情：" + ex.Message);
+                Logger.WriteLogWeb("数据库更新失败，Sql：" + commandText + "，详情：" + ex.Message);
             }
             return result;
         }
 
-        /// <summary>
-        /// 初始化参数
+        /// Sql初始化参数 MakeParam("@name" , SqlDbType.VarChar.ToString() , 50 ,value) as SqlParameter
         /// </summary>
-        /// <param name="ParamName"></param>
-        /// <param name="DbType"></param>
-        /// <param name="Size"></param>
-        /// <param name="Value"></param>
-        /// <returns></returns>
-        public SqlParameter MakeInParam(string ParamName, SqlDbType DbType, int Size, object Value)
+        /// <param name="paramName">参数名称</param>
+        /// <param name="dbType">SqlDbType/MySqlDbType枚举</param>
+        /// <param name="size">参数长度</param>
+        /// <param name="direction">参数类型</param>
+        /// <param name="value">参数值</param>
+        /// <returns>SqlParameter/MySqlParameter类型</returns>
+        public DbParameter MakeParam(string paramName, String dbType, int size, object value)
         {
-            System.Data.SqlClient.SqlParameter sqlParams = dbHelper.MakeParamSqlServer(ParamName, DbType, Size, ParameterDirection.Input, Value);
+            DbParameter sqlParams = dbHelper.MakeParam(paramName, dbType, size, ParameterDirection.Input, value);
             return sqlParams;
         }
     }

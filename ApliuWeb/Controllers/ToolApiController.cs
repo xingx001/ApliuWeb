@@ -76,7 +76,7 @@ namespace ApliuWeb.Controllers
                     }
                     break;
                 case "POST":
-                    int rank = DataAccess.InstanceKey["TestDatabase"].PostDataInt(Sql, null);
+                    int rank = DataAccess.InstanceKey["TestDatabase"].PostDataExecute(CommandType.Text, Sql, 30, null);
                     if (rank >= 0)
                     {
                         result.code = "0";
@@ -124,7 +124,7 @@ namespace ApliuWeb.Controllers
             #endregion
             if (sql.ToUpper().Contains("UPDATE") || sql.ToUpper().Contains("DELETE") || sql.ToUpper().Contains("INSERT"))
             {
-                int rank = dataAccess.PostDataInt(sql, null);//DataAccess.InstanceKey[key].PostDataInt(sql, null);
+                int rank = dataAccess.PostDataExecute(CommandType.Text, sql, 30, null);//DataAccess.InstanceKey[key].PostDataExecute(CommandType.Text, sql, 30, null);
                 if (rank >= 0)
                 {
                     result.code = "0";
