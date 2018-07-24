@@ -42,6 +42,9 @@ namespace ApliuWeb
             }
         }
 
+        /// <summary>
+        /// 数据库操作对象
+        /// </summary>
         private DatabaseHelper dbHelper = new DatabaseHelper();
 
         /// <summary>
@@ -161,6 +164,32 @@ namespace ApliuWeb
                 Logger.WriteLogWeb("数据库更新失败，Sql：" + commandText + "，详情：" + ex.Message);
             }
             return result;
+        }
+
+
+        /// <summary>
+        /// 开启数据库事务
+        /// </summary>
+        /// <param name="seconds">事务超时时间 单位秒</param>
+        public void BeginTransaction(int seconds)
+        {
+            dbHelper.BeginTransaction(seconds);
+        }
+
+        /// <summary>
+        /// 提交事务
+        /// </summary>
+        public void Commit()
+        {
+            dbHelper.Complete();
+        }
+
+        /// <summary>
+        /// 撤销事务
+        /// </summary>
+        public void Rollback()
+        {
+            dbHelper.Dispose();
         }
 
         /// Sql初始化参数 MakeParam("@name" , SqlDbType.VarChar.ToString() , 50 ,value) as SqlParameter

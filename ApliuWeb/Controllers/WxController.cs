@@ -4,6 +4,7 @@ using System;
 using System.Data;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 
@@ -108,12 +109,27 @@ namespace ApliuWeb.Controllers
         {
             //SELECT * FROM sysprocesses where loginame='apliuweb'
             //select * from test;waitfor delay '00:00:05';
+            //如果加上(nolock)标记，则是以ReadUncommitted执行该表的查询事务
             String respContent = "ERROR";
             try
             {
+                return respContent;
                 //DataAccess.Instance.TestCeshi();
-                DataSet ds = DataAccess.Instance.GetData("select top 1 * from test;waitfor delay '00:00:32';");
+
+                DataAccess.Instance.BeginTransaction(10);
+
+                string sql01 = "insert into Test values('" + Guid.NewGuid().ToString().ToLower() + "','BeginTransaction001','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "');";
+                bool p1 = DataAccess.Instance.PostData(sql01);
+
+                string sql02 = "insert into Test values('" + Guid.NewGuid().ToString().ToLower() + "','BeginTransaction002','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "');";
+                bool p2 = DataAccess.Instance.PostData(sql02);
+
+
+                DataSet ds = DataAccess.Instance.GetData("select * from Test where CreateTime like '%" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:s") + "%';waitfor delay '00:00:01';");
                 if (ds != null && ds.Tables.Count > 0) respContent = JsonHelper.JsonSerialize(ds.Tables[0]);
+                Thread.Sleep(5000);
+
+                DataAccess.Instance.Rollback();
             }
             catch (Exception ex)
             {

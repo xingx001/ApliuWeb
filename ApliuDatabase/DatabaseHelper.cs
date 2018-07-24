@@ -7,6 +7,8 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using System.Data.Common;
+using System.Transactions;
+using System.Data.OracleClient;
 
 namespace ApliuDatabase
 {
@@ -37,15 +39,6 @@ namespace ApliuDatabase
         /// </summary>
         public int Conn_Lifetime = 120;
 
-        /// <summary>
-        /// 数据库事务对象
-        /// </summary>
-        private DbTransaction dbTransaction = null;
-        /// <summary>
-        /// 是否由外界操控事务交或回滚
-        /// </summary>
-        private Boolean outTrans = false;
-
         private string _databaseConnection = String.Empty;
         /// <summary>
         /// 数据库链接字符串 System.Data.SqlClient.SqlConnectionStringBuilder
@@ -55,27 +48,7 @@ namespace ApliuDatabase
             // Data Source={0};Initial Catalog={1};Integrated Security=False;User ID={2};Password={3};Connect Timeout=15;Encrypt=False;TrustServerCertificate=False
             get
             {
-                String dbConnStr = String.Empty;
-                switch (databaseType)
-                {
-                    case DatabaseType.SqlServer:
-                        dbConnStr = _databaseConnection + ";"
-                                + "Max Pool Size=" + MaxPool + ";"
-                                + "Min Pool Size=" + MinPool + ";"
-                                + "Connect Timeout=" + Conn_Timeout + ";"
-                                + "Connection Lifetime=" + Conn_Lifetime + ";"
-                                + "Asynchronous Processing=" + Asyn_Process + ";";
-                        break;
-                    case DatabaseType.Oracle:
-                        break;
-                    case DatabaseType.MySql:
-                        break;
-                    case DatabaseType.Access:
-                        break;
-                    default:
-                        break;
-                }
-                return dbConnStr;
+                return CreateDatabaseConnectionStr(_databaseConnection);
             }
             set
             {
@@ -130,22 +103,47 @@ namespace ApliuDatabase
         }
 
         /// <summary>
-        /// 获取数据库事务
+        /// 数据库事务范围
         /// </summary>
-        /// <returns></returns>
-        [Obsolete]
-        public DbTransaction BeginTransaction()
+        private TransactionScope transactionScope = null;
+
+        /// <summary>
+        /// 开启数据库事务
+        /// </summary>
+        /// <param name="seconds">事务超时时间 单位秒</param>
+        public void BeginTransaction(int seconds)
         {
-            System.Transactions.TransactionOptions transactionOption = new System.Transactions.TransactionOptions();
+            TransactionOptions transactionOption = new TransactionOptions();
             //设置事务隔离级别
             transactionOption.IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
-            // 设置事务超时时间为120秒
-            transactionOption.Timeout = new TimeSpan(0, 0, 120);
+            // 设置事务超时时间为120秒 
+            transactionOption.Timeout = new TimeSpan(0, 0, seconds);
+            transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOption);
+        }
 
-            using (System.Transactions.TransactionScope scope = new System.Transactions.TransactionScope(System.Transactions.TransactionScopeOption.Required, transactionOption))
+        /// <summary>
+        /// 提交事务
+        /// </summary>
+        public void Complete()
+        {
+            if (transactionScope != null)
             {
+                transactionScope.Complete();
+                transactionScope.Dispose();
+                transactionScope = null;
             }
-            return null;
+        }
+
+        /// <summary>
+        /// 撤销事务
+        /// </summary>
+        public void Dispose()
+        {
+            if (transactionScope != null)
+            {
+                transactionScope.Dispose();
+                transactionScope = null;
+            }
         }
 
         #region 执行 Transact-SQL 语句并返回受影响的行数
@@ -160,24 +158,54 @@ namespace ApliuDatabase
         public int PostDataExecute(CommandType commandType, string commandText, int commandTimeout, params object[] commandParameters)
         {
             int val = -1;
-            switch (databaseType)
+            try
             {
-                case DatabaseType.SqlServer:
-                    SqlServerExecuteNonQuery(commandType, commandText, commandTimeout, out val, commandParameters);
-                    break;
-                case DatabaseType.Oracle:
-                    break;
-                case DatabaseType.MySql:
-                    MySqlExecuteNonQuery(commandType, commandText, commandTimeout, out val, commandParameters);
-                    break;
-                case DatabaseType.Access:
-                    break;
-                default:
-                    break;
+                using (DbConnection dbConnection = CreateDbConnection(databaseConnection))
+                {
+                    if (dbConnection.State != ConnectionState.Open) dbConnection.Open();
+                    using (DbCommand dbCommand = dbConnection.CreateCommand())
+                    {
+                        dbCommand.CommandText = commandText;
+                        dbCommand.CommandTimeout = commandTimeout;
+                        dbCommand.CommandType = commandType;
+                        if (commandParameters != null)
+                        {
+                            foreach (DbParameter parm in commandParameters)
+                                dbCommand.Parameters.Add(parm);
+                        }
+                        val = dbCommand.ExecuteNonQuery();
+                        dbConnection.Close();
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                val = -1;
+                throw ex;
+            }
+
+            #region 过期方式
+            //switch (databaseType)
+            //{
+            //    case DatabaseType.SqlServer:
+            //        SqlServerExecuteNonQuery(commandType, commandText, commandTimeout, out val, commandParameters);
+            //        break;
+            //    case DatabaseType.Oracle:
+            //        break;
+            //    case DatabaseType.MySql:
+            //        MySqlExecuteNonQuery(commandType, commandText, commandTimeout, out val, commandParameters);
+            //        break;
+            //    case DatabaseType.Access:
+            //        break;
+            //    default:
+            //        break;
+            //}
+            #endregion
+
             return val;
         }
 
+        #region 过期方式
         /// <summary>
         /// Sql Server具体执行PostData
         /// </summary>
@@ -186,6 +214,7 @@ namespace ApliuDatabase
         /// <param name="commandTimeout"></param>
         /// <param name="val"></param>
         /// <param name="commandParameters"></param>
+        [Obsolete]
         private void SqlServerExecuteNonQuery(CommandType commandType, string commandText, int commandTimeout, out int val, params object[] commandParameters)
         {
             SqlTransaction sqlTransaction = null;
@@ -194,7 +223,7 @@ namespace ApliuDatabase
                 using (SqlConnection sqlConnection = new SqlConnection(databaseConnection))
                 {
                     if (sqlConnection.State != ConnectionState.Open) sqlConnection.Open();
-                    sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    sqlTransaction = sqlConnection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
 
                     using (SqlCommand sqlCommand = new SqlCommand(commandText, sqlConnection))
                     {
@@ -203,7 +232,9 @@ namespace ApliuDatabase
                         sqlCommand.Transaction = sqlTransaction;
                         if (commandParameters != null)
                         {
-                            foreach (SqlParameter parm in commandParameters) sqlCommand.Parameters.Add(parm);
+                            //sqlCommand.Parameters.Clear();
+                            foreach (SqlParameter parm in commandParameters)
+                                sqlCommand.Parameters.Add(parm);
                         }
                         val = sqlCommand.ExecuteNonQuery();
                         if (val >= 0) sqlTransaction.Commit();
@@ -213,7 +244,7 @@ namespace ApliuDatabase
             catch (Exception ex)
             {
                 val = -1;
-                sqlTransaction.Rollback();
+                if (sqlTransaction != null) sqlTransaction.Rollback();
                 throw ex;
             }
         }
@@ -226,6 +257,7 @@ namespace ApliuDatabase
         /// <param name="commandTimeout"></param>
         /// <param name="val"></param>
         /// <param name="commandParameters"></param>
+        [Obsolete]
         private void MySqlExecuteNonQuery(CommandType commandType, string commandText, int commandTimeout, out int val, params object[] commandParameters)
         {
             MySqlTransaction mySqlTransaction = null;
@@ -234,13 +266,14 @@ namespace ApliuDatabase
                 using (MySqlConnection mySqlConnection = new MySqlConnection(databaseConnection))
                 {
                     if (mySqlConnection.State != ConnectionState.Open) mySqlConnection.Open();
-                    mySqlTransaction = mySqlConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    mySqlTransaction = mySqlConnection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                     using (MySqlCommand mySqlCommand = new MySqlCommand(commandText, mySqlConnection, mySqlTransaction))
                     {
                         mySqlCommand.CommandTimeout = commandTimeout;
                         mySqlCommand.CommandType = commandType;
                         if (commandParameters != null)
                         {
+                            //mySqlCommand.Parameters.Clear();
                             foreach (MySqlParameter parm in commandParameters)
                                 mySqlCommand.Parameters.Add(parm);
                         }
@@ -253,11 +286,13 @@ namespace ApliuDatabase
             }
             catch (Exception ex)
             {
-                mySqlTransaction.Rollback();
+                if (mySqlTransaction != null) mySqlTransaction.Rollback();
                 val = -1;
                 throw ex;
             }
         }
+        #endregion
+
         #endregion
 
         #region 执行Transact-SQL语句或存储过程，并返回查询结果
@@ -272,24 +307,56 @@ namespace ApliuDatabase
         public DataSet GetDataExecute(CommandType commandType, string commandText, int commandTimeout, params object[] commandParameters)
         {
             DataSet dsData = null;
-            switch (databaseType)
+            try
             {
-                case DatabaseType.SqlServer:
-                    SqlServerDataAdapter(commandType, commandText, commandTimeout, out dsData, commandParameters);
-                    break;
-                case DatabaseType.Oracle:
-                    break;
-                case DatabaseType.MySql:
-                    MySqlDataAdapter(commandType, commandText, commandTimeout, out dsData, commandParameters);
-                    break;
-                case DatabaseType.Access:
-                    break;
-                default:
-                    break;
+                using (DbConnection dbConnection = CreateDbConnection(databaseConnection))
+                {
+                    if (dbConnection.State != ConnectionState.Open) dbConnection.Open();
+                    using (DbCommand dbCommand = dbConnection.CreateCommand())
+                    {
+                        dbCommand.CommandText = commandText;
+                        dbCommand.CommandTimeout = commandTimeout;
+                        dbCommand.CommandType = commandType;
+                        if (commandParameters != null)
+                        {
+                            //sqlCommand.Parameters.Clear();
+                            foreach (DbParameter parm in commandParameters)
+                                dbCommand.Parameters.Add(parm);
+                        }
+                        DbDataAdapter da = CreateDbDataAdapter(dbCommand);
+                        dsData = new DataSet();
+                        da.Fill(dsData);
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                dsData = null;
+                throw ex;
+            }
+
+            #region 过期方式
+            //switch (databaseType)
+            //{
+            //    case DatabaseType.SqlServer:
+            //        SqlServerDataAdapter(commandType, commandText, commandTimeout, out dsData, commandParameters);
+            //        break;
+            //    case DatabaseType.Oracle:
+            //        break;
+            //    case DatabaseType.MySql:
+            //        MySqlDataAdapter(commandType, commandText, commandTimeout, out dsData, commandParameters);
+            //        break;
+            //    case DatabaseType.Access:
+            //        break;
+            //    default:
+            //        break;
+            //}
+            #endregion
+
             return dsData;
         }
 
+        #region 过期方式
         /// <summary>
         /// Sql Server具体执行GetData
         /// </summary>
@@ -297,6 +364,7 @@ namespace ApliuDatabase
         /// <param name="commandText"></param>
         /// <param name="dsData"></param>
         /// <param name="commandParameters"></param>
+        [Obsolete]
         private void SqlServerDataAdapter(CommandType commandType, string commandText, int commandTimeout, out DataSet dsData, params object[] commandParameters)
         {
             try
@@ -304,7 +372,7 @@ namespace ApliuDatabase
                 using (SqlConnection sqlConnection = new SqlConnection(databaseConnection))
                 {
                     if (sqlConnection.State != ConnectionState.Open) sqlConnection.Open();
-                    SqlTransaction sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    SqlTransaction sqlTransaction = sqlConnection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                     using (SqlCommand sqlCommand = new SqlCommand(commandText, sqlConnection))
                     {
                         sqlCommand.CommandTimeout = commandTimeout;
@@ -312,7 +380,9 @@ namespace ApliuDatabase
                         sqlCommand.Transaction = sqlTransaction;
                         if (commandParameters != null)
                         {
-                            foreach (SqlParameter parm in commandParameters) sqlCommand.Parameters.Add(parm);
+                            //sqlCommand.Parameters.Clear();
+                            foreach (SqlParameter parm in commandParameters)
+                                sqlCommand.Parameters.Add(parm);
                         }
                         SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
 
@@ -335,6 +405,7 @@ namespace ApliuDatabase
         /// <param name="commandText"></param>
         /// <param name="dsData"></param>
         /// <param name="commandParameters"></param>
+        [Obsolete]
         private void MySqlDataAdapter(CommandType commandType, string commandText, int commandTimeout, out DataSet dsData, params object[] commandParameters)
         {
             try
@@ -342,13 +413,14 @@ namespace ApliuDatabase
                 using (MySqlConnection mySqlConnection = new MySqlConnection(databaseConnection))
                 {
                     if (mySqlConnection.State != ConnectionState.Open) mySqlConnection.Open();
-                    MySqlTransaction mySqlTransaction = mySqlConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    MySqlTransaction mySqlTransaction = mySqlConnection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                     using (MySqlCommand mySqlCommand = new MySqlCommand(commandText, mySqlConnection, mySqlTransaction))
                     {
                         mySqlCommand.CommandTimeout = commandTimeout;
                         mySqlCommand.CommandType = commandType;
                         if (commandParameters != null)
                         {
+                            //mySqlCommand.Parameters.Clear();
                             foreach (MySqlParameter parm in commandParameters)
                                 mySqlCommand.Parameters.Add(parm);
                         }
@@ -366,6 +438,94 @@ namespace ApliuDatabase
             }
         }
         #endregion
+
+        #endregion
+
+        /// <summary>
+        /// 初始化数据库链接字符串
+        /// </summary>
+        /// <param name="beginConnectionStr"></param>
+        /// <returns></returns>
+        private String CreateDatabaseConnectionStr(String beginConnectionStr)
+        {
+            String databaseConnectionStr = null;
+            switch (databaseType)
+            {
+                case DatabaseType.SqlServer:
+                case DatabaseType.Oracle:
+                case DatabaseType.MySql:
+                case DatabaseType.Access:
+                    databaseConnectionStr = beginConnectionStr + ";"
+                                    + "Max Pool Size=" + MaxPool + ";"
+                                    + "Min Pool Size=" + MinPool + ";"
+                                    + "Connect Timeout=" + Conn_Timeout + ";"
+                                    + "Connection Lifetime=" + Conn_Lifetime + ";"
+                                    + "Asynchronous Processing=" + Asyn_Process + ";";
+                    break;
+                default:
+                    throw new Exception("数据库类型有误或未初始化 databaseType：" + databaseType.ToString());
+                    break;
+            }
+            return databaseConnectionStr;
+        }
+
+        /// <summary>
+        /// 获取数据库链接
+        /// </summary>
+        /// <param name="databaseConnection"></param>
+        /// <returns></returns>
+        private DbConnection CreateDbConnection(String databaseConnection)
+        {
+            DbConnection dbConnection = null;
+            switch (databaseType)
+            {
+                case DatabaseType.SqlServer:
+                    dbConnection = new SqlConnection(databaseConnection);
+                    break;
+                case DatabaseType.Oracle:
+                    dbConnection = new OracleConnection(databaseConnection);
+                    break;
+                case DatabaseType.MySql:
+                    dbConnection = new MySqlConnection(databaseConnection);
+                    break;
+                case DatabaseType.Access:
+                    dbConnection = new OleDbConnection(databaseConnection);
+                    break;
+                default:
+                    throw new Exception("数据库类型有误或未初始化 databaseType：" + databaseType.ToString());
+                    break;
+            }
+            return dbConnection;
+        }
+
+        /// <summary>
+        /// 获取用于填充 System.Data.DataSet 的对象
+        /// </summary>
+        /// <param name="dbCommand"></param>
+        /// <returns></returns>
+        private DbDataAdapter CreateDbDataAdapter(DbCommand dbCommand)
+        {
+            DbDataAdapter dbDataAdapter = null;
+            switch (databaseType)
+            {
+                case DatabaseType.SqlServer:
+                    dbDataAdapter = new SqlDataAdapter(dbCommand as SqlCommand);
+                    break;
+                case DatabaseType.Oracle:
+                    dbDataAdapter = new OracleDataAdapter(dbCommand as OracleCommand);
+                    break;
+                case DatabaseType.MySql:
+                    dbDataAdapter = new MySqlDataAdapter(dbCommand as MySqlCommand);
+                    break;
+                case DatabaseType.Access:
+                    dbDataAdapter = new OleDbDataAdapter(dbCommand as OleDbCommand);
+                    break;
+                default:
+                    throw new Exception("数据库类型有误或未初始化 databaseType：" + databaseType.ToString());
+                    break;
+            }
+            return dbDataAdapter;
+        }
 
         /// <summary>
         /// Sql初始化参数 MakeParam("@name" , 枚举.VarChar.ToString() , 50 ,value) as SqlParameter
