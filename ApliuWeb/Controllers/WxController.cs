@@ -113,6 +113,7 @@ namespace ApliuWeb.Controllers
             String respContent = "ERROR";
             try
             {
+                respContent = "测试";
                 return respContent;
                 //DataAccess.Instance.TestCeshi();
 
