@@ -16,20 +16,14 @@ namespace ApliuTools
         /// <param name="taskAction">待执行的任务</param>
         /// <param name="paramsObj">任务的参数</param>
         /// <param name="timeSpan">时间间隔</param>
-        /// <param name="callbackAction">执行完成后的回调方法</param>
+        /// <param name="callbackAction">执行完成后的回调方法 返回参数为是否执行成功</param>
         /// <param name="throwException">超时是否抛出异常</param>
         /// <returns></returns>
         public static async Task<EveryType> RunTaskWithTimeoutAsync<EveryType>(Func<Object, EveryType> taskAction, Object paramsObj, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
         {
-            EveryType everyType = RunTaskWithTimeout<EveryType>(taskAction, paramsObj, timeSpan, throwException);
-            if (everyType == null || everyType.Equals(default(EveryType)))
-            {
-                callbackAction.Invoke(false);
-            }
-            else
-            {
-                callbackAction.Invoke(true);
-            }
+            Boolean isCompleted = false;
+            EveryType everyType = RunTaskWithTimeout<EveryType>(taskAction, paramsObj, timeSpan, throwException, out isCompleted);
+            callbackAction.Invoke(isCompleted);
             return everyType;
         }
 
@@ -41,9 +35,11 @@ namespace ApliuTools
         /// <param name="paramsObj">任务的参数</param>
         /// <param name="timeSpan">时间间隔</param>
         /// <param name="throwException">超时是否抛出异常</param>
+        /// <param name="isCompleted">是否执行成功</param>
         /// <returns></returns>
-        public static EveryType RunTaskWithTimeout<EveryType>(Func<Object, EveryType> taskAction, Object paramsObj, TimeSpan timeSpan, Boolean throwException)
+        public static EveryType RunTaskWithTimeout<EveryType>(Func<Object, EveryType> taskAction, Object paramsObj, TimeSpan timeSpan, Boolean throwException, out Boolean isCompleted)
         {
+            isCompleted = false;
             try
             {
                 if (taskAction == null) return default(EveryType);
@@ -53,10 +49,10 @@ namespace ApliuTools
                 CancellationToken cancellationToken = cancellationTokenSource.Token;
 
                 Task<EveryType> backgroundTask = Task.Factory.StartNew(taskAction, paramsObj, cancellationToken);
-                Boolean IsCompleted = backgroundTask.Wait(timeSpan);
+                isCompleted = backgroundTask.Wait(timeSpan);
 
                 //是否执行完成
-                if (IsCompleted)
+                if (isCompleted)
                 {
                     EveryType everyType = backgroundTask.Result;
                     return everyType;
@@ -64,20 +60,9 @@ namespace ApliuTools
                 else
                 {
                     cancellationTokenSource.Cancel();
-                    try
-                    {
-                        cancellationToken.ThrowIfCancellationRequested();
-                    }
-                    catch (Exception exCancel)
-                    {
-                    }
-                    if (throwException) throw new Exception(taskAction.Method.ToString() + " 任务执行超时");
+                    //cancellationToken.ThrowIfCancellationRequested();//仅当取消之后执行该操作，才会backgroundTask.IsCanceled是True
 
-                    //是否取消任务
-                    if (backgroundTask.IsCanceled)
-                    {
-                        //Console.WriteLine("任务取消 : " + DateTime.Now.ToLongTimeString());
-                    }
+                    if (throwException) throw new Exception(taskAction.Method.ToString() + " 任务执行超时");
 
                     return default(EveryType);
                 }
@@ -97,7 +82,7 @@ namespace ApliuTools
         /// <param name="taskAction">待执行的任务</param>
         /// <param name="paramsObj">任务的参数</param>
         /// <param name="timeSpan">时间间隔</param>
-        /// <param name="callbackAction">执行完成后的回调方法</param>
+        /// <param name="callbackAction">执行完成后的回调方法 返回参数为是否执行成功</param>
         /// <param name="throwException">超时是否抛出异常</param>
         /// <returns></returns>
         public static async void RunTaskWithTimeoutAsync(Action taskAction, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
@@ -131,24 +116,12 @@ namespace ApliuTools
                 if (!IsCompleted)
                 {
                     cancellationTokenSource.Cancel();
-                    try
-                    {
-                        cancellationToken.ThrowIfCancellationRequested();
-                    }
-                    catch (Exception exCancel)
-                    {
-                    }
+                    //cancellationToken.ThrowIfCancellationRequested();//仅当取消之后执行该操作，才会backgroundTask.IsCanceled是True
+
                     if (throwException)
                     {
                         throw new Exception(taskAction.Method.ToString() + " 任务执行超时");
                     }
-                    //Console.WriteLine(taskAction.Method.ToString() + " 任务执行超时");
-                }
-
-                //是否取消任务
-                if (backgroundTask.IsCanceled)
-                {
-                    //Console.WriteLine("任务取消 : " + DateTime.Now.ToLongTimeString());
                 }
             }
             catch (Exception ex)
@@ -159,13 +132,77 @@ namespace ApliuTools
         }
 
         /// <summary>
+        /// 以指定的时间 异步 执行有一个参数且有返回值的任务, 时间到达后, 完成或超时则返回结果（任务停止执行）
+        /// </summary>
+        /// <typeparam name="EveryType">返回结果类型</typeparam>
+        /// <param name="taskAction">待执行的任务</param>
+        /// <param name="paramsObj">任务的参数</param>
+        /// <param name="timeSpan">时间间隔</param>
+        /// <param name="callbackAction">执行完成后的回调方法 返回参数为是否执行成功</param>
+        /// <param name="throwException">超时是否抛出异常</param>
+        /// <returns></returns>
+        public static async Task<EveryType> RunThreadWithTimeoutAsync<EveryType>(Func<Object, EveryType> taskAction, Object paramsObj, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
+        {
+            Boolean isCompleted = false;
+            EveryType everyType = RunThreadWithTimeout<EveryType>(taskAction, paramsObj, timeSpan, throwException, out isCompleted);
+            callbackAction.Invoke(isCompleted);
+            return everyType;
+        }
+
+        /// <summary>
+        /// 以指定的时间 同步 执行有一个参数且有返回值的任务, 时间到达后, 完成或超时则返回结果（任务停止执行）
+        /// </summary>
+        /// <typeparam name="EveryType">返回结果类型</typeparam>
+        /// <param name="taskAction">待执行的任务</param>
+        /// <param name="paramsObj">任务的参数</param>
+        /// <param name="timeSpan">时间间隔</param>
+        /// <param name="throwException">超时是否抛出异常</param>
+        /// <param name="isCompleted">是否执行成功</param>
+        /// <returns></returns>
+        public static EveryType RunThreadWithTimeout<EveryType>(Func<Object, EveryType> taskAction, Object paramsObj, TimeSpan timeSpan, Boolean throwException, out Boolean isCompleted)
+        {
+            isCompleted = false;
+            try
+            {
+                if (taskAction == null) return default(EveryType);
+                if (timeSpan == null) timeSpan = TimeSpan.FromSeconds(0);
+
+                ThreadResult<EveryType> threadParams = new ThreadResult<EveryType>(taskAction, paramsObj);
+                Thread thread = new Thread(new ThreadStart(threadParams.RunThread));
+                thread.IsBackground = true;
+                thread.Start();
+                Thread.Sleep(timeSpan);
+                isCompleted = !thread.IsAlive;
+                thread.Abort();
+
+                //是否执行完成
+                if (isCompleted)
+                {
+                    EveryType everyType = threadParams.Result;
+                    return everyType;
+                }
+                else
+                {
+                    if (throwException) throw new Exception(taskAction.Method.ToString() + " 任务执行超时");
+                    return default(EveryType);
+                }
+            }
+            catch (Exception ex)
+            {
+                //发生异常
+                if (throwException) throw ex;
+                return default(EveryType);
+            }
+        }
+
+        /// <summary>
         /// 以指定的时间 异步 执行任务, 时间到达后, 完成或超时则返回结果（任务停止执行）
         /// </summary>
         /// <typeparam name="EveryType">返回结果类型</typeparam>
         /// <param name="taskAction">待执行的任务</param>
         /// <param name="paramsObj">任务的参数</param>
         /// <param name="timeSpan">时间间隔</param>
-        /// <param name="callbackAction">执行完成后的回调方法</param>
+        /// <param name="callbackAction">执行完成后的回调方法 返回参数为是否执行成功</param>
         /// <param name="throwException">超时是否抛出异常</param>
         /// <returns></returns>
         public static async void RunThreadWithTimeoutAsync(Action taskAction, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)

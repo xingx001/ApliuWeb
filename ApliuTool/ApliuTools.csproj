@@ -70,6 +70,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SMSMessage.cs" />
+    <Compile Include="ThreadResult.cs" />
     <Compile Include="TimeHelper.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="WebTools\HttpContextRequest.cs" />
