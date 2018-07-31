@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataConvert.cs" />
+    <Compile Include="FunctionHelper.cs" />
     <Compile Include="JsonHelper.cs" />
     <Compile Include="Logger.cs">
       <SubType>Code</SubType>
@@ -71,14 +72,14 @@
     <Compile Include="SMSMessage.cs" />
     <Compile Include="TimeHelper.cs" />
     <Compile Include="Translate.cs" />
-    <Compile Include="Web\HttpContextRequest.cs" />
-    <Compile Include="Web\HttpRequestHelper.cs" />
-    <Compile Include="Web\HYRequest.cs" />
-    <Compile Include="Web\ResponseMessage.cs" />
-    <Compile Include="Web\ServerInfo.cs" />
-    <Compile Include="Web\Thumbnail.cs" />
-    <Compile Include="Web\UrlRewriter.cs" />
-    <Compile Include="Web\WebServiceHelper.cs" />
+    <Compile Include="WebTools\HttpContextRequest.cs" />
+    <Compile Include="WebTools\HttpRequestHelper.cs" />
+    <Compile Include="WebTools\HYRequest.cs" />
+    <Compile Include="WebTools\ResponseMessage.cs" />
+    <Compile Include="WebTools\ServerInfo.cs" />
+    <Compile Include="WebTools\Thumbnail.cs" />
+    <Compile Include="WebTools\UrlRewriter.cs" />
+    <Compile Include="WebTools\WebServiceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ApliuDatabase\ApliuDatabase.csproj">
