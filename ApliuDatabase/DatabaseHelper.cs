@@ -9,6 +9,8 @@ using MySql.Data.MySqlClient;
 using System.Data.Common;
 using System.Transactions;
 using System.Data.OracleClient;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ApliuDatabase
 {
@@ -116,9 +118,12 @@ namespace ApliuDatabase
             TransactionOptions transactionOption = new TransactionOptions();
             //设置事务隔离级别
             transactionOption.IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
-            // 设置事务超时时间为120秒 
+            // 设置事务超时时间
             transactionOption.Timeout = new TimeSpan(0, 0, seconds);
             transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOption);
+            
+            //当时间超过之后，主动注销该事务
+            Task.Factory.StartNew(() => { Thread.Sleep(seconds * 1000); Dispose(); });
         }
 
         /// <summary>
