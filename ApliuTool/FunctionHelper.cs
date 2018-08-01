@@ -22,7 +22,8 @@ namespace ApliuTools
         public static async Task<EveryType> RunTaskWithTimeoutAsync<EveryType>(Func<Object, EveryType> taskAction, Object paramsObj, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
         {
             Boolean isCompleted = false;
-            EveryType everyType = RunTaskWithTimeout<EveryType>(taskAction, paramsObj, timeSpan, throwException, out isCompleted);
+            Task<EveryType> backgroundTask = Task.Factory.StartNew<EveryType>(() => { return RunTaskWithTimeout<EveryType>(taskAction, paramsObj, timeSpan, throwException, out isCompleted); });
+            EveryType everyType = await backgroundTask.ConfigureAwait(false);
             callbackAction.Invoke(isCompleted);
             return everyType;
         }
@@ -40,39 +41,36 @@ namespace ApliuTools
         public static EveryType RunTaskWithTimeout<EveryType>(Func<Object, EveryType> taskAction, Object paramsObj, TimeSpan timeSpan, Boolean throwException, out Boolean isCompleted)
         {
             isCompleted = false;
-            try
+            EveryType everyType = default(EveryType);
+            if (taskAction != null && timeSpan != null)
             {
-                if (taskAction == null) return default(EveryType);
-                if (timeSpan == null) timeSpan = TimeSpan.FromSeconds(0);
-
-                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                CancellationToken cancellationToken = cancellationTokenSource.Token;
-
-                Task<EveryType> backgroundTask = Task.Factory.StartNew(taskAction, paramsObj, cancellationToken);
-                isCompleted = backgroundTask.Wait(timeSpan);
-
-                //是否执行完成
-                if (isCompleted)
+                try
                 {
-                    EveryType everyType = backgroundTask.Result;
-                    return everyType;
+                    CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                    CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                    Task<EveryType> backgroundTask = Task.Factory.StartNew(taskAction, paramsObj, cancellationToken);
+                    isCompleted = backgroundTask.Wait(timeSpan);
+
+                    //是否执行完成
+                    if (isCompleted)
+                    {
+                        everyType = backgroundTask.Result;
+                    }
+                    else
+                    {
+                        cancellationTokenSource.Cancel();
+                        //cancellationToken.ThrowIfCancellationRequested();//仅当取消之后执行该操作，才会backgroundTask.IsCanceled是True
+
+                        if (throwException) throw new Exception(taskAction.Method.ToString() + " 任务执行超时");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    cancellationTokenSource.Cancel();
-                    //cancellationToken.ThrowIfCancellationRequested();//仅当取消之后执行该操作，才会backgroundTask.IsCanceled是True
-
-                    if (throwException) throw new Exception(taskAction.Method.ToString() + " 任务执行超时");
-
-                    return default(EveryType);
+                    if (throwException) throw ex;
                 }
             }
-            catch (Exception ex)
-            {
-                //发生异常
-                if (throwException) throw ex;
-                return default(EveryType);
-            }
+            return everyType;
         }
 
         /// <summary>
@@ -85,10 +83,11 @@ namespace ApliuTools
         /// <param name="callbackAction">执行完成后的回调方法 返回参数为是否执行成功</param>
         /// <param name="throwException">超时是否抛出异常</param>
         /// <returns></returns>
-        public static async void RunTaskWithTimeoutAsync(Action taskAction, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
+        public static async Task RunTaskWithTimeoutAsync(Action taskAction, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
         {
-            Boolean IsCompleted = RunTaskWithTimeout(taskAction, timeSpan, throwException);
-            callbackAction.Invoke(IsCompleted);
+            Task<Boolean> backgroundTask = Task.Factory.StartNew<Boolean>(() => { return RunTaskWithTimeout(taskAction, timeSpan, throwException); });
+            Boolean isCompleted = await backgroundTask.ConfigureAwait(false);
+            callbackAction.Invoke(isCompleted);
         }
 
         /// <summary>
@@ -100,35 +99,32 @@ namespace ApliuTools
         /// <returns>是否正常执行完成</returns>
         public static Boolean RunTaskWithTimeout(Action taskAction, TimeSpan timeSpan, Boolean throwException)
         {
-            bool IsCompleted = false;
-            try
+            bool isCompleted = false;
+            if (taskAction != null && timeSpan != null)
             {
-                if (taskAction == null) return IsCompleted;
-                if (timeSpan == null) timeSpan = TimeSpan.FromSeconds(0);
-
-                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                CancellationToken cancellationToken = cancellationTokenSource.Token;
-
-                Task backgroundTask = Task.Factory.StartNew(taskAction, cancellationToken);
-                IsCompleted = backgroundTask.Wait(timeSpan);
-
-                //是否执行完成
-                if (!IsCompleted)
+                try
                 {
-                    cancellationTokenSource.Cancel();
-                    //cancellationToken.ThrowIfCancellationRequested();//仅当取消之后执行该操作，才会backgroundTask.IsCanceled是True
+                    CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                    CancellationToken cancellationToken = cancellationTokenSource.Token;
 
-                    if (throwException)
+                    Task backgroundTask = Task.Factory.StartNew(taskAction, cancellationToken);
+                    isCompleted = backgroundTask.Wait(timeSpan);
+
+                    //是否执行完成
+                    if (!isCompleted)
                     {
-                        throw new Exception(taskAction.Method.ToString() + " 任务执行超时");
+                        cancellationTokenSource.Cancel();
+                        //cancellationToken.ThrowIfCancellationRequested();//仅当取消之后执行该操作，才会backgroundTask.IsCanceled是True
+
+                        if (throwException) throw new Exception(taskAction.Method.ToString() + " 任务执行超时");
                     }
                 }
+                catch (Exception ex)
+                {
+                    if (throwException) throw ex;
+                }
             }
-            catch (Exception ex)
-            {
-                if (throwException) throw ex;
-            }
-            return IsCompleted;
+            return isCompleted;
         }
 
         /// <summary>
@@ -144,7 +140,8 @@ namespace ApliuTools
         public static async Task<EveryType> RunThreadWithTimeoutAsync<EveryType>(Func<Object, EveryType> taskAction, Object paramsObj, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
         {
             Boolean isCompleted = false;
-            EveryType everyType = RunThreadWithTimeout<EveryType>(taskAction, paramsObj, timeSpan, throwException, out isCompleted);
+            Task<EveryType> backgroundTask = Task.Factory.StartNew<EveryType>(() => { return FunctionHelper.RunThreadWithTimeout(taskAction, paramsObj, timeSpan, throwException, out isCompleted); });
+            EveryType everyType = await backgroundTask.ConfigureAwait(false);
             callbackAction.Invoke(isCompleted);
             return everyType;
         }
@@ -162,37 +159,29 @@ namespace ApliuTools
         public static EveryType RunThreadWithTimeout<EveryType>(Func<Object, EveryType> taskAction, Object paramsObj, TimeSpan timeSpan, Boolean throwException, out Boolean isCompleted)
         {
             isCompleted = false;
-            try
+            EveryType everyType = default(EveryType);
+            if (taskAction != null && timeSpan != null)
             {
-                if (taskAction == null) return default(EveryType);
-                if (timeSpan == null) timeSpan = TimeSpan.FromSeconds(0);
-
-                ThreadResult<EveryType> threadParams = new ThreadResult<EveryType>(taskAction, paramsObj);
-                Thread thread = new Thread(new ThreadStart(threadParams.RunThread));
-                thread.IsBackground = true;
-                thread.Start();
-                Thread.Sleep(timeSpan);
-                isCompleted = !thread.IsAlive;
-                thread.Abort();
-
-                //是否执行完成
-                if (isCompleted)
+                try
                 {
-                    EveryType everyType = threadParams.Result;
-                    return everyType;
+                    Thread thread = new Thread(() => { everyType = taskAction.Invoke(paramsObj); });
+                    thread.IsBackground = true;
+                    thread.Start();
+                    isCompleted = thread.Join(timeSpan);
+                    thread.Abort();
+
+                    //是否执行完成
+                    if (!isCompleted)
+                    {
+                        if (throwException) throw new Exception(taskAction.Method.ToString() + " 任务执行超时");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    if (throwException) throw new Exception(taskAction.Method.ToString() + " 任务执行超时");
-                    return default(EveryType);
+                    if (throwException) throw ex;
                 }
             }
-            catch (Exception ex)
-            {
-                //发生异常
-                if (throwException) throw ex;
-                return default(EveryType);
-            }
+            return everyType;
         }
 
         /// <summary>
@@ -205,10 +194,11 @@ namespace ApliuTools
         /// <param name="callbackAction">执行完成后的回调方法 返回参数为是否执行成功</param>
         /// <param name="throwException">超时是否抛出异常</param>
         /// <returns></returns>
-        public static async void RunThreadWithTimeoutAsync(Action taskAction, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
+        public static async Task RunThreadWithTimeoutAsync(Action taskAction, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
         {
-            Boolean IsCompleted = RunThreadWithTimeout(taskAction, timeSpan, throwException);
-            callbackAction.Invoke(IsCompleted);
+            Task<Boolean> backgroundTask = Task.Factory.StartNew<Boolean>(() => { return FunctionHelper.RunThreadWithTimeout(taskAction, timeSpan, throwException); });
+            Boolean isCompleted = await backgroundTask.ConfigureAwait(false);
+            callbackAction.Invoke(isCompleted);
         }
 
         /// <summary>
@@ -220,24 +210,23 @@ namespace ApliuTools
         /// <returns>是否正常执行完成</returns>
         public static Boolean RunThreadWithTimeout(Action taskAction, TimeSpan timeSpan, Boolean throwException)
         {
-            bool IsCompleted = false;
-            try
+            bool isCompleted = false;
+            if (taskAction != null && timeSpan != null)
             {
-                if (taskAction == null) return IsCompleted;
-                if (timeSpan == null) timeSpan = TimeSpan.FromSeconds(0);
-
-                Thread thread = new Thread(new ThreadStart(taskAction));
-                thread.IsBackground = true;
-                thread.Start();
-                Thread.Sleep(timeSpan);
-                IsCompleted = !thread.IsAlive;
-                thread.Abort();
+                try
+                {
+                    Thread thread = new Thread(new ThreadStart(taskAction));
+                    thread.IsBackground = true;
+                    thread.Start();
+                    isCompleted = thread.Join(timeSpan);
+                    thread.Abort();
+                }
+                catch (Exception ex)
+                {
+                    if (throwException) throw ex;
+                }
             }
-            catch (Exception ex)
-            {
-                if (throwException) throw ex;
-            }
-            return IsCompleted;
+            return isCompleted;
         }
 
         /// <summary>
@@ -251,23 +240,21 @@ namespace ApliuTools
         /// <returns></returns>
         public static async Task RunTaskTimingAsync(Action<Object> action, Object paramsObj, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
         {
-            bool IsCompleted = false;
-            if (action == null)
+            bool isCompleted = false;
+            if (action != null)
             {
-                return;
+                try
+                {
+                    if (timeSpan != null) await Task.Delay(timeSpan);
+                    action.Invoke(paramsObj);
+                    isCompleted = true;
+                }
+                catch (Exception ex)
+                {
+                    if (throwException) throw ex;
+                }
             }
-
-            try
-            {
-                if (timeSpan != null) await Task.Delay(timeSpan);
-                action.Invoke(paramsObj);
-                IsCompleted = true;
-            }
-            catch (Exception ex)
-            {
-                if (throwException) throw ex;
-            }
-            if (callbackAction != null) callbackAction.Invoke(IsCompleted);
+            if (callbackAction != null) callbackAction.Invoke(isCompleted);
         }
 
         /// <summary>
@@ -280,23 +267,21 @@ namespace ApliuTools
         /// <returns></returns>
         public static async Task RunTaskTimingAsync(Action action, TimeSpan timeSpan, Action<Boolean> callbackAction, Boolean throwException)
         {
-            bool IsCompleted = false;
-            if (action == null)
+            bool isCompleted = false;
+            if (action != null)
             {
-                return;
+                try
+                {
+                    if (timeSpan != null) await Task.Delay(timeSpan);
+                    action.Invoke();
+                    isCompleted = true;
+                }
+                catch (Exception ex)
+                {
+                    if (throwException) throw ex;
+                }
             }
-
-            try
-            {
-                if (timeSpan != null) await Task.Delay(timeSpan);
-                action.Invoke();
-                IsCompleted = true;
-            }
-            catch (Exception ex)
-            {
-                if (throwException) throw ex;
-            }
-            if (callbackAction != null) callbackAction.Invoke(IsCompleted);
+            if (callbackAction != null) callbackAction.Invoke(isCompleted);
         }
     }
 }

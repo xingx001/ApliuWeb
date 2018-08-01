@@ -47,11 +47,6 @@ namespace ApliuWeb
         /// </summary>
         private DatabaseHelper dbHelper = new DatabaseHelper();
 
-        /// <summary>
-        /// 无参构造函数
-        /// </summary>
-        public DataAccess() { }
-
         public DataAccess(string databaseType, string databaseConnection)
         {
             this.dbHelper.databaseType = (DatabaseType)Enum.Parse(typeof(DatabaseType), databaseType);
@@ -67,9 +62,7 @@ namespace ApliuWeb
             {
                 if (!_Instance.ContainsKey(instanceKey))
                 {
-                    DataAccess dataAccess = new DataAccess();
-                    dataAccess.dbHelper.databaseType = (DatabaseType)Enum.Parse(typeof(DatabaseType), databaseType);
-                    dataAccess.dbHelper.databaseConnection = databaseConnection;
+                    DataAccess dataAccess = new DataAccess(databaseType, databaseConnection);
                     //dataAccess.dbHelper.InitializtionConnection();
                     _Instance.Add(instanceKey, dataAccess);
                 }
@@ -110,7 +103,7 @@ namespace ApliuWeb
         {
             string guid = Guid.NewGuid().ToString().ToLower();
             string sql = "insert into Test values(@name1,@name2,@name3);";
-            SqlParameter[] myprams = { 
+            SqlParameter[] myprams = {
                         MakeParam("@name1" , SqlDbType.VarChar.ToString() , 50 ,guid) as SqlParameter ,
                         MakeParam("@name2" , SqlDbType.VarChar.ToString() , 50 ,"CeshiPrams") as SqlParameter,
                         MakeParam("@name3" , SqlDbType.VarChar.ToString() , 50 ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) as SqlParameter
