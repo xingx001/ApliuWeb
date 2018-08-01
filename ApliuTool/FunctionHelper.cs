@@ -42,7 +42,7 @@ namespace ApliuTools
         {
             isCompleted = false;
             EveryType everyType = default(EveryType);
-            if (taskAction != null && timeSpan != null)
+            if (taskAction != null && timeSpan != null && timeSpan.TotalSeconds > 0)
             {
                 try
                 {
@@ -100,7 +100,7 @@ namespace ApliuTools
         public static Boolean RunTaskWithTimeout(Action taskAction, TimeSpan timeSpan, Boolean throwException)
         {
             bool isCompleted = false;
-            if (taskAction != null && timeSpan != null)
+            if (taskAction != null && timeSpan != null && timeSpan.TotalSeconds > 0)
             {
                 try
                 {
@@ -160,7 +160,7 @@ namespace ApliuTools
         {
             isCompleted = false;
             EveryType everyType = default(EveryType);
-            if (taskAction != null && timeSpan != null)
+            if (taskAction != null && timeSpan != null && timeSpan.TotalSeconds > 0)
             {
                 try
                 {
@@ -211,7 +211,7 @@ namespace ApliuTools
         public static Boolean RunThreadWithTimeout(Action taskAction, TimeSpan timeSpan, Boolean throwException)
         {
             bool isCompleted = false;
-            if (taskAction != null && timeSpan != null)
+            if (taskAction != null && timeSpan != null && timeSpan.TotalSeconds > 0)
             {
                 try
                 {
@@ -245,7 +245,7 @@ namespace ApliuTools
             {
                 try
                 {
-                    if (timeSpan != null) await Task.Delay(timeSpan);
+                    if (timeSpan != null && timeSpan.TotalSeconds > 0) await Task.Delay(timeSpan);
                     action.Invoke(paramsObj);
                     isCompleted = true;
                 }
@@ -272,7 +272,7 @@ namespace ApliuTools
             {
                 try
                 {
-                    if (timeSpan != null) await Task.Delay(timeSpan);
+                    if (timeSpan != null && timeSpan.TotalSeconds > 0) await Task.Delay(timeSpan);
                     action.Invoke();
                     isCompleted = true;
                 }
@@ -282,6 +282,59 @@ namespace ApliuTools
                 }
             }
             if (callbackAction != null) callbackAction.Invoke(isCompleted);
+        }
+
+        /// <summary>
+        /// 定时重复异步执行指定任务 如需同步执行请再函数后面加上 .wait()，同步等待必须设置endTime
+        /// </summary>
+        /// <param name="action">待执行的任务</param>
+        /// <param name="paramsObj">任务参数</param>
+        /// <param name="dueTime">首次执行时间，0s则立刻执行，小于0s则首次不执行等待间隔后再执行</param>
+        /// <param name="period">间隔执行时间，必须大于0s</param>
+        /// <param name="endTime">结束任务时间，任务运行时间），0s则永不执行，小于0s则永不停止</param>
+        /// <param name="throwException">是否抛出异常</param>
+        /// <returns></returns>
+        public static async Task RunTimerAsync(Action<Object> action, Object paramsObj, TimeSpan dueTime, TimeSpan period, TimeSpan endTime, Boolean throwException)
+        {
+            if (action != null && period != null && period.TotalSeconds > 0 && endTime.TotalSeconds != 0)
+            {
+                try
+                {
+                    if (dueTime == null || dueTime.TotalSeconds < 0) dueTime = period;
+                    System.Threading.Timer timer = new System.Threading.Timer((objNull) => { action.Invoke(paramsObj); }, null, dueTime, period);
+                    if (endTime.TotalSeconds > 0) await RunTaskTimingAsync(() => { timer.Dispose(); }, endTime, null, throwException);
+                }
+                catch (Exception ex)
+                {
+                    if (throwException) throw ex;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 定时重复异步执行指定任务 如需同步执行请再函数后面加上 .wait()，同步等待必须设置 endTime
+        /// </summary>
+        /// <param name="action">待执行的任务</param>
+        /// <param name="dueTime">首次执行时间，0s则立刻执行，小于0s则首次不执行等待间隔后再执行</param>
+        /// <param name="period">间隔执行时间，必须大于0s</param>
+        /// <param name="endTime">结束任务时间，任务运行时间），0s则永不执行，小于0s则永不停止</param>
+        /// <param name="throwException">是否抛出异常</param>
+        /// <returns></returns>
+        public static async Task RunTimerAsync(Action action, TimeSpan dueTime, TimeSpan period, TimeSpan endTime, Boolean throwException)
+        {
+            if (action != null && period != null && period.TotalSeconds > 0 && endTime.TotalSeconds != 0)
+            {
+                try
+                {
+                    if (dueTime == null || dueTime.TotalSeconds < 0) dueTime = period;
+                    System.Threading.Timer timer = new System.Threading.Timer((objNull) => { action.Invoke(); }, null, dueTime, period);
+                    if (endTime.TotalSeconds > 0) await RunTaskTimingAsync(() => { timer.Dispose(); }, endTime, null, throwException);
+                }
+                catch (Exception ex)
+                {
+                    if (throwException) throw ex;
+                }
+            }
         }
     }
 }
