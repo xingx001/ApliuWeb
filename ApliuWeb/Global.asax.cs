@@ -1,5 +1,5 @@
 ﻿using ApliuTools;
-using ApliuWeb.WeChart;
+using ApliuWeb.WeChat;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,0 +1,60 @@
+﻿@{
+    Layout = "~/Views/Shared/Templet.cshtml";
+    ViewBag.Title = "微信登陆";
+}
+
+<script src="/Scripts/jquery.signalR-2.3.0.min.js"></script>
+<script src="/signalr/hubs"></script>
+
+<script>
+    $(document).ready(function () {
+        var srcapi = "/api/wx/getwxloginqrcode?random" + Math.random();
+        //$("#wxloginqrcode").attr("src", srcapi);
+
+        //引用自动生成的集线器代理
+        var chat = $.connection.serverHub;
+        //定义服务器调用的客户端sendMessage来显示新消息
+        chat.client.sendMessage = function (time,thread,ip, message) {
+            //向页面添加消息
+            $("#messageBox").val($("#messageBox").val() + "\r\n Time: " + time + "; Thread: " + thread + "; IP: " + ip + "; Message: " + message);
+            //$("#messageBox").append('<li><strong style="color:green">' + htmlEncode(name) + '</strong>:' + htmlEncode(message) + '</li>');
+        }
+        //设置焦点到输入框
+        $('#message').focus();
+        //开始连接服务器
+        $.connection.hub.start().done(function () {
+            $('#sendmessage').click(function () {
+                //调用服务器端集线器的Send方法
+                chat.server.sendMsg($('#message').val());
+                //清空输入框信息并获取焦点
+                $("#message").val('').focus();
+            })
+        })
+    });
+
+    //为显示的消息进行html编码
+    function htmlEncode(value) {
+        var encodeValue = $('<div />').text(value).html();
+        return encodeValue;
+    }
+</script>
+
+<div style="text-align: center; padding: 20px;">
+    <img id="wxloginqrcode" height="300" src="/images/logo/logosqu.png" />
+</div>
+
+<div class="container">
+    <div style="margin-top: 10px; text-align: center;">
+        <textarea id="message" class="qrcodecontentinput" placeholder="请输入消息内容"></textarea>
+        <input id="sendmessage" class="qrcodebutton" type="button" value="发送消息" />
+    </div>
+    <div style="text-align: center; padding: 20px;">
+        <textarea id="messageBox" class="qrcodecontentinput" placeholder="接收到的内容"></textarea>
+        <img id="qrcodeimg" height="300" src="/images/logo/logosqu.png" />
+    </div>
+</div>
+<div style="text-align: center; line-height: 50px; padding-top: 50px;">
+    <div><a href="/" class="loginwelcome">返回主页</a></div>
+</div>
+
+

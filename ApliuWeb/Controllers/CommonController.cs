@@ -180,7 +180,7 @@ namespace ApliuWeb.Controllers
         }
 
         [HttpGet]
-        public string User()
+        public new string User()
         {
             ResponseMessage result = new ResponseMessage();
             result.code = "-1";

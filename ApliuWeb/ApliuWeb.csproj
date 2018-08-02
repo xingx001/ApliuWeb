@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,10 +41,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.3.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.3.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Bin\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -122,6 +141,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\HubStartup.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Config\SiteConfig.cs" />
@@ -137,11 +157,12 @@
     <Compile Include="Controllers\ToolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Controllers\WeChartController.cs" />
+    <Compile Include="Controllers\WeChatController.cs" />
     <Compile Include="Controllers\WxController.cs" />
     <Compile Include="Models\Common.cs" />
     <Compile Include="Models\DataAccess.cs" />
     <Compile Include="Models\HttpContextRequest.cs" />
+    <Compile Include="Models\ServerHub.cs" />
     <Compile Include="Models\SessionHelper.cs" />
     <Compile Include="Models\Tencent\Cryptography.cs">
       <SubType>Code</SubType>
@@ -155,12 +176,12 @@
     </Compile>
     <Compile Include="Models\VerificationCode.cs" />
     <Compile Include="Models\Tencent\Sample.cs" />
-    <Compile Include="Models\WeChart\WeChartBase.cs" />
-    <Compile Include="Models\WeChart\WxDefaultMenu.cs" />
-    <Compile Include="Models\WeChart\WxJSSDKHelper.cs" />
-    <Compile Include="Models\WeChart\WxMessageHelp.cs" />
-    <Compile Include="Models\WeChart\WxTokenManager.cs" />
-    <Compile Include="Models\WeChart\WxOpenId.cs" />
+    <Compile Include="Models\WeChat\WeChatBase.cs" />
+    <Compile Include="Models\WeChat\WxDefaultMenu.cs" />
+    <Compile Include="Models\WeChat\WxJSSDKHelper.cs" />
+    <Compile Include="Models\WeChat\WxMessageHelp.cs" />
+    <Compile Include="Models\WeChat\WxTokenManager.cs" />
+    <Compile Include="Models\WeChat\WxOpenId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +307,40 @@
     <Content Include="Earliest\js\underscore.min.js" />
     <Content Include="Earliest\js\zepto.min.js" />
     <Content Include="Earliest\ListNavi\index.html" />
+    <Content Include="Earliest\OrderInfo\css\base2013.css" />
+    <Content Include="Earliest\OrderInfo\css\header%281%29.css" />
+    <Content Include="Earliest\OrderInfo\css\header.css" />
+    <Content Include="Earliest\OrderInfo\css\order2014.src.css" />
+    <Content Include="Earliest\OrderInfo\images\556671a1Ne5e7c6c7.jpg" />
+    <Content Include="Earliest\OrderInfo\images\jd-sprites_v=12.png" />
+    <Content Include="Earliest\OrderInfo\index.html" />
+    <Content Include="Earliest\OrderInfo\js\downloadAppPlugIn.js" />
+    <Content Include="Earliest\OrderInfo\js\jquery-1.6.2.min.js" />
+    <Content Include="Earliest\OrderInfo\js\ojbUrl.js" />
+    <Content Include="Earliest\OrderInfo\js\pingJS.1.0.js" />
+    <Content Include="Earliest\OrderInfo\js\spin.min.js" />
+    <Content Include="Earliest\OrderList\css\order.css" />
+    <Content Include="Earliest\OrderList\images\20072506-1_h.jpg" />
+    <Content Include="Earliest\OrderList\images\22804843-1_h.jpg" />
+    <Content Include="Earliest\OrderList\images\23206988-1_h.jpg" />
+    <Content Include="Earliest\OrderList\images\23219923-1_h.jpg" />
+    <Content Include="Earliest\OrderList\images\23414913-1_h.jpg" />
+    <Content Include="Earliest\OrderList\images\23437206-1_h.jpg" />
+    <Content Include="Earliest\OrderList\images\black_triangel.gif" />
+    <Content Include="Earliest\OrderList\images\c_back_btn.png" />
+    <Content Include="Earliest\OrderList\images\c_cancle.png" />
+    <Content Include="Earliest\OrderList\images\c_checkbox_on.png" />
+    <Content Include="Earliest\OrderList\images\filter.png" />
+    <Content Include="Earliest\OrderList\images\order_search_btn.png" />
+    <Content Include="Earliest\OrderList\images\search_icon.png" />
+    <Content Include="Earliest\OrderList\images\shop_icon.png" />
+    <Content Include="Earliest\OrderList\index.html" />
+    <Content Include="Earliest\OrderList\js\event.js" />
+    <Content Include="Earliest\OrderList\js\fx.js" />
+    <Content Include="Earliest\OrderList\js\fx_methods.js" />
+    <Content Include="Earliest\OrderList\js\js_tracker.js" />
+    <Content Include="Earliest\OrderList\js\order.js" />
+    <Content Include="Earliest\OrderList\js\zepto.min.js" />
     <Content Include="Earliest\PersCenter\css\base2013.css" />
     <Content Include="Earliest\PersCenter\css\guessing.css" />
     <Content Include="Earliest\PersCenter\css\header.css" />
@@ -339,123 +394,89 @@
     <Content Include="Earliest\ListNavi\js\html5\spin.min.js" />
     <Content Include="Earliest\ListNavi\js\jquery-1.6.2.min.js" />
     <Content Include="Earliest\ListNavi\js\zepto.min.js" />
-    <Content Include="Earliest\产品列表\css\app.css" />
-    <Content Include="Earliest\产品列表\images\1012542452-1_h_1.jpg" />
-    <Content Include="Earliest\产品列表\images\1059780222-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\1068957122-1_h_1.jpg" />
-    <Content Include="Earliest\产品列表\images\1100595022-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\1100604422-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\1101921400-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\1104239334-1_h_1.jpg" />
-    <Content Include="Earliest\产品列表\images\1150466322-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\1155013922-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\1196582830-1_h_1.jpg" />
-    <Content Include="Earliest\产品列表\images\1216469906-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\1227829522-1_h_2.jpg" />
-    <Content Include="Earliest\产品列表\images\1227833822-1_h_2.jpg" />
-    <Content Include="Earliest\产品列表\images\1227836522-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\1375641602-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\1375805902-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\1378008002-1_h.jpg" />
-    <Content Include="Earliest\产品列表\images\arrow_left.png" />
-    <Content Include="Earliest\产品列表\images\collect.png" />
-    <Content Include="Earliest\产品列表\images\ha1.jpg" />
-    <Content Include="Earliest\产品列表\images\ha2.jpg" />
-    <Content Include="Earliest\产品列表\images\ha3.jpg" />
-    <Content Include="Earliest\产品列表\images\search_sprite.png" />
-    <Content Include="Earliest\产品列表\images\select2.png" />
-    <Content Include="Earliest\产品列表\images\v4.5ico_43.png" />
-    <Content Include="Earliest\产品列表\index.html" />
-    <Content Include="Earliest\产品列表\js\common.min.js" />
-    <Content Include="Earliest\产品列表\js\filter.min.js" />
-    <Content Include="Earliest\产品列表\js\fx.min.js" />
-    <Content Include="Earliest\产品列表\js\fx_methods.min.js" />
-    <Content Include="Earliest\产品列表\js\js_tracker.js" />
-    <Content Include="Earliest\产品列表\js\mix_suggest.min.js" />
-    <Content Include="Earliest\产品列表\js\search.min.js" />
-    <Content Include="Earliest\产品列表\js\zepto.cookie.min.js" />
-    <Content Include="Earliest\产品列表\js\zepto.lazyload.min.js" />
-    <Content Include="Earliest\产品列表\js\zepto.min.js" />
-    <Content Include="Earliest\产品详情\css\common.css" />
-    <Content Include="Earliest\产品详情\css\product.css" />
-    <Content Include="Earliest\产品详情\images\1050069636-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1066861535-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1100604422-1_e_1.jpg" />
-    <Content Include="Earliest\产品详情\images\1100604422-2_e_1.jpg" />
-    <Content Include="Earliest\产品详情\images\1149937806-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1171914525-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1196107735-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1196991608-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1197447808-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1206438229-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1228694035-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1264108639-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1273687641-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1426474506-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1428917738-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\1477078008-1_b.jpg" />
-    <Content Include="Earliest\产品详情\images\2011111810580945.jpg" />
-    <Content Include="Earliest\产品详情\images\back.png" />
-    <Content Include="Earliest\产品详情\images\control.png" />
-    <Content Include="Earliest\产品详情\index.html" />
-    <Content Include="Earliest\产品详情\js\common.min.js" />
-    <Content Include="Earliest\产品详情\js\fastclick.min.js" />
-    <Content Include="Earliest\产品详情\js\iscroll5.min.js" />
-    <Content Include="Earliest\产品详情\js\js_tracker.js" />
-    <Content Include="Earliest\产品详情\js\product.min.js" />
-    <Content Include="Earliest\产品详情\js\underscore.min.js" />
-    <Content Include="Earliest\产品详情\js\zepto.min.js" />
-    <Content Include="Earliest\订单列表\css\order.css" />
-    <Content Include="Earliest\订单列表\images\20072506-1_h.jpg" />
-    <Content Include="Earliest\订单列表\images\22804843-1_h.jpg" />
-    <Content Include="Earliest\订单列表\images\23206988-1_h.jpg" />
-    <Content Include="Earliest\订单列表\images\23219923-1_h.jpg" />
-    <Content Include="Earliest\订单列表\images\23414913-1_h.jpg" />
-    <Content Include="Earliest\订单列表\images\23437206-1_h.jpg" />
-    <Content Include="Earliest\订单列表\images\black_triangel.gif" />
-    <Content Include="Earliest\订单列表\images\c_back_btn.png" />
-    <Content Include="Earliest\订单列表\images\c_cancle.png" />
-    <Content Include="Earliest\订单列表\images\c_checkbox_on.png" />
-    <Content Include="Earliest\订单列表\images\filter.png" />
-    <Content Include="Earliest\订单列表\images\order_search_btn.png" />
-    <Content Include="Earliest\订单列表\images\search_icon.png" />
-    <Content Include="Earliest\订单列表\images\shop_icon.png" />
-    <Content Include="Earliest\订单列表\index.html" />
-    <Content Include="Earliest\订单列表\js\event.js" />
-    <Content Include="Earliest\订单列表\js\fx.js" />
-    <Content Include="Earliest\订单列表\js\fx_methods.js" />
-    <Content Include="Earliest\订单列表\js\js_tracker.js" />
-    <Content Include="Earliest\订单列表\js\order.js" />
-    <Content Include="Earliest\订单列表\js\zepto.min.js" />
-    <Content Include="Earliest\订单详情\css\base2013.css" />
-    <Content Include="Earliest\订单详情\css\header%281%29.css" />
-    <Content Include="Earliest\订单详情\css\header.css" />
-    <Content Include="Earliest\订单详情\css\order2014.src.css" />
-    <Content Include="Earliest\订单详情\images\556671a1Ne5e7c6c7.jpg" />
-    <Content Include="Earliest\订单详情\images\jd-sprites_v=12.png" />
-    <Content Include="Earliest\订单详情\index.html" />
-    <Content Include="Earliest\订单详情\js\downloadAppPlugIn.js" />
-    <Content Include="Earliest\订单详情\js\jquery-1.6.2.min.js" />
-    <Content Include="Earliest\订单详情\js\ojbUrl.js" />
-    <Content Include="Earliest\订单详情\js\pingJS.1.0.js" />
-    <Content Include="Earliest\订单详情\js\spin.min.js" />
-    <Content Include="Earliest\购物车\css\cart_v3.css" />
-    <Content Include="Earliest\购物车\images\1100604422-1_h.jpg" />
-    <Content Include="Earliest\购物车\images\back.png" />
-    <Content Include="Earliest\购物车\images\collect_off.png" />
-    <Content Include="Earliest\购物车\images\c_checkbox_off.png" />
-    <Content Include="Earliest\购物车\images\c_checkbox_on.png" />
-    <Content Include="Earliest\购物车\images\c_del.png" />
-    <Content Include="Earliest\购物车\images\shop_arrow.png" />
-    <Content Include="Earliest\购物车\index.html" />
-    <Content Include="Earliest\购物车\js\cart.js" />
-    <Content Include="Earliest\购物车\js\fastclick.js" />
-    <Content Include="Earliest\购物车\js\fx.js" />
-    <Content Include="Earliest\购物车\js\iscroll5.min.js" />
-    <Content Include="Earliest\购物车\js\js_tracker.js" />
-    <Content Include="Earliest\购物车\js\stack.js" />
-    <Content Include="Earliest\购物车\js\util.js" />
-    <Content Include="Earliest\购物车\js\zepto-1.1.6.min.js" />
+    <Content Include="Earliest\ProductInfo\css\common.css" />
+    <Content Include="Earliest\ProductInfo\css\product.css" />
+    <Content Include="Earliest\ProductInfo\images\1050069636-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1066861535-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1100604422-1_e_1.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1100604422-2_e_1.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1149937806-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1171914525-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1196107735-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1196991608-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1197447808-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1206438229-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1228694035-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1264108639-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1273687641-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1426474506-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1428917738-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\1477078008-1_b.jpg" />
+    <Content Include="Earliest\ProductInfo\images\2011111810580945.jpg" />
+    <Content Include="Earliest\ProductInfo\images\back.png" />
+    <Content Include="Earliest\ProductInfo\images\control.png" />
+    <Content Include="Earliest\ProductInfo\index.html" />
+    <Content Include="Earliest\ProductInfo\js\common.min.js" />
+    <Content Include="Earliest\ProductInfo\js\fastclick.min.js" />
+    <Content Include="Earliest\ProductInfo\js\iscroll5.min.js" />
+    <Content Include="Earliest\ProductInfo\js\js_tracker.js" />
+    <Content Include="Earliest\ProductInfo\js\product.min.js" />
+    <Content Include="Earliest\ProductInfo\js\underscore.min.js" />
+    <Content Include="Earliest\ProductInfo\js\zepto.min.js" />
+    <Content Include="Earliest\ProductList\css\app.css" />
+    <Content Include="Earliest\ProductList\images\1012542452-1_h_1.jpg" />
+    <Content Include="Earliest\ProductList\images\1059780222-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\1068957122-1_h_1.jpg" />
+    <Content Include="Earliest\ProductList\images\1100595022-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\1100604422-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\1101921400-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\1104239334-1_h_1.jpg" />
+    <Content Include="Earliest\ProductList\images\1150466322-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\1155013922-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\1196582830-1_h_1.jpg" />
+    <Content Include="Earliest\ProductList\images\1216469906-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\1227829522-1_h_2.jpg" />
+    <Content Include="Earliest\ProductList\images\1227833822-1_h_2.jpg" />
+    <Content Include="Earliest\ProductList\images\1227836522-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\1375641602-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\1375805902-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\1378008002-1_h.jpg" />
+    <Content Include="Earliest\ProductList\images\arrow_left.png" />
+    <Content Include="Earliest\ProductList\images\collect.png" />
+    <Content Include="Earliest\ProductList\images\ha1.jpg" />
+    <Content Include="Earliest\ProductList\images\ha2.jpg" />
+    <Content Include="Earliest\ProductList\images\ha3.jpg" />
+    <Content Include="Earliest\ProductList\images\search_sprite.png" />
+    <Content Include="Earliest\ProductList\images\select2.png" />
+    <Content Include="Earliest\ProductList\images\v4.5ico_43.png" />
+    <Content Include="Earliest\ProductList\index.html" />
+    <Content Include="Earliest\ProductList\js\common.min.js" />
+    <Content Include="Earliest\ProductList\js\filter.min.js" />
+    <Content Include="Earliest\ProductList\js\fx.min.js" />
+    <Content Include="Earliest\ProductList\js\fx_methods.min.js" />
+    <Content Include="Earliest\ProductList\js\js_tracker.js" />
+    <Content Include="Earliest\ProductList\js\mix_suggest.min.js" />
+    <Content Include="Earliest\ProductList\js\search.min.js" />
+    <Content Include="Earliest\ProductList\js\zepto.cookie.min.js" />
+    <Content Include="Earliest\ProductList\js\zepto.lazyload.min.js" />
+    <Content Include="Earliest\ProductList\js\zepto.min.js" />
+    <Content Include="Earliest\ShopCart\css\cart_v3.css" />
+    <Content Include="Earliest\ShopCart\images\1100604422-1_h.jpg" />
+    <Content Include="Earliest\ShopCart\images\back.png" />
+    <Content Include="Earliest\ShopCart\images\collect_off.png" />
+    <Content Include="Earliest\ShopCart\images\c_checkbox_off.png" />
+    <Content Include="Earliest\ShopCart\images\c_checkbox_on.png" />
+    <Content Include="Earliest\ShopCart\images\c_del.png" />
+    <Content Include="Earliest\ShopCart\images\shop_arrow.png" />
+    <Content Include="Earliest\ShopCart\index.html" />
+    <Content Include="Earliest\ShopCart\js\cart.js" />
+    <Content Include="Earliest\ShopCart\js\fastclick.js" />
+    <Content Include="Earliest\ShopCart\js\fx.js" />
+    <Content Include="Earliest\ShopCart\js\iscroll5.min.js" />
+    <Content Include="Earliest\ShopCart\js\js_tracker.js" />
+    <Content Include="Earliest\ShopCart\js\stack.js" />
+    <Content Include="Earliest\ShopCart\js\util.js" />
+    <Content Include="Earliest\ShopCart\js\zepto-1.1.6.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="Game\Poker\DJDDZ.js" />
     <Content Include="Game\Poker\img\1.jpg" />
@@ -953,6 +974,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.3.0.js" />
+    <Content Include="Scripts\jquery.signalR-2.3.0.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -1229,7 +1252,8 @@
     <Content Include="Views\Tool\HttpSend.cshtml" />
     <Content Include="Views\Tool\Security.cshtml" />
     <Content Include="Views\Tool\BaseConver.cshtml" />
-    <Content Include="Views\WeChart\JSSDK.cshtml" />
+    <Content Include="Views\WeChat\JSSDK.cshtml" />
+    <Content Include="Views\WeChat\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1248,6 +1272,10 @@
     <ProjectReference Include="..\ApliuTool\ApliuTools.csproj">
       <Project>{181462d8-64b9-4899-a011-d2504a74d46b}</Project>
       <Name>ApliuTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ApliuWeChat\ApliuWeChat.csproj">
+      <Project>{ac2e5763-85a4-4152-bdbb-fe16bbd939f2}</Project>
+      <Name>ApliuWeChat</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

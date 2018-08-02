@@ -1,9 +1,12 @@
 ﻿using ApliuTools;
-using ApliuWeb.WeChart;
+using ApliuWeb.WeChat;
+using ApliuWeChat;
 using System;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Web;
 using System.Web.Http;
@@ -34,7 +37,7 @@ namespace ApliuWeb.Controllers
             Logger.WriteLog("请求方式：" + HttpContext.Current.Request.HttpMethod.ToUpper() + "，请求原地址：" + HttpContext.Current.Request.Url.ToString());
 
             //验证消息是否来自微信服务器
-            if (WeChartBase.CheckSignature(signature, timestamp, nonce))
+            if (WeChatBase.CheckSignature(signature, timestamp, nonce))
             {
                 if (HttpContext.Current.Request.HttpMethod.ToUpper() == "GET")
                 {
@@ -52,12 +55,12 @@ namespace ApliuWeb.Controllers
                         {
                             Byte[] postBytes = new Byte[stream.Length];
                             stream.Read(postBytes, 0, (Int32)stream.Length);
-                            string beforeReqData = WeChartBase.WxEncoding.GetString(postBytes);
+                            string beforeReqData = WeChatBase.WxEncoding.GetString(postBytes);
                             if (!string.IsNullOrEmpty(beforeReqData))
                             {
-                                if ("aes".Equals(encrypt_type))//(WeChartBase.IsSecurity)
+                                if ("aes".Equals(encrypt_type))//(WeChatBase.IsSecurity)
                                 {
-                                    Tencent.WXBizMsgCrypt wxcpt = new Tencent.WXBizMsgCrypt(WeChartBase.WxToken, WeChartBase.WxEncodingAESKey, WeChartBase.WxAppId);
+                                    Tencent.WXBizMsgCrypt wxcpt = new Tencent.WXBizMsgCrypt(WeChatBase.WxToken, WeChatBase.WxEncodingAESKey, WeChatBase.WxAppId);
                                     string afterReqData = String.Empty;  //解析之后的明文
                                     int reqRet = wxcpt.DecryptMsg(msg_signature, timestamp, nonce, beforeReqData, ref afterReqData);
                                     if (reqRet == 0)
@@ -96,7 +99,7 @@ namespace ApliuWeb.Controllers
                 }
             }
 
-            return WeChartBase.encapResult(respContent);
+            return WeChatBase.encapResult(respContent);
         }
 
         /// <summary>
@@ -140,6 +143,23 @@ namespace ApliuWeb.Controllers
             //MsgCryptTest.Sample.Main(null);
             //Logger.WriteLog("Api Wx Test");
             return respContent;
+        }
+
+        private WeChatClient weChatClient;
+
+        [HttpGet]
+        public HttpResponseMessage GetWxLoginQRCode()
+        {
+            if (weChatClient == null) weChatClient = new WeChatClient();
+
+            Image image = weChatClient.GetWeChatLoginQRCode();
+            MemoryStream ms = new MemoryStream();
+            image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+            HttpResponseMessage response = new HttpResponseMessage();
+            response.Content = new ByteArrayContent(ms.ToArray());
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+            image.Dispose();
+            return response;
         }
     }
 }
