@@ -14,7 +14,10 @@ namespace ApliuWeb
     public class DataAccess
     {
         private static Dictionary<string, DataAccess> _Instance = new Dictionary<string, DataAccess>() { };
-
+        /// <summary>
+        /// 静态锁确保不重复
+        /// </summary>
+        private static Object objectInstanceLock = new Object();
         /// <summary>
         /// 获取默认的数据库链接对象 key=Default 从配置文件中读取
         /// </summary>
@@ -22,11 +25,21 @@ namespace ApliuWeb
         {
             get
             {
-                if (_Instance.ContainsKey("Default")) return _Instance["Default"];
+                if (_Instance.ContainsKey("Default"))
+                {
+                    return _Instance["Default"];
+                }
                 else
                 {
-                    LoadDataAccess("Default", SiteConfig.Instance.DatabaseType, SiteConfig.Instance.DatabaseConnection);
-                    return _Instance["Default"];
+                    lock (objectInstanceLock)
+                    {
+                        if (_Instance.ContainsKey("Default")) return _Instance["Default"];
+                        else
+                        {
+                            LoadDataAccess("Default", SiteConfig.Instance.DatabaseType, SiteConfig.Instance.DatabaseConnection);
+                            return _Instance["Default"];
+                        }
+                    }
                 }
             }
         }
@@ -53,6 +66,7 @@ namespace ApliuWeb
             this.dbHelper.databaseConnection = databaseConnection;
         }
 
+        private static Object objectLoadDataAccessLock = new Object();
         /// <summary>
         /// 初始化数据库连接通道
         /// </summary>
@@ -62,9 +76,15 @@ namespace ApliuWeb
             {
                 if (!_Instance.ContainsKey(instanceKey))
                 {
-                    DataAccess dataAccess = new DataAccess(databaseType, databaseConnection);
-                    //dataAccess.dbHelper.InitializtionConnection();
-                    _Instance.Add(instanceKey, dataAccess);
+                    lock (objectLoadDataAccessLock)
+                    {
+                        if (!_Instance.ContainsKey(instanceKey))
+                        {
+                            DataAccess dataAccess = new DataAccess(databaseType, databaseConnection);
+                            //dataAccess.dbHelper.InitializtionConnection();
+                            _Instance.Add(instanceKey, dataAccess);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
