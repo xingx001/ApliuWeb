@@ -417,20 +417,5 @@ namespace ApliuWeb.Controllers
 
             return result.ToString();
         }
-
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        [HttpPut]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        [HttpDelete]
-        public void Delete(int id)
-        {
-        }
     }
 }

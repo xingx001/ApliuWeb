@@ -246,32 +246,5 @@ namespace ApliuWeb.Controllers
             }
             return result.ToString();
         }
-
-        // GET api/common
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/common/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/common
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/common/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/common/5
-        public void Delete(int id)
-        {
-        }
     }
 }
