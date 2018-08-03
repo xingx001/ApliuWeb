@@ -75,6 +75,7 @@
     <Compile Include="Translate.cs" />
     <Compile Include="WebTools\HttpContextRequest.cs" />
     <Compile Include="WebTools\HttpRequestHelper.cs" />
+    <Compile Include="WebTools\HttpRuntimeCache.cs" />
     <Compile Include="WebTools\HYRequest.cs" />
     <Compile Include="WebTools\ResponseMessage.cs" />
     <Compile Include="WebTools\ServerInfo.cs" />

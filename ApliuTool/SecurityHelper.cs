@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -585,5 +586,25 @@ namespace ApliuTools
             return HttpUtility.HtmlEncode(Content);
         }
         #endregion
+
+        public static string Base64FromImage(Image image)
+        {
+            string strbaser64 = String.Empty;
+            try
+            {
+                MemoryStream ms = new MemoryStream();
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                byte[] arr = new byte[ms.Length];
+                ms.Position = 0;
+                ms.Read(arr, 0, (int)ms.Length);
+                ms.Close();
+                strbaser64 = Convert.ToBase64String(arr);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return strbaser64;
+        }
     }
 }

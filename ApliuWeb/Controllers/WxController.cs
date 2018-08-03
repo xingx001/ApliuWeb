@@ -1,6 +1,7 @@
 ﻿using ApliuTools;
 using ApliuWeb.WeChat;
 using ApliuWeChat;
+using Microsoft.AspNet.SignalR;
 using System;
 using System.Data;
 using System.Drawing;
@@ -110,6 +111,10 @@ namespace ApliuWeb.Controllers
         [HttpPost]
         public String Test()
         {
+            //Image weChatLoginQRCode = e.Result;
+            //String base64Image = SecurityHelper.Base64FromImage(weChatLoginQRCode);
+            //_context.Clients.All.SetLoginQRCode("data:image/jpg;base64," + base64Image);
+
             //SELECT * FROM sysprocesses where loginame='apliuweb'
             //select * from test;waitfor delay '00:00:05';
             //如果加上(nolock)标记，则是以ReadUncommitted执行该表的查询事务
@@ -143,23 +148,6 @@ namespace ApliuWeb.Controllers
             //MsgCryptTest.Sample.Main(null);
             //Logger.WriteLog("Api Wx Test");
             return respContent;
-        }
-
-        private WeChatClient weChatClient;
-
-        [HttpGet]
-        public HttpResponseMessage GetWxLoginQRCode()
-        {
-            if (weChatClient == null) weChatClient = new WeChatClient();
-
-            Image image = weChatClient.GetWeChatLoginQRCode();
-            MemoryStream ms = new MemoryStream();
-            image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-            HttpResponseMessage response = new HttpResponseMessage();
-            response.Content = new ByteArrayContent(ms.ToArray());
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
-            image.Dispose();
-            return response;
         }
     }
 }

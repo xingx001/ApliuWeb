@@ -18,10 +18,27 @@ namespace ApliuWeb
         public string MobileNumber;
         public string Openid;
         public string Unionid;
+        public string hubConnectionId;
     }
 
     public class UserInfo
     {
+        /// <summary>
+        /// 登录成功后设置用户信息
+        /// </summary>
+        /// <param name="userSession"></param>
+        public static void SetUserInfo(UserSession userSession)
+        {
+            if (HttpContext.Current.Session["UserSession"] == null)
+            {
+                HttpContext.Current.Session.Add("UserSession", userSession);
+            }
+            else
+            {
+                HttpContext.Current.Session["UserSession"] = userSession;
+            }
+        }
+
         /// <summary>
         /// 登录成功后设置用户信息
         /// </summary>

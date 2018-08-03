@@ -14,7 +14,7 @@ namespace ApliuWeChat
         /// <summary>
         /// 操作微信的实例对象
         /// </summary>
-        private WeChatHelper weChatHelper;
+        public WeChatHelper weChatHelper;
         /// <summary>
         /// 所有联系人信息
         /// </summary>

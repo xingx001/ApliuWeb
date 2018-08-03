@@ -162,7 +162,9 @@
     <Compile Include="Models\Common.cs" />
     <Compile Include="Models\DataAccess.cs" />
     <Compile Include="Models\HttpContextRequest.cs" />
-    <Compile Include="Models\ServerHub.cs" />
+    <Compile Include="Models\SignalRHub\IHubServer.cs" />
+    <Compile Include="Models\SignalRHub\IHubClient.cs" />
+    <Compile Include="Models\SignalRHub\TestHub.cs" />
     <Compile Include="Models\SessionHelper.cs" />
     <Compile Include="Models\Tencent\Cryptography.cs">
       <SubType>Code</SubType>
@@ -177,6 +179,7 @@
     <Compile Include="Models\VerificationCode.cs" />
     <Compile Include="Models\Tencent\Sample.cs" />
     <Compile Include="Models\WeChat\WeChatBase.cs" />
+    <Compile Include="Models\WeChat\WeChatHub.cs" />
     <Compile Include="Models\WeChat\WxDefaultMenu.cs" />
     <Compile Include="Models\WeChat\WxJSSDKHelper.cs" />
     <Compile Include="Models\WeChat\WxMessageHelp.cs" />
@@ -239,6 +242,8 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="CssStyle\amazeui.min.css" />
+    <Content Include="CssStyle\chatroom.css" />
     <Content Include="CssStyle\CommonStyle.css" />
     <Content Include="CssStyle\drawing.css" />
     <Content Include="CssStyle\jquery-weui.min.css" />
@@ -552,6 +557,19 @@
     <Content Include="Game\Poker\ResourceData.js" />
     <Content Include="Global.asax" />
     <Content Include="Images\Background\login.jpg" />
+    <Content Include="Images\chatroom\close.png" />
+    <Content Include="Images\chatroom\file.png" />
+    <Content Include="Images\chatroom\guding.png" />
+    <Content Include="Images\chatroom\lianjie.png" />
+    <Content Include="Images\chatroom\max.png" />
+    <Content Include="Images\chatroom\message.png" />
+    <Content Include="Images\chatroom\min.png" />
+    <Content Include="Images\chatroom\more.png" />
+    <Content Include="Images\chatroom\mulu.png" />
+    <Content Include="Images\chatroom\music.png" />
+    <Content Include="Images\chatroom\pic.png" />
+    <Content Include="Images\chatroom\qianbi.png" />
+    <Content Include="Images\chatroom\share.png" />
     <Content Include="Images\Icon\qq.png" />
     <Content Include="Images\Icon\wb.png" />
     <Content Include="Images\Icon\wx.png" />
@@ -561,6 +579,8 @@
     <Content Include="Images\Logo\logorect.png" />
     <Content Include="Images\Logo\logosqu.png" />
     <Content Include="Images\Icon\tips.png" />
+    <Content Include="Images\chatroom\chatmen.jpg" />
+    <Content Include="Images\chatroom\chatwomen.jpg" />
     <Content Include="JsScript\apliualert.js" />
     <Content Include="JsScript\CommonJs.js" />
     <Content Include="JsScript\drawing.js" />

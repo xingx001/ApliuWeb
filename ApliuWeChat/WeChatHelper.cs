@@ -152,7 +152,7 @@ namespace ApliuWeChat.Helper
         public WeChatHelper()
         {
             baseRequest = new BaseRequest();
-            asyncOperation = AsyncOperationManager.CreateOperation(null);
+            //asyncOperation = AsyncOperationManager.CreateOperation(null);
             source = new CancellationTokenSource();
             factory = new TaskFactory(source.Token);
         }

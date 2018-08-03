@@ -1,60 +1,133 @@
 ﻿@{
     Layout = "~/Views/Shared/Templet.cshtml";
-    ViewBag.Title = "微信登陆";
+    ViewBag.Title = "在线聊天室";
 }
-
+<link rel="stylesheet" href="/CssStyle/amazeui.min.css">
+<link rel="stylesheet" href="/CssStyle/chatroom.css">
 <script src="/Scripts/jquery.signalR-2.3.0.min.js"></script>
 <script src="/signalr/hubs"></script>
 
 <script>
+    var weChatUserName;
+    var weChatHub;
     $(document).ready(function () {
-        var srcapi = "/api/wx/getwxloginqrcode?random" + Math.random();
-        //$("#wxloginqrcode").attr("src", srcapi);
-
-        //引用自动生成的集线器代理
-        var chat = $.connection.serverHub;
-        //定义服务器调用的客户端sendMessage来显示新消息
-        chat.client.sendMessage = function (time,thread,ip, message) {
-            //向页面添加消息
-            $("#messageBox").val($("#messageBox").val() + "\r\n Time: " + time + "; Thread: " + thread + "; IP: " + ip + "; Message: " + message);
-            //$("#messageBox").append('<li><strong style="color:green">' + htmlEncode(name) + '</strong>:' + htmlEncode(message) + '</li>');
-        }
-        //设置焦点到输入框
-        $('#message').focus();
-        //开始连接服务器
+        weChatHub = $.connection.weChatHub;
+        weChatHub.client.receivemessage = function (message) {
+            document.getElementById('chatbox').innerHTML += '<li class="other"><spanuser style="font-size:0.2rem;">' + message.userName + '</spanuser><img src="/Images/chatroom/chatwomen.jpg" title="other"><span>' + message.Message + '</span></li>';
+            //$("#messageBox").val(message.datetimeNow + " " + message.userName + " ：\r\n" + message.Message + "\r\n" + $("#messageBox").val());
+        };
+        weChatHub.client.ondisconnected = function (username) {
+            $.alert(userName, "掉线了");
+        };
+        weChatHub.client.onconnected = function (username) {
+            $.alert(userName, "上线了");
+        };
+        weChatHub.client.OnReconnected = function (username) {
+            $.alert(userName, "重连成功");
+        };
         $.connection.hub.start().done(function () {
-            $('#sendmessage').click(function () {
-                //调用服务器端集线器的Send方法
-                chat.server.sendMsg($('#message').val());
-                //清空输入框信息并获取焦点
-                $("#message").val('').focus();
-            })
-        })
+            $.prompt({
+                text: "名字不能超过6个字符",
+                title: "输入姓名",
+                onOK: function (userName) {
+                    var tempUserName = userName;
+                    if (tempUserName == null) {
+                        tempUserName = 'Mr ' + Math.random().toString().substring(2, 4);
+                        $.alert("未输入名称，系统随机生成");
+                    }
+                    if (tempUserName.length > 6) {
+                        tempUserName = tempUserName.substring(0, 6);
+                        $.alert("名称过长，系统自动截取");
+                    }
+
+                    //$.alert("您的名字是:" + tempUserName, "设定成功");
+                    weChatHub.server.chatLogin(tempUserName, tempUserName);
+                    weChatUserName = tempUserName;
+                },
+                onCancel: function () {
+                    $.alert("放弃连接聊天");
+                    weChatHub = null;
+                    //$.connection.
+                },
+                input: 'Mr ' + Math.random().toString().substring(2, 4)
+            });
+        }).fail(function () {
+            apliualert("连接signalR Hub出错，详情：" + error);
+        });
+        /* weChatHub.server.wechatsend($('#message').val()); */
+
+
+
+
+        //var connection = $.hubConnection();
+        //weChatHub = connection.createHubProxy('weChatHub');
+        //weChatHub.on('receivemessage', function (message) {
+        //    $("#messageBox").val(message);
+        //});
+        //connection.start();
+        /* weChatHub.invoke('wechatsend', $('#message').val()); */
+        $("#talkbox").click(function () {
+            $("#input_box").focus();
+        });
+        $("#input_box").focus(function () {
+            $("#talkbox").css("background-color", "#FFFFFF");
+            $("#input_box").css("background-color", "#FFFFFF");
+        });
+        $("#input_box").blur(function () {
+            $("#talkbox").css("background-color", "#f5f5f5");
+            $("#input_box").css("background-color", "#f5f5f5");
+        });
+
+        $("#send").click(function () {
+            var sendMessage = $.trim($("#input_box").val());
+            if (sendMessage == '') {
+                $("#input_box").focus();
+            } else {
+                document.getElementById('chatbox').innerHTML += '<li class="me"><spanuser style="font-size:0.2rem;">' + weChatUserName + '</spanuser><img src="/Images/chatroom/chatmen.jpg" title="other"><span>' + sendMessage + '</span></li>';
+                weChatHub.server.sendOthersMessage(sendMessage);
+                $("#input_box").val('');
+            }
+        });
     });
 
-    //为显示的消息进行html编码
-    function htmlEncode(value) {
-        var encodeValue = $('<div />').text(value).html();
-        return encodeValue;
+    function sendmessage() {
+        weChatHub.server.sendAllMessage($('#message').val());
+        //weChatHub.invoke('sendAllMessage', $('#message').val());
     }
 </script>
 
-<div style="text-align: center; padding: 20px;">
-    <img id="wxloginqrcode" height="300" src="/images/logo/logosqu.png" />
-</div>
-
-<div class="container">
-    <div style="margin-top: 10px; text-align: center;">
-        <textarea id="message" class="qrcodecontentinput" placeholder="请输入消息内容"></textarea>
-        <input id="sendmessage" class="qrcodebutton" type="button" value="发送消息" />
+<div class="box">
+    <div class="talk_window">
+        <div class="windows_top">
+            <div class="windows_top_box">
+                <span>在线聊天</span>
+            </div>
+        </div>
+        <!--聊天内容-->
+        <div class="windows_body">
+            <div class="office_text" style="height: 100%; overflow: hidden;">
+                <ul class="content" id="chatbox" style="top: 0px; position: absolute;overflow:auto;height:100%;">
+                    @*<li class="me"><spanuser style="font-size:0.2rem;">Mr Wang09</spanuser><img src="~/Images/chatroom/chatwomen.jpg" title="me"><span>me</span></li>*@
+                    @* <li class="other">Mr Wang09<img src="~/Images/chatroom/chatwomen.jpg" title="other"><span>other</span></li>*@
+                </ul>
+                <div style="position: absolute; display: block; line-height: 0; height: 0px;" class="zUIpanelScrollBox"></div><div style="position: absolute; display: block; line-height: 0; height: 0px;" class="zUIpanelScrollBar"></div>
+            </div>
+        </div>
+        <div class="windows_input" id="talkbox">
+            <div class="input_icon">
+                <a href="javascript:;"><img src="~/Images/chatroom/message.png" title="消息" /></a>
+                <a href="javascript:;"><img src="~/Images/chatroom/pic.png" title="图片" /></a>
+                <a href="javascript:;"><img src="~/Images/chatroom/file.png" title="文件" /></a>
+                <a href="javascript:;"><img src="~/Images/chatroom/music.png" title="音乐" /></a>
+                <a href="javascript:;"><img src="~/Images/chatroom/lianjie.png" title="链接" /></a>
+                <a href="javascript:;"><img src="~/Images/chatroom/share.png" title="分享" /></a>
+            </div>
+            <div class="input_box">
+                <textarea id="input_box"></textarea>
+                <button id="send">发送（S）</button>
+            </div>
+        </div>
     </div>
-    <div style="text-align: center; padding: 20px;">
-        <textarea id="messageBox" class="qrcodecontentinput" placeholder="接收到的内容"></textarea>
-        <img id="qrcodeimg" height="300" src="/images/logo/logosqu.png" />
-    </div>
-</div>
-<div style="text-align: center; line-height: 50px; padding-top: 50px;">
-    <div><a href="/" class="loginwelcome">返回主页</a></div>
 </div>
 
 
