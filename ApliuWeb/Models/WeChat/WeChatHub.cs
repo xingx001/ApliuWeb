@@ -1,4 +1,5 @@
-﻿using ApliuTools.WebTools;
+﻿using ApliuTools.Web;
+using ApliuTools.WebTools;
 using ApliuWeb.SignalRHub;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -42,6 +43,10 @@ namespace ApliuWeb.WeChat
             MessageModel messageModel = new MessageModel();
             messageModel.userName = HttpRuntimeCache.Get(Context.ConnectionId).ToString();
             messageModel.Message = Message;
+            String chatLogSql = String.Format(@"insert into ChatMessage (ChatMsgID,UserName,Message,SendTime,HubConnectionId,IP)
+                values('{0}','{1}','{2}','{3}','{4}','{5}');", Guid.NewGuid().ToString(), messageModel.userName, messageModel.Message,
+                messageModel.datetimeNow, Context.ConnectionId, HYRequest.GetIP());
+            Boolean logResult = DataAccess.Instance.PostData(chatLogSql);
             Clients.Others.ReceiveMessage(messageModel);
         }
     }

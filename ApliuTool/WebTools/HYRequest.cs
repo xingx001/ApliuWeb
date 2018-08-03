@@ -322,9 +322,8 @@ namespace ApliuTools.Web
             {
                 return "0.0.0.0";
             }
-
+            
             return result;
-
         }
 
         /// <summary>

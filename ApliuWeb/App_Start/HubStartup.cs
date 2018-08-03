@@ -35,15 +35,24 @@ namespace ApliuWeb
     {
         public void Configuration(IAppBuilder app)
         {
-            // Any connection or hub wire up and configuration should go here
-            GlobalHost.HubPipeline.AddModule(new ErrorHandlingPipelineModule());
+            try
+            {
+                // Any connection or hub wire up and configuration should go here
+                GlobalHost.HubPipeline.AddModule(new ErrorHandlingPipelineModule());
 
-            //开启详细错误反馈
-            HubConfiguration hubConfiguration = new HubConfiguration();
-            hubConfiguration.EnableDetailedErrors = true;
+                //开启详细错误反馈
+                HubConfiguration hubConfiguration = new HubConfiguration();
+                hubConfiguration.EnableDetailedErrors = true;
 
-            // 有关如何配置应用程序的详细信息，请访问 https://go.microsoft.com/fwlink/?LinkID=316888
-            app.MapSignalR("/signalr", new HubConfiguration());
+                // 有关如何配置应用程序的详细信息，请访问 https://go.microsoft.com/fwlink/?LinkID=316888
+                app.MapSignalR("/signalr", new HubConfiguration());
+
+                Logger.WriteLog("signalR Hubs 配置完成");
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog("signalR Hubs 配置失败，详情：" + ex.Message);
+            }
         }
     }
 }

@@ -1,13 +1,9 @@
 ﻿using ApliuTools;
 using ApliuWeb.WeChat;
-using ApliuWeChat;
-using Microsoft.AspNet.SignalR;
 using System;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Web;
 using System.Web.Http;

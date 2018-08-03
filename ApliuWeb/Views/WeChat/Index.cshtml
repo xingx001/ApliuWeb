@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/Templet.cshtml";
-    ViewBag.Title = "在线聊天室";
+    ViewBag.Title = "singalR Hub实时通讯";
 }
 <link rel="stylesheet" href="/CssStyle/amazeui.min.css">
 <link rel="stylesheet" href="/CssStyle/chatroom.css">
@@ -16,15 +16,15 @@
             document.getElementById('chatbox').innerHTML += '<li class="other"><spanuser style="font-size:0.2rem;">' + message.userName + '</spanuser><img src="/Images/chatroom/chatwomen.jpg" title="other"><span>' + message.Message + '</span></li>';
             //$("#messageBox").val(message.datetimeNow + " " + message.userName + " ：\r\n" + message.Message + "\r\n" + $("#messageBox").val());
         };
-        weChatHub.client.ondisconnected = function (username) {
-            $.alert(userName, "掉线了");
-        };
-        weChatHub.client.onconnected = function (username) {
-            $.alert(userName, "上线了");
-        };
-        weChatHub.client.OnReconnected = function (username) {
-            $.alert(userName, "重连成功");
-        };
+        //weChatHub.client.ondisconnected = function (username) {
+        //    $.alert(userName, "掉线了");
+        //};
+        //weChatHub.client.onconnected = function (username) {
+        //    $.alert(userName, "上线了");
+        //};
+        //weChatHub.client.OnReconnected = function (username) {
+        //    $.alert(userName, "重连成功");
+        //};
         $.connection.hub.start().done(function () {
             $.prompt({
                 text: "名字不能超过6个字符",
@@ -89,20 +89,15 @@
             }
         });
     });
-
-    function sendmessage() {
-        weChatHub.server.sendAllMessage($('#message').val());
-        //weChatHub.invoke('sendAllMessage', $('#message').val());
-    }
 </script>
 
 <div class="box">
     <div class="talk_window">
-        <div class="windows_top">
+        @*<div class="windows_top">
             <div class="windows_top_box">
                 <span>在线聊天</span>
             </div>
-        </div>
+        </div>*@
         <!--聊天内容-->
         <div class="windows_body">
             <div class="office_text" style="height: 100%; overflow: hidden;">
