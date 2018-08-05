@@ -77,7 +77,7 @@ namespace ApliuDatabase
                     MySqlConnection mySqlConnection = new MySqlConnection(databaseConnection);
                     //mySqlConnection.OpenAsync();
                     break;
-                case DatabaseType.Access:
+                case DatabaseType.OleDb:
                     break;
                 default:
                     break;
@@ -459,7 +459,7 @@ namespace ApliuDatabase
                 case DatabaseType.SqlServer:
                 case DatabaseType.Oracle:
                 case DatabaseType.MySql:
-                case DatabaseType.Access:
+                case DatabaseType.OleDb:
                     databaseConnectionStr = beginConnectionStr + ";"
                                     + "Max Pool Size=" + MaxPool + ";"
                                     + "Min Pool Size=" + MinPool + ";"
@@ -493,7 +493,7 @@ namespace ApliuDatabase
                 case DatabaseType.MySql:
                     dbConnection = new MySqlConnection(databaseConnection);
                     break;
-                case DatabaseType.Access:
+                case DatabaseType.OleDb:
                     dbConnection = new OleDbConnection(databaseConnection);
                     break;
                 default:
@@ -522,7 +522,7 @@ namespace ApliuDatabase
                 case DatabaseType.MySql:
                     dbDataAdapter = new MySqlDataAdapter(dbCommand as MySqlCommand);
                     break;
-                case DatabaseType.Access:
+                case DatabaseType.OleDb:
                     dbDataAdapter = new OleDbDataAdapter(dbCommand as OleDbCommand);
                     break;
                 default:
@@ -551,12 +551,16 @@ namespace ApliuDatabase
                     ((SqlParameter)dbParameter).SqlDbType = (SqlDbType)Enum.Parse(typeof(SqlDbType), dbType);
                     break;
                 case DatabaseType.Oracle:
+                    dbParameter = new OracleParameter();
+                    ((OracleParameter)dbParameter).OracleType = (OracleType)Enum.Parse(typeof(OracleType), dbType);
                     break;
                 case DatabaseType.MySql:
                     dbParameter = new MySqlParameter();
                     ((MySqlParameter)dbParameter).MySqlDbType = (MySqlDbType)Enum.Parse(typeof(MySqlDbType), dbType);
                     break;
-                case DatabaseType.Access:
+                case DatabaseType.OleDb:
+                    dbParameter = new OleDbParameter();
+                    ((OleDbParameter)dbParameter).OleDbType = (OleDbType)Enum.Parse(typeof(OleDbType), dbType);
                     break;
                 default:
                     break;
