@@ -492,14 +492,17 @@ namespace ApliuDatabase
                     break;
                 case DatabaseType.Oracle:
                     databaseConnectionStr = beginConnectionStr + ";"
-                    + "MIN POOL SIZE=" + MinPool + ";"
-                    + "MAX POOL SIZE=" + MaxPool + ";"
-                    + "CONNECTION TIMEOUT=" + Conn_Timeout + ";"
-                    + "CONNECTION LIFETIME=" + Conn_Lifetime + ";"
-                    + "POOLING=True;";
+                                        + "MIN POOL SIZE=" + MinPool + ";"
+                                        + "MAX POOL SIZE=" + MaxPool + ";"
+                                        //+ "CONNECTION TIMEOUT=" + Conn_Timeout + ";"
+                                        + "LOAD BALANCE TIMEOUT=" + Conn_Lifetime + ";"
+                                        + "POOLING=True;";
                     break;
                 case DatabaseType.OleDb:
-                    databaseConnectionStr = beginConnectionStr;
+                    OleDbConnectionStringBuilder oledbStr = new OleDbConnectionStringBuilder();
+                    oledbStr.DataSource = beginConnectionStr;
+                    oledbStr.Provider = "Microsoft.ACE.OleDB.15.0";
+                    databaseConnectionStr = oledbStr.ToString();
                     break;
                 default:
                     throw new Exception("数据库类型有误或未初始化 databaseType：" + databaseType.ToString());
