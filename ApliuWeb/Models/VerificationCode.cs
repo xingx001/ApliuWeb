@@ -73,21 +73,27 @@ namespace ApliuWeb
             SendMsg = "短信发送失败";
             switch (codeType)
             {
-                case CodeType.Null: return false;
+                case CodeType.Null:
+                    return false;
                     break;
-                case CodeType.Test: timeOut = 120L;
+                case CodeType.Test:
+                    timeOut = 120L;
                     smsContent = TimeHelper.DataTimeNow.ToString("yyyy年MM月dd日 HH:mm:ss") + ", 测试短信. --Apliu";
                     break;
-                case CodeType.Register: timeOut = 120L;
+                case CodeType.Register:
+                    timeOut = 120L;
                     smsContent = "您好, 您的注册验证码是: " + smsCode + ", 有效期" + timeOut / 60 + "分钟, 如非本人发送, 请忽略该短信。";
                     break;
-                case CodeType.Login: timeOut = 120L;
+                case CodeType.Login:
+                    timeOut = 120L;
                     smsContent = "您好, 您的登录动态验证码是: " + smsCode + ", 有效期" + timeOut / 60 + "分钟, 如非本人发送, 请忽略该短信。";
                     break;
-                case CodeType.ChangePassword: timeOut = 120L;
+                case CodeType.ChangePassword:
+                    timeOut = 120L;
                     smsContent = "您好, 您的修改密码验证码是: " + smsCode + ", 有效期" + timeOut / 60 + "分钟, 如非本人发送, 请忽略该短信。";
                     break;
-                default: return false;
+                default:
+                    return false;
                     break;
             }
             bool result = SendSMS(Mobile, smsContent, out SendMsg);
@@ -113,8 +119,10 @@ namespace ApliuWeb
         {
             string TcSMSAppId = SiteConfig.GetConfigAppSettingsValue("TcSMSAppId");
             string TcSMSAppKey = SiteConfig.GetConfigAppSettingsValue("TcSMSAppKey");
+            String sendLogSql = String.Empty;
             SMSMessage sms = new TencentSMS();
-            bool resutl = sms.SendSMS(Mobile, SMSContent, out SendMsg, TcSMSAppId, TcSMSAppKey);
+            bool resutl = sms.SendSMS(Mobile, SMSContent, out SendMsg, out sendLogSql, TcSMSAppId, TcSMSAppKey);
+            bool logResult = DataAccess.Instance.PostData(sendLogSql);
             return resutl;
         }
 

@@ -121,7 +121,7 @@ namespace ApliuDatabase
             // 设置事务超时时间
             transactionOption.Timeout = new TimeSpan(0, 0, seconds);
             transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOption);
-            
+
             //当时间超过之后，主动注销该事务
             Task.Factory.StartNew(() => { Thread.Sleep(seconds * 1000); Dispose(); });
         }
@@ -165,6 +165,24 @@ namespace ApliuDatabase
             int val = -1;
             try
             {
+                //SQL语句以分号结束
+                if (!commandText.Trim().EndsWith(";")) commandText = commandText.Trim() + ";";
+
+                switch (databaseType)
+                {
+                    case DatabaseType.SqlServer:
+                        break;
+                    case DatabaseType.Oracle://Oracle SQL语句必须加上Begin End
+                        if (!commandText.Trim().ToUpper().EndsWith("END;")) commandText = "begin " + commandText + " end;";
+                        break;
+                    case DatabaseType.MySql:
+                        break;
+                    case DatabaseType.OleDb:
+                        break;
+                    default:
+                        break;
+                }
+
                 using (DbConnection dbConnection = CreateDbConnection(databaseConnection))
                 {
                     if (dbConnection.State != ConnectionState.Open) dbConnection.Open();
@@ -457,15 +475,31 @@ namespace ApliuDatabase
             switch (databaseType)
             {
                 case DatabaseType.SqlServer:
-                case DatabaseType.Oracle:
-                case DatabaseType.MySql:
-                case DatabaseType.OleDb:
                     databaseConnectionStr = beginConnectionStr + ";"
-                                    + "Max Pool Size=" + MaxPool + ";"
-                                    + "Min Pool Size=" + MinPool + ";"
-                                    + "Connect Timeout=" + Conn_Timeout + ";"
-                                    + "Connection Lifetime=" + Conn_Lifetime + ";"
-                                    + "Asynchronous Processing=" + Asyn_Process + ";";
+                                        + "Max Pool Size=" + MaxPool + ";"
+                                        + "Min Pool Size=" + MinPool + ";"
+                                        + "Connect Timeout=" + Conn_Timeout + ";"
+                                        + "Connection Lifetime=" + Conn_Lifetime + ";"
+                                        + "Pooling =True;";
+                    break;
+                case DatabaseType.MySql:
+                    databaseConnectionStr = beginConnectionStr + ";"
+                                        + "maxpoolsize=" + MaxPool + ";"
+                                        + "minpoolsize=" + MinPool + ";"
+                                        + "connectiontimeout=" + Conn_Timeout + ";"
+                                        + "connectionlifetime=" + Conn_Lifetime + ";"
+                                        + "pooling=True;SslMode = none;";
+                    break;
+                case DatabaseType.Oracle:
+                    databaseConnectionStr = beginConnectionStr + ";"
+                    + "MIN POOL SIZE=" + MinPool + ";"
+                    + "MAX POOL SIZE=" + MaxPool + ";"
+                    + "CONNECTION TIMEOUT=" + Conn_Timeout + ";"
+                    + "CONNECTION LIFETIME=" + Conn_Lifetime + ";"
+                    + "POOLING=True;";
+                    break;
+                case DatabaseType.OleDb:
+                    databaseConnectionStr = beginConnectionStr;
                     break;
                 default:
                     throw new Exception("数据库类型有误或未初始化 databaseType：" + databaseType.ToString());

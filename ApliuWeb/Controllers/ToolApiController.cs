@@ -155,14 +155,16 @@ namespace ApliuWeb.Controllers
             result.result = "执行失败";
 
             string SendMsg = "发生异常";
+            String sendLogSql = String.Empty;
             SMSMessage sms = new TencentSMS();
-            bool sendresult = sms.SendSMS(Mobile, SMSContent, out SendMsg, TcSMSAppId, TcSMSAppKey);
+            bool sendresult = sms.SendSMS(Mobile, SMSContent, out SendMsg, out sendLogSql, TcSMSAppId, TcSMSAppKey);
             if (sendresult)
             {
                 result.code = "0";
                 result.result = "发送成功";
             }
             result.msg = SendMsg;
+            bool logResult = DataAccess.Instance.PostData(sendLogSql);
             return result.ToString();
         }
 
@@ -175,14 +177,16 @@ namespace ApliuWeb.Controllers
             result.result = "执行失败";
 
             string SendMsg = "发生异常";
+            String sendLogSql = String.Empty;
             SMSMessage sms = new TencentSMS();
-            bool sendresult = sms.SendSMS(Mobile, SMSContent, out SendMsg, TcSMSAppId, TcSMSAppKey);
+            bool sendresult = sms.SendSMS(Mobile, SMSContent, out SendMsg, out sendLogSql, TcSMSAppId, TcSMSAppKey);
             if (sendresult)
             {
                 result.code = "0";
                 result.result = "发送成功";
             }
             result.msg = SendMsg;
+            bool logResult = DataAccess.Instance.PostData(sendLogSql);
             return result.ToString();
         }
 
@@ -342,17 +346,23 @@ namespace ApliuWeb.Controllers
             String srcContent = String.Empty;
             switch (type)
             {
-                case "MD5": srcContent = SecurityHelper.MD5Encrypt(content, Encoding.UTF8);
+                case "MD5":
+                    srcContent = SecurityHelper.MD5Encrypt(content, Encoding.UTF8);
                     break;
-                case "GUID": srcContent = Guid.NewGuid().ToString().ToUpper();
+                case "GUID":
+                    srcContent = Guid.NewGuid().ToString().ToUpper();
                     break;
-                case "ToUpper": srcContent = content.ToString().ToUpper();
+                case "ToUpper":
+                    srcContent = content.ToString().ToUpper();
                     break;
-                case "ToLower": srcContent = content.ToString().ToLower();
+                case "ToLower":
+                    srcContent = content.ToString().ToLower();
                     break;
-                case "UrlDecode": srcContent = SecurityHelper.UrlDecode(content, Encoding.UTF8);
+                case "UrlDecode":
+                    srcContent = SecurityHelper.UrlDecode(content, Encoding.UTF8);
                     break;
-                case "UrlEncode": srcContent = SecurityHelper.UrlEncode(content, Encoding.UTF8);
+                case "UrlEncode":
+                    srcContent = SecurityHelper.UrlEncode(content, Encoding.UTF8);
                     break;
                 case "ASCIIEncode":
                     byte[] array = System.Text.Encoding.UTF8.GetBytes(content);

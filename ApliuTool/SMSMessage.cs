@@ -13,7 +13,7 @@ namespace ApliuTools
     public interface SMSMessage
     {
         ///api/toolapi/sendsms?mobile=18779182730&smscontent=您正在使用短信服务，短信验证码是ACBXDFF，2分钟之内有效，如非本人操作，请忽略本短信。&smsappid=1400075540&smsappkey=b0a0f4466492c96fcd3d1d334cc01749
-        bool SendSMS(string Mobile, string SMSContent, out string SendMsg, params string[] Args);
+        bool SendSMS(string Mobile, string SMSContent, out string SendMsg, out string SendLogSql, params string[] Args);
     }
 
     public class TencentSMS : SMSMessage
@@ -25,14 +25,15 @@ namespace ApliuTools
         /// <param name="SMSContent"></param>
         /// <param name="Args">SMSAppId,SMSAppKey</param>
         /// <returns></returns>
-        public bool SendSMS(string Mobile, string SMSContent, out string SendMsg, params string[] Args)
+        public bool SendSMS(string Mobile, string SMSContent, out string SendMsg, out string SendLogSql, params string[] Args)
         {
             if (Args.Length != 2)
             {
+                SendLogSql = String.Empty;
                 SendMsg = "Apliu：腾讯云短信，参数有误";
                 return false;
             }
-            return SendSMSParams(Mobile, SMSContent, out SendMsg, Args[0], Args[1]);
+            return SendSMSParams(Mobile, SMSContent, out SendMsg, out SendLogSql, Args[0], Args[1]);
         }
 
         /// <summary>
@@ -43,15 +44,15 @@ namespace ApliuTools
         /// <param name="SMSAppId">短信应用API ID</param>
         /// <param name="SMSAppKey">API ID秘钥</param>
         /// <returns></returns>
-        public static bool SendSMSParams(string Mobile, string SMSContent,out string SendMsg, string SMSAppId, string SMSAppKey)
+        public static bool SendSMSParams(string Mobile, string SMSContent, out string SendMsg, out string SendLogSql, string SMSAppId, string SMSAppKey)
         {
             string Rand = new Random().Next(int.MaxValue).ToString().PadLeft(10, '0');
             string sendjson = GetSendJson(Mobile, SMSContent, SMSAppKey, Rand);
             string sendurl = string.Format(SendUrl, SMSAppId, Rand);
             string response = HttpRequestHelper.HttpPost(sendurl, sendjson);
             bool result = AnalysisResponse(response, out SendMsg);
-            string insertlog = string.Format(sqlInsertAll, Guid.NewGuid(), Mobile, SMSContent, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "Apliu", "验证码", result, SendMsg);
-            Logger.WriteLogWeb("  sendurl:" + sendurl + "  sendjson:" + sendjson + "  response:" + response + "  insertlog:" + insertlog);
+            SendLogSql = string.Format(sqlInsertAll, Guid.NewGuid(), Mobile, SMSContent, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "Apliu", "验证码", result, SendMsg);
+            Logger.WriteLogWeb("  sendurl:" + sendurl + "  sendjson:" + sendjson + "  response:" + response + "  insertlog:" + SendLogSql);
             //DataAccess.PostData(insertlog);
             return result;
         }
